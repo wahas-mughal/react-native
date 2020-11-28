@@ -34,7 +34,11 @@
     "react-navigation-stack": "^2.8.2",
     "react-navigation-tabs": "^2.9.2",
     "react-redux": "^7.2.1",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "expo-location": "~8.2.1",
+    "expo-notifications": "~0.3.3",
+    "react-native-maps": "0.27.1",
+    "expo-permissions": "~9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

@@ -15,6 +15,7 @@ import ConfirmBooking from "../screens/HomeStackScreens/PaymentStackScreens/Conf
 import Header from "../shared/Header";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { createSwitchNavigator } from "react-navigation";
+import MapScreen from "../screens/Google Maps/MapScreen";
 
 const defaultNavOptions = {
   headerTitleStyle: {
@@ -40,7 +41,7 @@ const availableCarsStack = createStackNavigator(
     paymentMethod: PaymentMethod,
     selectCreditCard: SelectCreditCard,
     confirmPayment: ConfirmPayment,
-    "Bank Details": Bankdetailsscreen
+    "Bank Details": Bankdetailsscreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -79,6 +80,23 @@ const dealerHomeStack = createStackNavigator({
       };
     },
   },
+
+  MapScreen: {
+    screen: MapScreen,
+    navigationOptions: () => {
+      return {
+        headerTitle: "Select Your Location",
+        headerStyle: {
+          backgroundColor: "#03c4ff",
+        },
+        headerTintColor: "#fff",
+        headerTintStyle: {
+          fontSize: 18,
+        },
+        headerTitleAlign: "center",
+      };
+    },
+  },
   "Dealer Profile": {
     screen: DealerProfile,
     navigationOptions: {
@@ -105,6 +123,17 @@ dealerHomeStack.navigationOptions = ({ navigation }) => {
     navigationOptions.tabBarVisible = false;
   }
 
+  return navigationOptions;
+};
+
+//hide the bottom tab bar in Map screen
+dealerHomeStack.navigationOptions = ({ navigation }) => {
+  let { routeName } = navigation.state.routes[navigation.state.index];
+  let navigationOptions = {};
+
+  if (routeName === "MapScreen") {
+    navigationOptions.tabBarVisible = false;
+  }
   return navigationOptions;
 };
 
