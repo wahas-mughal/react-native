@@ -1,10 +1,12 @@
 import { FEED } from "../data/dummy-data";
 import { GALLERY } from "../data/dummy-data";
+import { LIKE } from "../data/dummy-data";
 import { ISLIKED } from "./actions";
 
 const initialState = {
   feed: FEED,
   gallery: GALLERY,
+  likes: LIKE
 };
 
 export default (state = initialState, action) => {

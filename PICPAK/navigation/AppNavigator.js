@@ -7,18 +7,30 @@ import Follow from "../screens/Setting/Follow";
 import Help from "../screens/Setting/HelpSection/Help";
 import DataPolicy from "../screens/Setting/AboutSection/DataPolicy";
 import TermsOfUse from "../screens/Setting/AboutSection/TermsOfUse";
-import Notifications from "../screens/Setting/Notifications";
+import Notifications from "../screens/Setting/NotificationsSection/Notifications";
+import PostsAndComments from "../screens/Setting/NotificationsSection/PostsAndComments";
+import FollowersAndFollowing from "../screens/Setting/NotificationsSection/FollowersAndFollowing";
 import PrivacyAndSecurity from "../screens/Setting/HelpSection/PrivacyAndSecurity";
 import Report from "../screens/Setting/HelpSection/Report";
-import Privacy from "../screens/Setting/Privacy";
-import Security from "../screens/Setting/Security";
+import Privacy from "../screens/Setting/PrivacySection/Privacy";
+import BlockedAccounts from "../screens/Setting/PrivacySection/BlockedAccounts";
+import FollowedAccounts from "../screens/Setting/PrivacySection/FollowedAccounts";
+import Security from "../screens/Setting/SecuritySection/Security";
+import ResetPassword from "../screens/Setting/SecuritySection/ResetPassword";
+import LoginActivity from "../screens/Setting/SecuritySection/LoginActivity";
+import SavedLoginInfo from "../screens/Setting/SecuritySection/SavedLoginInfo";
 import About from "../screens/Setting/AboutSection/About";
 import Theme from "../screens/Setting/Theme";
+import Account from "../screens/Setting/AccountSection/Account";
+import PersonalInformation from "../screens/Setting/AccountSection/PersonalInformation";
+import Activity from "../screens/Setting/AccountSection/Activity";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import Search from "../screens/Search";
 import Likes from "../screens/Likes";
+import AllLikes from "../screens/AllLikes";
+import FollowRequests from "../screens/FollowRequests";
 import Profile from "../screens/Profile";
 import AddImage from "../screens/AddImage";
 import { SimpleLineIcons } from "@expo/vector-icons";
@@ -35,51 +47,165 @@ const defaultNavOptions = {
   headerTintColor: "#fff",
 };
 
-const HelpNavigator = createStackNavigator({
-  helpNav: {
-    screen: Help,
+const accountNavigator = createStackNavigator({
+  account: {
+    screen: Account,
     navigationOptions: {
-      headerTitle: "Help",
+      headerTitle: "Account",
     },
   },
-  privacyandsecurity: {
-    screen: PrivacyAndSecurity,
+  personalinfo: {
+    screen: PersonalInformation,
     navigationOptions: {
-      headerTitle: "Privacy and Security",
+      headerTitle: "Personal Information",
     },
   },
-  report: {
-    screen: Report,
+  activity: {
+    screen: Activity,
     navigationOptions: {
-      headerTitle: "Report",
+      headerTitle: "Activity",
     },
   },
 },{
-  defaultNavigationOptions: defaultNavOptions
-});
+  defaultNavigationOptions: defaultNavOptions,
+})
 
-const AboutNavigator = createStackNavigator({
-  aboutNav: {
-    screen: About,
-    navigationOptions: {
-      headerTitle: "About",
+
+const securityNavigator = createStackNavigator(
+  {
+    security: {
+      screen: Security,
+      navigationOptions: {
+        headerTitle: "Security",
+      },
+    },
+    resetpassword: {
+      screen: ResetPassword,
+      navigationOptions: {
+        headerTitle: "Reset Password",
+      },
+    },
+    savedlogininfo: {
+      screen: SavedLoginInfo,
+      navigationOptions: {
+        headerTitle: "Saved Login Info",
+      },
+    },
+    loginactivity: {
+      screen: LoginActivity,
+      navigationOptions: {
+        headerTitle: "Login Activity",
+      },
     },
   },
-  datapolicy: {
-    screen: DataPolicy,
-    navigationOptions: {
-      headerTitle: "Data Policy",
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const privacyNavigator = createStackNavigator(
+  {
+    privacyNav: {
+      screen: Privacy,
+      navigationOptions: {
+        headerTitle: "Privacy",
+      },
+    },
+    blockedaccounts: {
+      screen: BlockedAccounts,
+      navigationOptions: {
+        headerTitle: "Block Accounts",
+      },
+    },
+    followedaccounts: {
+      screen: FollowedAccounts,
+      navigationOptions: {
+        headerTitle: "Followed Accounts",
+      },
     },
   },
-  termsofuse: {
-    screen: TermsOfUse,
-    navigationOptions: {
-      headerTitle: "Term Of Use",
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const notificationNavigator = createStackNavigator(
+  {
+    notificationsNav: {
+      screen: Notifications,
+      navigationOptions: {
+        headerTitle: "Notifications",
+      },
+    },
+    postsandcomments: {
+      screen: PostsAndComments,
+      navigationOptions: {
+        headerTitle: "Posts And Comments",
+      },
+    },
+    followersandfollowing: {
+      screen: FollowersAndFollowing,
+      navigationOptions: {
+        headerTitle: "Followers And Following",
+      },
     },
   },
-},{
-  defaultNavigationOptions: defaultNavOptions
-});
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const HelpNavigator = createStackNavigator(
+  {
+    helpNav: {
+      screen: Help,
+      navigationOptions: {
+        headerTitle: "Help",
+      },
+    },
+    privacyandsecurity: {
+      screen: PrivacyAndSecurity,
+      navigationOptions: {
+        headerTitle: "Privacy and Security",
+      },
+    },
+    report: {
+      screen: Report,
+      navigationOptions: {
+        headerTitle: "Report",
+      },
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const AboutNavigator = createStackNavigator(
+  {
+    aboutNav: {
+      screen: About,
+      navigationOptions: {
+        headerTitle: "About",
+      },
+    },
+    datapolicy: {
+      screen: DataPolicy,
+      navigationOptions: {
+        headerTitle: "Data Policy",
+      },
+    },
+    termsofuse: {
+      screen: TermsOfUse,
+      navigationOptions: {
+        headerTitle: "Term Of Use",
+      },
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
 const settingsNavigator = createStackNavigator(
   {
@@ -98,32 +224,39 @@ const settingsNavigator = createStackNavigator(
     help: {
       screen: HelpNavigator,
       navigationOptions: {
-        headerShown: false
+        headerShown: false,
       },
     },
     notifications: {
-      screen: Notifications,
+      screen: notificationNavigator,
       navigationOptions: {
-        headerTitle: "Notifications",
+        headerShown: false,
       },
     },
     privacy: {
-      screen: Privacy,
+      screen: privacyNavigator,
       navigationOptions: {
-        headerTitle: "Privacy",
+        headerShown: false,
       },
     },
     security: {
-      screen: Security,
+      screen: securityNavigator,
       navigationOptions: {
-        headerTitle: "Security",
+       headerShown: false
       },
     },
+    account: {
+      screen: accountNavigator,
+      navigationOptions: {
+        headerShown: false
+      },
+    },
+
     about: {
       screen: AboutNavigator,
       navigationOptions: {
         headerTitle: "About",
-        headerShown: false
+        headerShown: false,
       },
     },
     theme: {
@@ -134,7 +267,7 @@ const settingsNavigator = createStackNavigator(
     },
   },
   {
-    defaultNavigationOptions: defaultNavOptions
+    defaultNavigationOptions: defaultNavOptions,
   }
 );
 
@@ -152,6 +285,28 @@ const profileNavigator = createStackNavigator({
     },
   },
 });
+
+const likesNavigator = createStackNavigator({
+  likesNav:{
+    screen: Likes,
+    navigationOptions:{
+      headerShown: false
+    }
+  },
+  alllikes:{
+    screen: AllLikes,
+    navigationOptions:{
+      headerShown: false
+    }
+  },
+  newRequestFollowers:{
+    screen: FollowRequests,
+    navigationOptions:{
+      headerShown: false
+    } 
+  }
+})
+
 
 const bottomTabNavigator = createBottomTabNavigator(
   {
@@ -182,7 +337,7 @@ const bottomTabNavigator = createBottomTabNavigator(
       },
     },
     likes: {
-      screen: Likes,
+      screen: likesNavigator,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => {
           return (
@@ -210,10 +365,10 @@ const bottomTabNavigator = createBottomTabNavigator(
     tabBarOptions: {
       showLabel: false,
       activeTintColor: "#ff6600",
-      keyboardHidesTabBar: true,
-      style: {
-        position: "absolute",
-      },
+      // keyboardHidesTabBar: true,
+      // style: {
+      //   position: "absolute",
+      // },
     },
   }
 );

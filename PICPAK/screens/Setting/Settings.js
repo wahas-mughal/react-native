@@ -65,7 +65,7 @@ const Settings = (props) => {
             <Text style={styles.text}> Security </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress = {() => props.navigation.navigate('account')}>
           <View style={styles.rows}>
             <MaterialIcons name="account-circle" size={28} color="#fff" />
             <Text style={styles.text}> Account </Text>

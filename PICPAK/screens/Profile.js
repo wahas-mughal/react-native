@@ -8,6 +8,8 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  TouchableNativeFeedback,
+  Platform
 } from "react-native";
 import Card from "../components/Card";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
@@ -18,6 +20,11 @@ import { FlatList } from "react-native-gesture-handler";
 const Profile = (props) => {
   const galleryData = useSelector((state) => state.gallery.gallery);
   console.log(galleryData);
+  
+  let TouchableNativeOpacity = TouchableOpacity;
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableNativeOpacity = TouchableNativeFeedback;
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -32,7 +39,6 @@ const Profile = (props) => {
         contentContainerStyle={{
           alignItems: "center",
           justifyContent: "center",
-          paddingBottom: 40,
         }}
       >
         <View style={{ marginTop: 50, width: "100%"}}>
@@ -97,12 +103,12 @@ const Profile = (props) => {
           renderItem={(itemData) => (
          
               <View style={styles.profilePosts}>
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableNativeOpacity onPress={() => {}}>
                   <Image
                     source={{ uri: itemData.item.postImage }}
                     style={styles.postImages}
                   />
-                </TouchableOpacity>
+                </TouchableNativeOpacity>
               </View>
           )}
         />
@@ -150,7 +156,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: Dimensions.get('window').width/4,
     height: Dimensions.get('window').width/4,
-    borderRadius: 80,
+    borderRadius: 50,
   },
   profileHead: {
     flexDirection: "row",

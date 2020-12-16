@@ -7,7 +7,6 @@ const Theme = (props) => {
   return (
     <View style={styles.container}>
       <View style={{ margin: 30 }}>
-        <TouchableOpacity>
           <View style = {styles.themeContainer}>
             <Text style={styles.mainText}> Light </Text>
             <Switch
@@ -15,8 +14,6 @@ const Theme = (props) => {
               thumbColor="#03b1fc"
             />
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
           <View style = {styles.themeContainer}>
             <Text style={styles.mainText}> Dark </Text>
             <Switch
@@ -24,8 +21,6 @@ const Theme = (props) => {
               thumbColor="#03b1fc"
             />
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
           <View style = {styles.themeContainer}>
             <Text style={styles.mainText}> Dark with blue </Text>
             <Switch
@@ -33,17 +28,13 @@ const Theme = (props) => {
               thumbColor="#03b1fc"
             />
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
           <View style = {styles.themeContainer}>
             <Text style={styles.mainText}> Dark with pink </Text>
             <Switch
               trackColor={{ true: "#03b1fc", false: "#fff" }}
               thumbColor="#03b1fc"
             />
-          </View>
-        </TouchableOpacity>
-        
+          </View>   
       </View>
     </View>
   );

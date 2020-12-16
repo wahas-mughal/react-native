@@ -6,11 +6,9 @@ const Notifications = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.byshareContainer}>
-        <TouchableOpacity onPress={() => {}}>
           <View style={styles.byShareWay}>
             <Text style={styles.byShareText}> Push Notifications </Text>
           </View>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => {}}>
           <View
             style={[styles.byShareWay, { justifyContent: "space-between" }]}
@@ -22,19 +20,14 @@ const Notifications = (props) => {
             />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('postsandcomments')}>
           <View style={styles.byShareWay}>
-            <Text style={styles.byShareText}> Posts, Stories and Comments</Text>
+            <Text style={styles.byShareText}> Posts and Comments</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('followersandfollowing')}>
           <View style={styles.byShareWay}>
-            <Text style={styles.byShareText}> Following and Followers </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
-          <View style={styles.byShareWay}>
-            <Text style={styles.byShareText}> Messages </Text>
+            <Text style={styles.byShareText}> Followers and Following </Text>
           </View>
         </TouchableOpacity>
       </View>

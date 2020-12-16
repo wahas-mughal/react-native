@@ -8,6 +8,8 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  TouchableNativeFeedback,
+  Platform,
 } from "react-native";
 import Card from "../components/Card";
 import { AntDesign } from "@expo/vector-icons";
@@ -21,6 +23,11 @@ const Dashboard = (props) => {
   const dispatch = useDispatch();
   console.log(feedData);
   console.log(Dimensions.get("window").width / 5);
+
+  let TouchableNativeOpacity = TouchableOpacity;
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableNativeOpacity = TouchableNativeFeedback;
+  }
 
   const onScrollBeginHandler = () => {
     setTimeout(() => {
@@ -52,53 +59,79 @@ const Dashboard = (props) => {
         contentContainerStyle={{
           alignItems: "center",
           justifyContent: "center",
-          paddingBottom: 80,
+          paddingBottom: 40,
         }}
       >
         {feedData.map((elements) => (
-          <TouchableOpacity
+          <View
+            style={{
+              overflow: "hidden",
+              borderBottomLeftRadius: 35,
+              borderBottomRightRadius: 35,
+              marginTop: 40,
+              borderTopLeftRadius: 15,
+              borderTopRightRadius: 15,
+            }}
             key={elements.feedId}
-            onPress={postLikeHandler.bind(this, elements.feedId)}
           >
-            <View>
-              <Card style={styles.card}>
-                <View style={{ width: "100%", height: "69%" }}>
-                  <Image
-                    source={{ uri: elements.profileImage }}
-                    style={styles.image}
-                  />
-                  <View style={styles.likedView}>
-                    {elements.isLiked ? (
-                      <AntDesign name="heart" size={24} color="orange" />
-                    ) : (
-                      <AntDesign name="heart" size={24} color="gray" />
-                    )}
-                    <Text style={styles.likedText}>
-                      Furqan and 201 others liked
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      height: "20%",
-                      paddingHorizontal: 20,
-                      paddingTop: 5,
-      
-                    }}
-                  >
-                    <View style = {{flexDirection: 'row', justifyContent: 'space-between', marginTop: 3}}>
-                    <Text style={styles.profileName}>{elements.title} </Text>
-                    <TouchableOpacity>
-                      <View style = {{backgroundColor: 'orange', padding: 3, borderRadius: 7}}>
-                      <Text style = {{color: '#fff'}}> View </Text>
-                      </View>
-                    </TouchableOpacity>
+            <TouchableNativeOpacity
+              onPress={postLikeHandler.bind(this, elements.feedId)}
+            >
+              <View>
+                <Card style={styles.card}>
+                  <View style={{ width: "100%", height: "69%" }}>
+                    <Image
+                      source={{ uri: elements.profileImage }}
+                      style={styles.image}
+                    />
+                    <View style={styles.likedView}>
+                      {elements.isLiked ? (
+                        <AntDesign name="heart" size={24} color="orange" />
+                      ) : (
+                        <AntDesign name="heart" size={24} color="gray" />
+                      )}
+                      <Text style={styles.likedText}>
+                        Furqan and 201 others liked
+                      </Text>
                     </View>
-                    <Text numberOfLines={3} style = {{marginTop: 3}} >{elements.profileDescription}</Text>
+                    <View
+                      style={{
+                        height: "20%",
+                        paddingHorizontal: 20,
+                        paddingTop: 5,
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: 3,
+                        }}
+                      >
+                        <Text style={styles.profileName}>
+                          {elements.title}{" "}
+                        </Text>
+                        <TouchableNativeOpacity>
+                          <View
+                            style={{
+                              backgroundColor: "orange",
+                              padding: 3,
+                              borderRadius: 7,
+                            }}
+                          >
+                            <Text style={{ color: "#fff" }}> View </Text>
+                          </View>
+                        </TouchableNativeOpacity>
+                      </View>
+                      <Text numberOfLines={3} style={{ marginTop: 3 }}>
+                        {elements.profileDescription}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </Card>
-            </View>
-          </TouchableOpacity>
+                </Card>
+              </View>
+            </TouchableNativeOpacity>
+          </View>
         ))}
       </ScrollView>
     </View>
@@ -150,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   card: {
-    marginTop: 40,
+    // marginTop: 40,
     padding: 0,
     borderBottomLeftRadius: 35,
     borderBottomRightRadius: 35,
