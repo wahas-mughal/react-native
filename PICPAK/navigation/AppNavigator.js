@@ -25,7 +25,7 @@ import Theme from "../screens/Setting/Theme";
 import Account from "../screens/Setting/AccountSection/Account";
 import PersonalInformation from "../screens/Setting/AccountSection/PersonalInformation";
 import Activity from "../screens/Setting/AccountSection/Activity";
-import { createAppContainer } from "react-navigation";
+import { createAppContainer, createSwitchNavigator} from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import Search from "../screens/Search";
@@ -459,19 +459,31 @@ searchNavigator.navigationOptions = ({ navigation }) => {
   return navigationOptions;
 };
 
-const AppNavigator = createStackNavigator(
-  {
-    login: Login,
-    verification: Verification,
-    register: Register,
-    intro: Intro,
-    dashboardBottomNav: bottomTabNavigator,
+const AppNavigator = createSwitchNavigator({
+  login: Login,
+  verification: Verification,
+  register: Register,
+  intro: Intro,
+  dashboardBottomNav: bottomTabNavigator,
+},{
+  defaultNavigationOptions: {
+    headerShown: false,
   },
-  {
-    defaultNavigationOptions: {
-      headerShown: false,
-    },
-  }
-);
+});
+
+// const AppNavigator = createStackNavigator(
+//   {
+//     login: Login,
+//     verification: Verification,
+//     register: Register,
+//     intro: Intro,
+//     dashboardBottomNav: bottomTabNavigator,
+//   },
+//   {
+//     defaultNavigationOptions: {
+//       headerShown: false,
+//     },
+//   }
+// );
 
 export default createAppContainer(AppNavigator);
