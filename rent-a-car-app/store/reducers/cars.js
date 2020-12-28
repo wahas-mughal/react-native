@@ -1,9 +1,18 @@
-import {CARS} from '../../data/dummy-data';
+import { CARS } from "../../data/dummy-data";
+import { FETCH_CARS } from "../actions/cars";
 
 const initialState = {
-    allCars: CARS
-}
+  allCars: CARS,
+};
 
 export default (state = initialState, action) => {
-    return state;
-}
+  // switch (action.type) {
+  //   case FETCH_CARS: {
+  //       return {
+  //           ...state,
+  //           allCars: action.cars
+  //       }
+  //   }
+  // }
+  return state;
+};

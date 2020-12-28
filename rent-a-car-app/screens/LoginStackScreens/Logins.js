@@ -12,17 +12,28 @@ import MyButton from "../../shared/MyButton";
 import { globalstyles } from "../../style/global";
 import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import * as firebase from "firebase";
+import * as authActions from '../../store/actions/auth';
+import {useDispatch} from 'react-redux';
 
 export default function Login({ navigation }) {
  
+  // const [token, setToken] = useState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   // user sign in with firebase
   const userSignIn = (email, pass) => {
-    firebase.auth().signInWithEmailAndPassword(email, pass)
-      .then(() => {
-        navigation.navigate("Spinner");
+  firebase.auth().signInWithEmailAndPassword(email, pass)
+      .then((credentials) => {
+        // console.log(credentials);
+        credentials.user.getIdToken().then(function(idToken){
+          dispatch(authActions.auth(idToken, credentials.user.uid));
+          console.log("token at the time of login " +idToken);
+          console.log("user id at the time of login "+credentials.user.uid);
+          navigation.navigate("Spinner");
+        });
+      
       })
       .catch((error) => {
         Alert.alert(error.message);

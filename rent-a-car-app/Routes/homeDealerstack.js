@@ -114,7 +114,7 @@ const dealerHomeStack = createStackNavigator({
   },
 });
 
-//hide the bottom tab bar in Home screen
+// hide the bottom tab bar in Home screen
 dealerHomeStack.navigationOptions = ({ navigation }) => {
   let { routeName } = navigation.state.routes[navigation.state.index];
   let navigationOptions = {};
@@ -145,6 +145,7 @@ const bottomTabScreens = {
         return <AntDesign name="profile" size={21} color="#fff" />;
       },
       tabBarColor: "#03c4ff",
+      // tabBarVisible: false
     },
   },
   "Available Cars": {

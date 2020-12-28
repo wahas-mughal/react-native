@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Text,
   StyleSheet,
@@ -6,62 +6,102 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import Card from "../shared/Card";
+import { useSelector, useDispatch } from "react-redux";
+import * as bookingActions from "../store/actions/bookings";
 
-export default function MyBookings({ navigation }) {
+function BookingList({ navigation }) {
+  const bookingData = useSelector((state) => state.bookings.userBookings);
+  console.log(bookingData);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const fetchBookings = useCallback(async () => {
+    setIsLoading(true);
+    await dispatch(bookingActions.fetchBookings());
+    setIsLoading(false);
+  }, [dispatch, setIsLoading]);
+
+  // // this effect runs whenver this screen is switch between other screens
+  useEffect(() => {
+    const willFocus = navigation.addListener("willFocus", fetchBookings);
+    return () => {
+      willFocus.remove();
+    };
+  }, [fetchBookings]);
+
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View style={styles.indicator}>
+        <ActivityIndicator size={32} color="#03c4ff" />
+      </View>
+    );
+  }
+
   return (
-      <ScrollView style={styles.container}>
-        <Text style={styles.headingText}> Bookings Overview</Text>
-          <Card style = {{padding: 15, margin: 10}}>
+    <View>
+      {bookingData.map((items) => (
+        <View key={items.userId} style={{ margin: 10 }}>
+          <Card style={{ padding: 15 }}>
             <TouchableOpacity
               activeOpacity={0.5}
-              onPress={() => navigation.navigate("BookingHistory")}
+              onPress={() =>
+                navigation.navigate("BookingHistory", { id: items.bookingId })
+              }
             >
               <View style={styles.historyView}>
-                <Text style={styles.carTitle}>Suzuki Liana </Text>
+                <View style={{ width: 170 }}>
+                  <Text style={styles.carTitle} numberOfLines={1}>
+                    {" "}
+                    {items.vehicle}{" "}
+                  </Text>
+                </View>
                 <View style={styles.onGoingStatusView}>
                   <Text style={styles.statusText}>On-Going</Text>
                 </View>
               </View>
             </TouchableOpacity>
           </Card>
-          <Card style = {{padding: 15, margin: 10}}>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={() => navigation.navigate("BookingHistory")}
-            >
-              <View style={styles.historyView}>
-                <Text style={styles.carTitle}>Suzuki Liana </Text>
-                <View style={styles.completedStatusView}>
-                  <Text style={styles.statusText}>Completed</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </Card>
+        </View>
+      ))}
+    </View>
+  );
+}
 
-      </ScrollView>
+export default function MyBookings({ navigation }) {
+  return (
+    <ScrollView style={styles.container}>
+      <View style={{ margin: 10 }}>
+        <Text style={styles.headingText}> Bookings Overview</Text>
+        <BookingList navigation={navigation} />
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
   },
   headingText: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
     marginBottom: 10,
     marginLeft: 4,
-    marginTop: 10
+    marginTop: 10,
   },
   historyView: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: 'center',
+    alignItems: "center",
     width: 280,
   },
   onGoingStatusView: {
@@ -74,7 +114,7 @@ const styles = StyleSheet.create({
     padding: 4,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10
+    marginRight: 10,
   },
   statusText: {
     color: "#fff",
@@ -90,10 +130,15 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   carTitle: {
     fontSize: 16,
     fontWeight: "900",
+  },
+  indicator: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

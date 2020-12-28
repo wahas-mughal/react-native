@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,47 @@ import {
   FlatList,
   TouchableOpacity,
   TouchableNativeFeedback,
-  Platform
+  Platform,
+  ActivityIndicator,
 } from "react-native";
 import { useSelector } from "react-redux";
 import Card from "../shared/Card";
+// import * as dealerActions from "../store/actions/dealers";
+// import { useDispatch } from "react-redux";
 
 export default function AllDealers({ navigation }) {
   const allDealer = useSelector((state) => state.dealers.allDealers);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const dispatch = useDispatch();
 
-  let TouchableNativeOpacity = TouchableOpacity
-  
-  if(Platform.OS === 'android' && Platform.Version >= 21){
-    TouchableNativeOpacity = TouchableNativeFeedback
+  // const fetchAllDealers = useCallback(async () => {
+  //   setIsLoading(true);
+  //   await dispatch(dealerActions.fetchDealers());
+  //   setIsLoading(false);
+  // }, [dispatch, setIsLoading]);
+
+  // useEffect(() => {
+  //   const willFocus = navigation.addListener("WillFocus", fetchAllDealers);
+  //   return () => {
+  //     willFocus.remove();
+  //   };
+  // }, [fetchAllDealers]);
+
+  // useEffect(() => {
+  //   fetchAllDealers();
+  // }, []);
+
+  let TouchableNativeOpacity = TouchableOpacity;
+
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableNativeOpacity = TouchableNativeFeedback;
   }
+
+  // if (isLoading) {
+  //   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+  //     <ActivityIndicator size={28} color="#03c4ff" />
+  //   </View>;
+  // }
 
   return (
     <View style={styles.allFeaturedSection}>
@@ -28,11 +56,15 @@ export default function AllDealers({ navigation }) {
         data={allDealer}
         keyExtractor={(item) => item.dealerId}
         renderItem={(itemData) => (
-          <TouchableNativeOpacity onPress = {() => navigation.navigate('Dealer Profile', {
-            id: itemData.item.dealerId,
-            title: itemData.item.title
-          })}>
-            <View style={{margin: 10, marginBottom: 20 }}>
+          <TouchableNativeOpacity
+            onPress={() =>
+              navigation.navigate("Dealer Profile", {
+                id: itemData.item.dealerId,
+                title: itemData.item.title,
+              })
+            }
+          >
+            <View style={{ margin: 10, marginBottom: 20 }}>
               <Card style={styles.allCard}>
                 <Image
                   style={styles.allFeaturedImage}

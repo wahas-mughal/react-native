@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,47 @@ import {
   TouchableOpacity,
   TouchableNativeFeedback,
   Platform,
+  ActivityIndicator
 } from "react-native";
 import { useSelector } from "react-redux";
 import Card from "../../shared/Card";
-import { ALL_DEALERS } from "../../data/dummy-data";
+// import * as carActions from '../../store/actions/cars'
+// import { useDispatch } from "react-redux";
 
 const AvailableCars = (props) => {
   const carData = useSelector((state) => state.cars.allCars);
+
+  // const [isLoading, setIsLoading] = useState(false);
+  // const dispatch = useDispatch();
+
+  // const fetchCars = useCallback(async () => {
+  //   setIsLoading(true);
+  //   await dispatch(carActions.fetchAllCars());
+  //   setIsLoading(false);
+  // }, [dispatch, setIsLoading]);
+
+  // useEffect(() => {
+  //   const willFocus = navigation.addListener("WillFocus", fetchCars);
+  //   return () => {
+  //     willFocus.remove();
+  //   };
+  // }, [fetchCars]);
+
+  // useEffect(() => {
+  //   fetchCars();
+  // }, []);
 
   let TouchableAndroidOpacity = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21) {
     TouchableAndroidOpacity = TouchableNativeFeedback;
   }
+
+  // if (isLoading) {
+  //   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+  //     <ActivityIndicator size={28} color="#03c4ff" />
+  //   </View>;
+  // }
 
   return (
     <View style={styles.container}>

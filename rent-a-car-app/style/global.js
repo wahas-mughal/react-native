@@ -169,8 +169,8 @@ export const globalstyles = StyleSheet.create({
     IdentityCameraContent:{
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        height: '60%'
+        height: '100%',
+        padding:20
         },
 
     cameraContent:{

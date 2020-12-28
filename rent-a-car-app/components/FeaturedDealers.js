@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
   View,
   Text,
@@ -8,12 +8,36 @@ import {
   TouchableOpacity,
   TouchableNativeFeedback,
   Platform,
+  ActivityIndicator
 } from "react-native";
 import { useSelector } from "react-redux";
 import Card from "../shared/Card";
+// import * as dealerActions from "../store/actions/dealers";
+// import { useDispatch } from "react-redux";
+
 
 export default function FeaturedDealers({ navigation }) {
-  const featureDealers = useSelector((state) => state.dealers.featuredDealers);
+  const allDealer = useSelector((state) => state.dealers.allDealers);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const dispatch = useDispatch();
+
+
+  // const fetchAllDealers = useCallback(async () => {
+  //   setIsLoading(true);
+  //   await dispatch(dealerActions.fetchDealers());
+  //   setIsLoading(false);
+  // }, [dispatch, setIsLoading]);
+
+  // useEffect(() => {
+  //   const willFocus = navigation.addListener("WillFocus", fetchAllDealers);
+  //   return () => {
+  //     willFocus.remove();
+  //   };
+  // }, [fetchAllDealers]);
+
+  // useEffect(() => {
+  //   fetchAllDealers();
+  // }, []);
 
   let TouchableNativeOpacity = TouchableOpacity;
 
@@ -21,13 +45,19 @@ export default function FeaturedDealers({ navigation }) {
     TouchableNativeOpacity = TouchableNativeFeedback;
   }
 
+  // if (isLoading) {
+  //   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+  //     <ActivityIndicator size={28} color="#03c4ff" />
+  //   </View>;
+  // }
+
   return (
     <View style={styles.featuredSection}>
       <Text style={styles.featureHeading}> Featured Dealers </Text>
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
-        data={featureDealers}
+        data={allDealer}
         keyExtractor={(item) => item.dealerId}
         renderItem={(itemData) => (
 
@@ -54,6 +84,7 @@ export default function FeaturedDealers({ navigation }) {
                 </View>
               </Card>
             </View>
+            
           </TouchableNativeOpacity>
         )}
       />

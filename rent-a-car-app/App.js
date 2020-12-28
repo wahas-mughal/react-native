@@ -1,25 +1,19 @@
 import React, { useState } from "react";
 import AppNavigator from "./Routes/drawer";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import dealersReducer from "./store/reducers/dealers";
 import carReducer from "./store/reducers/cars";
+import bookingReducer from "./store/reducers/bookings";
+import authReducer from "./store/reducers/auth";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
+import ReduxThunk from 'redux-thunk';
+import {firebaseConfig} from './config/firebase-config';
 
 //firebase setup
 import * as firebase from "firebase";
 import "@firebase/firestore";
-
-var firebaseConfig = {
-  apiKey: "AIzaSyB1CxkIfZpxlp-_bY8G25MvdDdrEqOWAXQ",
-  authDomain: "rent-a-car-app-211bf.firebaseapp.com",
-  databaseURL: "https://rent-a-car-app-211bf.firebaseio.com",
-  projectId: "rent-a-car-app-211bf",
-  storageBucket: "rent-a-car-app-211bf.appspot.com",
-  messagingSenderId: "343530227842",
-  appId: "1:343530227842:web:075c3ca04fe9f70b14cc9b",
-};
 
 firebase.initializeApp(firebaseConfig);
 
@@ -34,11 +28,13 @@ const fetchFonts = () => {
 // combine the reducers
 const rootReducer = combineReducers({
   dealers: dealersReducer,
-  cars: carReducer
+  cars: carReducer,
+  bookings: bookingReducer,
+  auth: authReducer
 });
 
 //initialize redux store
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 
 export default function App() {

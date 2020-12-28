@@ -1,4 +1,5 @@
 import{ALL_DEALERS}from '../../data/dummy-data';
+import { FETCH_DEALERS } from '../actions/dealers';
 
 const initialState = {
     allDealers: ALL_DEALERS,
@@ -7,5 +8,13 @@ const initialState = {
 }
 
 export default (state = initialState, action) => {
-    return state;
+    // switch (action.type) {
+    //     case FETCH_DEALERS: {
+    //         return {
+    //             ...state,
+    //             allDealers: action.dealers
+    //         }
+    //     }
+    //   }
+      return state;
 }

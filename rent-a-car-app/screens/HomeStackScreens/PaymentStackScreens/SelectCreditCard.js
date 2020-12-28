@@ -11,6 +11,10 @@ import Card from "../../../shared/Card";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function SelectCreditCard({ navigation }) {
+
+  const bookingData = navigation.getParam('bookingData');
+  
+
   let TouchableNativeOpacity = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -29,7 +33,7 @@ export default function SelectCreditCard({ navigation }) {
       </TouchableNativeOpacity>
       <Text style={styles.savedCardText}> Saved Cards </Text>
       <TouchableNativeOpacity
-        onPress={() => navigation.navigate("confirmPayment")}
+        onPress={() => navigation.navigate("confirmPayment", {bookingData: bookingData})}
       >
         <View>
           <Card style={styles.creditCardView}>

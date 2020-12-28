@@ -1,38 +1,53 @@
 import React from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, FlatList } from "react-native";
+import { useSelector } from "react-redux";
 import { globalstyles } from "../../style/global";
 
-export default class BookingHistory extends React.Component {
-  render() {
-    return (
-      <View style={styles.historyContainer}>
-        <View style={globalstyles.card}>
-          <Image
-            source={require("../../assets/images/suzuki-liana.jpg")}
-            style={styles.coverImage}
-            resizeMode="cover"
-          />
+export default function BookingHistory({navigation}) {
+  const bookingID = navigation.getParam('id');
+  console.log(bookingID);
+  const bookingData = useSelector((state) => state.bookings.bookings.filter(booking => booking.bookingId === bookingID));
+  console.log(bookingData);
+  return (
+    <FlatList
+      data={bookingData}
+      keyExtractor = {(item) => item.bookingId}
+      renderItem={(itemData) => (
+        <View style={styles.historyContainer}>
+          <View style={globalstyles.card}>
+            {/* <Image
+              source={require("../../assets/images/suzuki-liana.jpg")}
+              style={styles.coverImage}
+              resizeMode="cover"
+            /> */}
 
-          <Text style = {styles.headingText}> Booking Details </Text>
+            <Text style={styles.headingText}> Booking Details </Text>
 
-          <View style={styles.textView}>
-            <Text style={styles.text}>
-              Car: <Text style={styles.innerText}> Suzuki Liana </Text>{" "}
-            </Text>
-            <Text style={styles.text}>
-              Booking Start: <Text style={styles.innerText}> 26/07/2020 </Text>
-            </Text>
-            <Text style={styles.text}>
-              Booking End: <Text style={styles.innerText}> 29/07/2020 </Text>
-            </Text>
-            <Text style={styles.text}>
-              Status: <Text style={styles.innerText}> On-Going </Text>{" "}
-            </Text>
+            <View style={styles.textView}>
+              <Text style={styles.text}>
+                Car:{" "}
+                <Text style={styles.innerText}> {itemData.item.vehicle} </Text>{" "}
+              </Text>
+              <Text style={styles.text}>
+                Rent:{" "}
+                <Text style={styles.innerText}> {itemData.item.rent} </Text>
+              </Text>
+              <Text style={styles.text}>
+               Rent Duration:{" "}
+                <Text style={styles.innerText}>
+                  {" "}
+                  {itemData.item.rentDuration}
+                </Text>
+              </Text>
+              <Text style={styles.text}>
+                Status: <Text style={styles.innerText}> On-Going </Text>{" "}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-    );
-  }
+      )}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
@@ -60,10 +75,10 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     fontSize: 14,
   },
-  headingText:{
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginLeft: 10,
-      marginTop: 10
-  }
+  headingText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
+    marginTop: 10,
+  },
 });

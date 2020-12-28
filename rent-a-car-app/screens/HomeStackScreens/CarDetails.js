@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   View,
   StyleSheet,
@@ -8,11 +8,13 @@ import {
   Button,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
-import Card from "../../shared/Card";
+import { Picker } from "@react-native-community/picker";
 
 export default function CarDetails({ navigation }) {
   const carID = navigation.getParam("id");
+
+  const [selectedValue, setSelectedValue] = useState("1");
+
   const carDetails = useSelector((state) =>
     state.cars.allCars.filter((car) => car.carId === carID)
   );
@@ -63,12 +65,57 @@ export default function CarDetails({ navigation }) {
                   </Text>
                 </View>
               </View>
+              <View style = {{marginVertical: 10, }}>
+                <Text style = {styles.descriptionText}>Duration</Text>
+                <Picker
+                  selectedValue={selectedValue}
+                  style={{ width: 150, height: 50 }}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedValue(itemValue)
+                  }
+                >
+                  <Picker.Item label="1 Day" value="1" />
+                  <Picker.Item label="2 Days" value="2" />
+                  <Picker.Item label="3 Days" value="3" />
+                  <Picker.Item label="4 Days" value="4" />
+                  <Picker.Item label="5 Days" value="5" />
+                  <Picker.Item label="6 Days" value="6" />
+                  <Picker.Item label="7 Days" value="7" />
+                  <Picker.Item label="8 Days" value="8" />
+                  <Picker.Item label="9 Days" value="9" />
+                  <Picker.Item label="10 Days" value="10" />
+                  <Picker.Item label="11 Days" value="11" />
+                  <Picker.Item label="12 Days" value="12" />
+                  <Picker.Item label="13 Days" value="13" />
+                  <Picker.Item label="14 Days" value="14" />
+                  <Picker.Item label="15 Days" value="15" />
+                  <Picker.Item label="16 Days" value="16" />
+                  <Picker.Item label="17 Days" value="17" />
+                  <Picker.Item label="18 Days" value="18" />
+                  <Picker.Item label="19 Days" value="19" />
+                  <Picker.Item label="20 Days" value="20" />
+                   <Picker.Item label="21 Days" value="21" />
+                  <Picker.Item label="22 Days" value="22" />
+                  <Picker.Item label="23 Days" value="23" />
+                  <Picker.Item label="24 Days" value="24" />
+                  <Picker.Item label="25 Days" value="25" />
+                  <Picker.Item label="26 Days" value="26" />
+                  <Picker.Item label="27 Days" value="27" />
+                  <Picker.Item label="28 Days" value="28" />
+                  <Picker.Item label="29 Days" value="29" />
+                  <Picker.Item label="30 Days" value="30" />
+                </Picker>
+              </View>
               <View style={styles.btn}>
                 <Button
-                  title="Book"
+                  title="Book Now"
                   color="#03c4ff"
                   onPress={() =>
-                    navigation.navigate({ routeName: "paymentMethod" })
+                    navigation.navigate("paymentMethod", {
+                      title: itemData.item.title,
+                      rent: itemData.item.rent,
+                      duration: selectedValue
+                    })
                   }
                 />
               </View>
