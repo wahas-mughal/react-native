@@ -10,15 +10,26 @@ import {
   TouchableOpacity,
   TouchableNativeFeedback,
   Platform,
+  StatusBar
 } from "react-native";
 import Card from "../components/Card";
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../store/actions";
+import Animated from 'react-native-reanimated';
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const Dashboard = (props) => {
-  const [scrollBegins, setScrollBegins] = useState(false);
+  // const [scrollBegins, setScrollBegins] = useState(false);
   // const [isLiked, setIsLiked] = useState(false);
+  const HEADER_HEIGHT = Platform.OS === 'ios' ? 115 : 70+StatusBar.currentHeight;
+  const scrollY = new Animated.Value(0);
+  const diffClampScrollY = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
+  const headerY = Animated.interpolate(diffClampScrollY, {
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [0, -HEADER_HEIGHT]
+  });
+
   const feedData = useSelector((state) => state.feed.feed);
   const dispatch = useDispatch();
   console.log(feedData);
@@ -29,12 +40,6 @@ const Dashboard = (props) => {
     TouchableNativeOpacity = TouchableNativeFeedback;
   }
 
-  const onScrollBeginHandler = () => {
-    setTimeout(() => {
-      setScrollBegins(true);
-    }, 300);
-  };
-
   const postLikeHandler = (fId) => {
     dispatch(actions.isLiked(fId));
   };
@@ -42,24 +47,33 @@ const Dashboard = (props) => {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
-        style={[styles.fixedPositioning, styles.container, { zIndex: -1 }]}
+        style={[styles.fixedPositioning, { zIndex: -10 }]}
         source={require("../assets/Images/dash-bgImage.jpg")}
       />
 
-      {scrollBegins ? null : (
-        <View style={styles.mainTextContainer}>
-          <Text style={styles.mainText}> EXPLORE </Text>
-        </View>
-      )}
+      <Animated.View style = {[styles.header, {height: HEADER_HEIGHT, transform: [{translateY: headerY}]}]} >
+        <Text style = {{color: '#fff', fontWeight: 'bold', fontSize: RFPercentage(3.5)}}> EXPLORE </Text>
+      </Animated.View>
 
-      <ScrollView
+      <Animated.ScrollView
+      bounces = {false}
+        scrollEventThrottle = {16}
+        onScroll = {Animated.event([
+          {
+            nativeEvent: {
+              contentOffset: {
+                y: scrollY
+              }
+            }
+          }
+        ])}
         showsVerticalScrollIndicator={false}
-        onScrollBeginDrag={onScrollBeginHandler}
         style={styles.scrollview}
         contentContainerStyle={{
           alignItems: "center",
           justifyContent: "center",
           paddingBottom: 40,
+          paddingTop: 80
         }}
       >
         {feedData.map((elements) => (
@@ -135,18 +149,16 @@ const Dashboard = (props) => {
             </TouchableNativeOpacity>
           </View>
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  fixedPositioning: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-  },
-  fixedPositioning: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -201,6 +213,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 3,
   },
+  header:{
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    backgroundColor: 'orange',
+    zIndex: 1000,
+    elevation: 1000,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 10
+  }
 });
 
 export default Dashboard;

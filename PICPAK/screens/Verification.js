@@ -103,12 +103,12 @@ const Verification = (props) => {
         // console.log(credential);
         const res = await firebase.auth().signInWithCredential(credential);
         console.log(res);
-        setIsloading(false);
         props.navigation.navigate("register");
       }
     } catch (err) {
       Alert.alert("Please enter a valid OTP!");
     }
+    setIsloading(false);
   };
 
   if (isLoading) {

@@ -317,12 +317,12 @@ const likesNavigator = createStackNavigator({
       headerShown: false,
     },
   },
-  newRequestFollowers: {
-    screen: FollowRequests,
-    navigationOptions: {
-      headerShown: false,
-    },
-  },
+  // newRequestFollowers: {
+  //   screen: FollowRequests,
+  //   navigationOptions: {
+  //     headerShown: false,
+  //   },
+  // },
 });
 
 const dashboardNavigator = createStackNavigator(

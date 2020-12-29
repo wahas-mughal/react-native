@@ -33,7 +33,7 @@ const Likes = (props) => {
       <View style={styles.container}>
         <View style={{ margin: 20 }}>
           <Text style={styles.mainText}> Your Activity </Text>
-          <View style={styles.newRequestSection}>
+          {/* <View style={styles.newRequestSection}>
             <TouchableNativeOpacity
               onPress={() => props.navigation.navigate("newRequestFollowers")}
             >
@@ -49,7 +49,7 @@ const Likes = (props) => {
               />
             </TouchableNativeOpacity>
             <Text style={styles.newFollowText}> New Follow Frequest</Text>
-          </View>
+          </View> */}
           <View
             style={{
               flexDirection: "row",

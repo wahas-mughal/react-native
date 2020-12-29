@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   tabBar: {
     position: "absolute",
     right: 0,
-    bottom: 100,
+    bottom: Dimensions.get('window').width/3.3,
     left: 0,
     borderColor: "#ddd",
   },
