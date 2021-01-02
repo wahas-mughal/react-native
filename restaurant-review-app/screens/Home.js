@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, TouchableOpacity, FlatList } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  View,
+} from "react-native";
 import {
   Container,
   Header,
@@ -20,30 +27,54 @@ import HeaderButton from "../components/HeaderButton";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import {useDispatch, useSelector} from 'react-redux';
-import * as detailActions from '../store/action/details';
+import { useDispatch, useSelector } from "react-redux";
+import * as detailActions from "../store/action/details";
+// navigator.geolocation = require('@react-native-community/geolocation');
+// navigator.geolocation = require('react-native-geolocation-service');
+
 
 const Home = (props) => {
+  const [placeID, setPlaceID] = useState("");
+  return (
+    <Container>
+      <Content>
+        <Card>
+          <CardItem>
+            <GooglePlacesAutocomplete
+              placeholder="Search Nearby Restaurants"
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                console.log(data, details);
+                setPlaceID(details.place_id);
+              }}
+              query={{
+                key: "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8",
+                language: "en",
+                components: "country:pk"
+              }}
+              currentLocation={true}
+              currentLocationLabel='Choose current location'
+            />
+          </CardItem>
+        </Card>
+        <SearchedItems place_id={placeID} navigation = {props.navigation} />
+      </Content>
+    </Container>
+  );
+};
 
+const SearchedItems = (props) => {
+  const { place_id } = props;
   //Google Maps API
-  const GoogleAPI = 'AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8'
-  const fetchedPlacesDetails = useSelector(state => state.details.placeDetails);
-  console.log(fetchedPlacesDetails); 
-
+  const GoogleAPI = "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
+  const fetchedPlacesDetails = useSelector(
+    (state) => state.details.placeDetails
+  );
+  console.log(fetchedPlacesDetails);
 
   const [pickedLocation, setPickedLocation] = useState();
-  const [placeID, setPlaceID] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState();
-  const [placeDetails, setPlaceDetails] = useState();
-  console.log("PLACES DETAILS: "+placeDetails);
-  console.log(placeID);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  // const token = useSelector((state) => state.auth.token);
-  // console.log(token);
-
-
-
-  //places
 
   // verify current location permissions
   const verifyPermissions = async () => {
@@ -84,47 +115,28 @@ const Home = (props) => {
     }
   };
 
-// request google maps nearby API to fetch the data for nearby restaurants
-const reqNearbyRestaurants = async (placeId) => {
-  try{
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,geometry/location,reviews,photos&key=${GoogleAPI}`;
-    const result = await fetch(url);
-    const resData = await result.json();
-    console.log(resData);
-    // get the lat and lng of the selected location
-    setSelectedLocation({
-      latitude: resData.result.geometry.location.lat,
-      longitude: resData.result.geometry.location.lng,
-    })
-  }
-  catch(err) {
-    throw err;
-  }
-  try{
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${selectedLocation.latitude},${selectedLocation.longitude}&radius=1500&type=restaurant&key=${GoogleAPI}`;
-    const result = await fetch(url);
-    const resData = await result.json();
-    console.log(resData);
+  // request google maps nearby API to fetch the data for nearby restaurants
+  const reqNearbyRestaurants = async (placeId) => {
+    setIsLoading(true);
+    try {
+      const placeSearchAPI = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,geometry/location,reviews,photos&key=${GoogleAPI}`;
+      const placeResults = await fetch(placeSearchAPI);
+      const placeResData = await placeResults.json();
+      console.log(placeResData);
 
-    dispatch(detailActions.setPlaceDetails(resData));
-    // const detailsArray = []
+      const lat =  placeResData.result.geometry.location.lat
+      const lng =  placeResData.result.geometry.location.lng
 
-    // for (const data of resData){
-    //   detailsArray.push(
-    //     data.results.place_id,
-    //     data.results.name,
-    //     data.results.photos.photo_reference,
-    //     data.results.rating
-    //   )
-    // }
-
-    setPlaceDetails(resData.results);
-  }
-  catch(err){
-    throw err;
-  }
-  
-}
+      const nearestPlaceAPI = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=${GoogleAPI}`;
+      const nearestPlaceResult = await fetch(nearestPlaceAPI);
+      const nearestPlaceResData = await nearestPlaceResult.json();
+      console.log(nearestPlaceResData);
+      dispatch(detailActions.setPlaceDetails(nearestPlaceResData));
+      setIsLoading(false);
+    } catch (err) {
+      throw err;
+    }
+  };
 
   //runs getLocationHandler when the screen is mounted
   useEffect(() => {
@@ -132,36 +144,30 @@ const reqNearbyRestaurants = async (placeId) => {
   }, []);
 
   useEffect(() => {
-    reqNearbyRestaurants(placeID);
-  }, [placeID, dispatch])
+    if (place_id) {
+      reqNearbyRestaurants(place_id);
+    }
+  }, [place_id]);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size={28} color="#0065ff" />
+      </View>
+    );
+  }
 
   return (
-    <Container>
-      <Content>
-        <Card>
-          <CardItem>
-            <GooglePlacesAutocomplete
-              placeholder="Search Nearby Restaurants"
-              onPress={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
-                console.log(data, details);
-                setPlaceID(details.place_id);
-              }}
-              query={{
-                key: "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8",
-                language: "en",
-              }}
-            />
-            {/* <Icon name="ios-search" style={{ color: "#0065ff" }} />
-            <Input placeholder="Search" />
-            <Icon name="md-location-sharp" style={{ color: "#0065ff" }} /> */}
-          </CardItem>
-        </Card>
-        
-        <FlatList data = {placeDetails} 
-        renderItem = {(data) => (
-          <TouchableOpacity
-          onPress={() => props.navigation.navigate("reviewDetails")}
+    <FlatList
+      data={fetchedPlacesDetails}
+      renderItem={(resData) => (
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate("reviewDetails", {
+            id: resData.item.place_id,
+            placeName: resData.item.name,
+            userRating: resData.item.rating,
+            totalRatings: resData.item.total_ratings
+          })}
         >
           <Card>
             <CardItem>
@@ -175,7 +181,7 @@ const reqNearbyRestaurants = async (placeId) => {
                       fontWeight: "bold",
                     }}
                   >
-                    {data.item.name}
+                    {resData.item.name}
                   </Text>
                 </Body>
               </Left>
@@ -183,11 +189,10 @@ const reqNearbyRestaurants = async (placeId) => {
             <CardItem cardBody>
               <Image
                 source={{
-                  uri:
-                    data.item.icon
+                  uri: "https://cdn-food.tribune.com.pk/gallery/jHwYlOlhiCQSU6OBcx6RObu72a7JSvei5rHBjvJa.jpeg"
                 }}
                 style={{ height: 200, width: null, flex: 1 }}
-                resizeMode = 'contain'
+                resizeMode="contain"
               />
             </CardItem>
             <CardItem>
@@ -204,7 +209,7 @@ const reqNearbyRestaurants = async (placeId) => {
                       fontWeight: "bold",
                     }}
                   >
-                    Reviews(20)
+                  Total Ratings({resData.item.total_ratings})
                   </Text>
                 </Button>
               </Left>
@@ -221,18 +226,15 @@ const reqNearbyRestaurants = async (placeId) => {
                       fontWeight: "bold",
                     }}
                   >
-                    {data.item.rating}
+                    {resData.item.rating}
                   </Text>
                 </Button>
               </Right>
             </CardItem>
           </Card>
         </TouchableOpacity>
-        )}
-        />
-      
-      </Content>
-    </Container>
+      )}
+    />
   );
 };
 
