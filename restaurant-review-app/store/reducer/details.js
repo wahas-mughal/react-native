@@ -1,7 +1,6 @@
 import { SET_PLACE_DETAILS } from "../action/details";
 
 const initialState = {
-    reviews: [],
     placeDetails: []
 }
 

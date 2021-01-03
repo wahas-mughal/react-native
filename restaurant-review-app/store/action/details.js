@@ -13,7 +13,7 @@ export const setPlaceDetails = (payload) => {
     console.log(result);
 
     let convertObjIntoArray = Object.values(result);
-    console.log("CONVERTED ARRAY " + convertObjIntoArray);
+    console.log("CONVERTED ARRAY " +convertObjIntoArray);
 
     let detailsArray = [];
 

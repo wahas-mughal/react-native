@@ -90,6 +90,8 @@ const SearchedItems = (props) => {
     return true;
   };
 
+
+
   // function to get the device current location
   const getLocationHandler = async () => {
     const hasPermission = await verifyPermissions();
@@ -102,10 +104,11 @@ const SearchedItems = (props) => {
         timeout: 5000,
       });
       console.log(location);
-      setPickedLocation({
-        lat: location.coords.latitude,
-        lng: location.coords.longitude,
-      });
+
+        const lat = location.coords.latitude;
+        const lng = location.coords.longitude;
+        findNearByRestaurant(lat, lng)
+
     } catch (err) {
       Alert.alert(
         "Could not fetch location!",
@@ -115,9 +118,24 @@ const SearchedItems = (props) => {
     }
   };
 
+  const findNearByRestaurant = async (lat, lng) => {
+    setIsLoading(true);
+    try{
+      const nearestPlaceAPI = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=${GoogleAPI}`;
+      const nearestPlaceResult = await fetch(nearestPlaceAPI);
+      const nearestPlaceResData = await nearestPlaceResult.json();
+      console.log(nearestPlaceResData);
+      dispatch(detailActions.setPlaceDetails(nearestPlaceResData));
+    }
+    catch(err){
+      throw err;
+    }
+    setIsLoading(false);
+  }
+
+
   // request google maps nearby API to fetch the data for nearby restaurants
   const reqNearbyRestaurants = async (placeId) => {
-    setIsLoading(true);
     try {
       const placeSearchAPI = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,geometry/location,reviews,photos&key=${GoogleAPI}`;
       const placeResults = await fetch(placeSearchAPI);
@@ -126,13 +144,12 @@ const SearchedItems = (props) => {
 
       const lat =  placeResData.result.geometry.location.lat
       const lng =  placeResData.result.geometry.location.lng
-
-      const nearestPlaceAPI = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=${GoogleAPI}`;
-      const nearestPlaceResult = await fetch(nearestPlaceAPI);
-      const nearestPlaceResData = await nearestPlaceResult.json();
-      console.log(nearestPlaceResData);
-      dispatch(detailActions.setPlaceDetails(nearestPlaceResData));
-      setIsLoading(false);
+      findNearByRestaurant(lat, lng);
+      // const nearestPlaceAPI = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=${GoogleAPI}`;
+      // const nearestPlaceResult = await fetch(nearestPlaceAPI);
+      // const nearestPlaceResData = await nearestPlaceResult.json();
+      // console.log(nearestPlaceResData);
+      // dispatch(detailActions.setPlaceDetails(nearestPlaceResData));
     } catch (err) {
       throw err;
     }

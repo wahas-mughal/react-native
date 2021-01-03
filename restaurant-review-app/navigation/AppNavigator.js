@@ -7,6 +7,7 @@ import SignUp from "../screens/SignUp";
 import ReviewHistory from "../screens/ReviewHistory";
 import ReviewDetails from "../screens/ReviewDetails";
 import PostReview from "../screens/PostReview";
+import GoogleReviews from "../screens/GoogleReviews";
 import ForgetPassword from "../screens/ForgetPassword";
 import { Button, View, Text } from "react-native";
 import React, {useState, useEffect} from "react";
@@ -35,7 +36,15 @@ const HomeNavigator = createStackNavigator({
       headerTitleAlign: "center",
     },
   },
+  googleReviews: {
+    screen: GoogleReviews,
+    navigationOptions: {
+      headerTitle: "Google Reviews",
+      headerTitleAlign: "center",
+    },
+  },
 });
+
 
 const afterAuthDrawerNav = createDrawerNavigator(
   {

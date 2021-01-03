@@ -14,36 +14,16 @@ import {
   Body,
   Right,
 } from "native-base";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import HeaderButton from "../components/HeaderButton";
-import {useDispatch, useSelector} from 'react-redux';
+
+
 
 const ReviewDetails = (props) => {
-  const GoogleAPI = "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
   const getPlaceId = props.navigation.getParam("id");
   const [placeId, setPlaceId] = useState(getPlaceId);
+
   const getName = props.navigation.getParam("placeName");
   const getRating = props.navigation.getParam("userRating");
   const getTotalRatings = props.navigation.getParam("totalRatings");
-  const dispatch = useDispatch();
-
-  const getReviewById = async (placeID) => {
-    try {
-      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=reviews&key=${GoogleAPI}`;
-      const results = await fetch(url);
-      const resData = await results.json();
-      console.log(resData);
-      dispatch()
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  useEffect(() => {
-    if (placeId) {
-      getReviewById(placeId);
-    }
-  }, [placeId]);
 
   return (
     <Container>
@@ -99,6 +79,15 @@ const ReviewDetails = (props) => {
               </Button>
             </Right>
           </CardItem>
+          <CardItem>
+         <Body style = {{alignItems: 'flex-end'}}>
+           <TouchableOpacity onPress = {() => props.navigation.navigate('googleReviews', {
+             id: placeId
+           })}>
+           <Text style={styles.text}> See Google Reviews </Text>
+           </TouchableOpacity>
+         </Body>      
+          </CardItem>
         </Card>
 
         <Card>
@@ -112,18 +101,11 @@ const ReviewDetails = (props) => {
                     marginBottom: 8,
                   }}
                 >
-                  <Image
-                    source={{
-                      uri: "https://bookingmedtravel.com/img/userimage.png",
-                    }}
-                    style={styles.image}
-                  />
                   <Text
                     style={{
                       fontSize: 18,
                       fontWeight: "bold",
                       color: "#0065ff",
-                      marginLeft: 7,
                     }}
                   >
                     Bilal Khan
@@ -135,16 +117,26 @@ const ReviewDetails = (props) => {
               </Body>
             </Left>
             <Right>
-              <Body style={{ justifyContent: "flex-end"}}>
-                <View style = {{justifyContent: 'flex-start'}}> 
-                <Text
-                  style={{ color: "#0065ff", fontSize: 16, fontWeight: "bold" }}
-                >RATED 4 
-                </Text>
-                <Text
-                  style={{ color: "#0065ff", fontSize: 16, fontWeight: "bold" }}
-                >3 months ago
-                </Text>
+              <Body style={{ justifyContent: "flex-end" }}>
+                <View style={{ justifyContent: "flex-start" }}>
+                  <Text
+                    style={{
+                      color: "#0065ff",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    RATED 4
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#0065ff",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    3 months ago
+                  </Text>
                 </View>
               </Body>
             </Right>
@@ -160,6 +152,11 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 60,
+  },
+  text: {
+    color: "#0065ff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

@@ -8,6 +8,7 @@ import { combineReducers, createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import authReducer from "./store/reducer/auth";
 import detailsReducer from "./store/reducer/details";
+import reviewsReducer from "./store/reducer/reviews";
 import ReduxThunk from 'redux-thunk';
 import * as firebase from 'firebase';
 
@@ -37,7 +38,8 @@ export default function App() {
 
   const rootReducer = combineReducers({
     auth: authReducer,
-    details: detailsReducer
+    details: detailsReducer,
+    reviews: reviewsReducer
   });
 
   const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
