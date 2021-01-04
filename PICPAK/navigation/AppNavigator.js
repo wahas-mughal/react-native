@@ -460,11 +460,11 @@ searchNavigator.navigationOptions = ({ navigation }) => {
 };
 
 const AppNavigator = createSwitchNavigator({
+  dashboardBottomNav: bottomTabNavigator,
   login: Login,
   verification: Verification,
   register: Register,
   intro: Intro,
-  dashboardBottomNav: bottomTabNavigator,
 },{
   defaultNavigationOptions: {
     headerShown: false,

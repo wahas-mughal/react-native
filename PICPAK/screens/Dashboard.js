@@ -23,10 +23,18 @@ const Dashboard = (props) => {
   // const [scrollBegins, setScrollBegins] = useState(false);
   // const [isLiked, setIsLiked] = useState(false);
   const HEADER_HEIGHT = Platform.OS === 'ios' ? 115 : 70+StatusBar.currentHeight;
+  
+  //set the animated value Y position to 0
   const scrollY = new Animated.Value(0);
+
+  //to show the header on scroll up get the scroll Y value and set min and max value
   const diffClampScrollY = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
+  
+  //set the input and output range on diffClamp values
   const headerY = Animated.interpolate(diffClampScrollY, {
+    // 0 to header height
     inputRange: [0, HEADER_HEIGHT],
+    // header height to 0
     outputRange: [0, -HEADER_HEIGHT]
   });
 
@@ -51,13 +59,17 @@ const Dashboard = (props) => {
         source={require("../assets/Images/dash-bgImage.jpg")}
       />
 
+      {/* //transform the headerY to create an effect */}
       <Animated.View style = {[styles.header, {height: HEADER_HEIGHT, transform: [{translateY: headerY}]}]} >
         <Text style = {{color: '#fff', fontWeight: 'bold', fontSize: RFPercentage(3.5)}}> EXPLORE </Text>
       </Animated.View>
 
       <Animated.ScrollView
       bounces = {false}
+       // set the throttle value to 16
         scrollEventThrottle = {16}
+
+        // create an animated event and set the nativeEvent contentOffset(y: scrollY)
         onScroll = {Animated.event([
           {
             nativeEvent: {

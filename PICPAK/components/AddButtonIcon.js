@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -6,8 +6,9 @@ import {
   Alert,
   Modal,
   Image,
-  ImageBackground,
-  KeyboardAvoidingView,
+  Dimensions,
+  ScrollView,
+  PixelRatio,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -23,8 +24,12 @@ import {
   Body,
   Form,
   Left,
+  Content,
+  Container,
 } from "native-base";
 import { RFPercentage } from "react-native-responsive-fontsize";
+import * as FileSystem from "expo-file-system";
+import FilterScreen from "../screens/FilterScreen";
 
 const AddButtonIcon = (props) => {
   const [imagePicker, setImagePicker] = useState(null);
@@ -56,34 +61,48 @@ const AddButtonIcon = (props) => {
       }
       const image = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
-        // aspect: [16, 9],
-        quality: 0.5,
+        aspect: [4, 3],
+        quality: 1,
       });
 
-      setImagePicker(image.uri);
+      const imageURI = image.uri;
+      console.log("Image path: " + imageURI);
+      const imagePath = imageURI.split("/").pop();
+      const newImagePath = FileSystem.documentDirectory + imagePath;
+
+      await FileSystem.moveAsync({
+        from: imageURI,
+        to: newImagePath,
+      });
+
+      console.log("New Image Path " + newImagePath);
+
+      setImagePicker(newImagePath);
       setIsModalTrue(true);
-      console.log("Image path: " + image.uri);
     } catch (err) {
       throw err;
     }
   };
 
   const SIZE = 65;
+
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalTrue}
-        onRequestClose={() => {
-          Alert.alert("Post posted!");
-        }}
-      >
-        <View style={{ flex: 1, marginTop: 15, margin: 10 }}>
-          <Card style={{ borderRadius: 10 }}>
+      <Modal animationType="fade" transparent={true} visible={isModalTrue}>
+        <Content style={{ margin: 10 }}>
+          <Card>
             <CardItem>
               <Left>
-                <Text style = {{fontSize: RFPercentage(4), fontWeight: 'bold', color: 'orange', marginLeft: -10}}> Caption </Text>
+                <Text
+                  style={{
+                    fontSize: RFPercentage(4),
+                    fontWeight: "bold",
+                    color: "orange",
+                    marginLeft: -10,
+                  }}
+                >
+                  Caption
+                </Text>
               </Left>
               <Body />
               <Right>
@@ -101,41 +120,11 @@ const AddButtonIcon = (props) => {
                 placeholder="Give caption to your photo"
               />
             </View>
-            <CardItem cardBody>
-              <Image
-                source={{ uri: imagePicker }}
-                style={{ width: "100%", height: 280 }}
-                resizeMode="contain"
-              />
-            </CardItem>
-            <CardItem>
-              <Left />
-              <Body />
-              <Right>
-                <Button
-                  block
-                  style={{
-                    backgroundColor: "#fff",
-                    borderColor: "orange",
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    marginVertical: 3
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "orange",
-                      fontWeight: "bold",
-                      fontSize: RFPercentage(2.6),
-                    }}
-                  >
-                    POST
-                  </Text>
-                </Button>
-              </Right>
+            <CardItem cardBody style={{ margin: 4 }}>
+              <FilterScreen source={imagePicker} />
             </CardItem>
           </Card>
-        </View>
+        </Content>
       </Modal>
       <TouchableOpacity
         style={{
@@ -164,13 +153,22 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
   },
-  // modalContainer: {
-  //   height: 450,
-  //   width: "100%",
-  //   // padding: 20,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
+  image: {
+    width: Dimensions.get("window").width / 1.1,
+    height: Dimensions.get("window").width / 1.1,
+    flex: 1,
+    backgroundColor: "white",
+  },
+  filterTags: {
+    borderColor: "orange",
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+    padding: 7,
+    marginBottom: 10,
+    backgroundColor: "orange",
+  },
 });
 
 export default AddButtonIcon;
