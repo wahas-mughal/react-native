@@ -13,6 +13,8 @@ import { Button, View, Text } from "react-native";
 import React, {useState, useEffect} from "react";
 import * as firebase from "firebase";
 import '@firebase/firestore';
+import { useDispatch } from "react-redux";
+import * as authActions from '../store/action/auth';
 
 const HomeNavigator = createStackNavigator({
   Home: {
@@ -110,7 +112,7 @@ const afterAuthDrawerNav = createDrawerNavigator(
             }}
           >
             <Text style={{ color: "#fff", fontSize: 20, margin: 20 }}>
-              {user && user?.firstname + " " + user.lastname}
+              {user && user?.firstname + " " + user?.lastname}
             </Text>
           </View>
           <DrawerItems {...props} />

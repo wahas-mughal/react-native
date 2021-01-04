@@ -14,16 +14,21 @@ import {
   Body,
   Right,
 } from "native-base";
-
-
+import { useSelector } from "react-redux";
 
 const ReviewDetails = (props) => {
   const getPlaceId = props.navigation.getParam("id");
   const [placeId, setPlaceId] = useState(getPlaceId);
+  const token = useSelector((state) => state.auth.token);
+  const { navigation } = props;
 
   const getName = props.navigation.getParam("placeName");
   const getRating = props.navigation.getParam("userRating");
   const getTotalRatings = props.navigation.getParam("totalRatings");
+
+  useEffect(() => {
+    navigation.setParams({ authToken: token });
+  }, [token]);
 
   return (
     <Container>
@@ -80,13 +85,18 @@ const ReviewDetails = (props) => {
             </Right>
           </CardItem>
           <CardItem>
-         <Body style = {{alignItems: 'flex-end'}}>
-           <TouchableOpacity onPress = {() => props.navigation.navigate('googleReviews', {
-             id: placeId
-           })}>
-           <Text style={styles.text}> See Google Reviews </Text>
-           </TouchableOpacity>
-         </Body>      
+            <Body style={{ alignItems: "flex-end" }}>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate("googleReviews", {
+                    id: placeId,
+                    name: getName,
+                  })
+                }
+              >
+                <Text style={styles.text}> See Google Reviews </Text>
+              </TouchableOpacity>
+            </Body>
           </CardItem>
         </Card>
 
@@ -161,24 +171,30 @@ const styles = StyleSheet.create({
 });
 
 ReviewDetails.navigationOptions = (navData) => {
+  const token = navData.navigation.getParam("authToken");
   return {
-    headerRight: () => (
-      <TouchableOpacity
-        onPress={() => navData.navigation.navigate("postReview")}
-      >
-        <Text
-          style={{
-            color: "#0065ff",
-            marginRight: 15,
-            fontSize: 17,
-            fontWeight: "bold",
-          }}
-        >
-          {" "}
-          Post Review{" "}
-        </Text>
-      </TouchableOpacity>
-    ),
+    headerRight: () => {
+      {
+        token ? (
+          <TouchableOpacity
+            onPress={() => navData.navigation.navigate("postReview")}
+          >
+            <Text
+              style={{
+                color: "#0065ff",
+                marginRight: 15,
+                fontSize: 17,
+                fontWeight: "bold",
+              }}
+            >
+              Post Review
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <View />
+        );
+      }
+    },
   };
 };
 
