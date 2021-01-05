@@ -6,6 +6,7 @@ import {
   Dimensions,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import { RFPercentage } from "react-native-responsive-fontsize";
@@ -33,28 +34,28 @@ function useCapture() {
 }
 export default function FilterScreen({ source }) {
   const { captureViewRef, snapShot, onCapture } = useCapture();
+  const [selectedFilter, setSelectedFilter] = useState(
+    styles.defaultFilterOverlay
+  );
 
   return (
-    <View style={{ width: "100%" }}>
-      <View ref={captureViewRef} collapsable={false}>
+    <View>
+      <View
+        ref={captureViewRef}
+        collapsable={false}
+        style={{
+          height: Dimensions.get("window").width / 1.1,
+          // width: Dimensions.get("window").width / 1.2,
+        }}
+      >
         <Image
           source={{
             uri: source,
           }}
-          style={{
-            width: "100%",
-            height: Dimensions.get("window").width / 1.43,
-            zIndex: -10,
-            position: "absolute",
-          }}
-          resizeMode="contain"
+          style={styles.filterImage}
+          resizeMode="cover"
         />
-        <View
-          style={{
-            backgroundColor: "rgba(255, 0, 0, 0.2)",
-            height: Dimensions.get("window").width / 1.43,
-          }}
-        />
+        <View style={selectedFilter} />
       </View>
 
       <Body>
@@ -65,14 +66,14 @@ export default function FilterScreen({ source }) {
             }}
             style={{
               width: "100%",
-              height: Dimensions.get("window").width / 1.43,
+              height: Dimensions.get("window").width / 1.1,
               position: "relative",
             }}
           />
         ) : (
           <View />
         )}
-        <ScrollView horizontal style = {{marginVertical: 15}}>
+        <ScrollView horizontal style={{ marginVertical: 7 }}>
           <View
             style={{
               flexDirection: "row",
@@ -80,41 +81,56 @@ export default function FilterScreen({ source }) {
               alignItems: "center",
             }}
           >
-            <View style={styles.filterTags}>
+            <TouchableOpacity
+              style={styles.filterTags}
+              onPress={() => setSelectedFilter(styles.filterOverlay1)}
+            >
+              <Text style={{ color: "#fff", fontWeight: "bold" }}>Bright</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.filterTags}
+              onPress={() => setSelectedFilter(styles.filterOverlay6)}
+            >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                Filter 1
+                Bright 2
               </Text>
-            </View>
-            <View style={styles.filterTags}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.filterTags}
+              onPress={() => setSelectedFilter(styles.filterOverlay7)}
+            >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                Filter 2
+                Bright 3
               </Text>
-            </View>
-            <View style={styles.filterTags}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.filterTags}
+              onPress={() => setSelectedFilter(styles.filterOverlay2)}
+            >
+              <Text style={{ color: "#fff", fontWeight: "bold" }}>Blueish</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.filterTags}
+              onPress={() => setSelectedFilter(styles.filterOverlay3)}
+            >
+              <Text style={{ color: "#fff", fontWeight: "bold" }}>Reddish</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.filterTags}
+              onPress={() => setSelectedFilter(styles.filterOverlay4)}
+            >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                Filter 3
+                Dark Tense
               </Text>
-            </View>
-            <View style={styles.filterTags}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.filterTags}
+              onPress={() => setSelectedFilter(styles.filterOverlay5)}
+            >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                Filter 4
+                Greenish
               </Text>
-            </View>
-            <View style={styles.filterTags}>
-              <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                Filter 5
-              </Text>
-            </View>
-            <View style={styles.filterTags}>
-              <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                Filter 6
-              </Text>
-            </View>
-            <View style={styles.filterTags}>
-              <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                Filter 7
-              </Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </ScrollView>
         <Button
@@ -123,8 +139,8 @@ export default function FilterScreen({ source }) {
             backgroundColor: "#fff",
             borderColor: "orange",
             borderWidth: 1,
-            borderRadius: 5,
-            marginVertical: 5,
+            marginBottom: 10,
+            marginHorizontal: 7,
           }}
           onPress={onCapture}
         >
@@ -153,5 +169,43 @@ const styles = StyleSheet.create({
     padding: 7,
     marginBottom: 10,
     backgroundColor: "orange",
+    borderRadius: 30,
+  },
+  filterImage: {
+    width: "100%",
+    height: "100%",
+    zIndex: -10,
+    position: "absolute",
+  },
+  defaultFilterOverlay: {
+    height: Dimensions.get("window").width / 1.1,
+  },
+  filterOverlay1: {
+    height: Dimensions.get("window").width / 1.1,
+    backgroundColor: "rgba(193, 194, 190, 0.1)",
+  },
+  filterOverlay2: {
+    height: Dimensions.get("window").width / 1.1,
+    backgroundColor: "rgba(0, 0, 255, 0.1)",
+  },
+  filterOverlay3: {
+    height: Dimensions.get("window").width / 1.1,
+    backgroundColor: "rgba(252, 5, 5, 0.1)",
+  },
+  filterOverlay4: {
+    height: Dimensions.get("window").width / 1.1,
+    backgroundColor: "rgba(33, 33, 32, 0.3)",
+  },
+  filterOverlay5: {
+    height: Dimensions.get("window").width / 1.1,
+    backgroundColor: "rgba(0, 225, 0, 0.1)",
+  },
+  filterOverlay6: {
+    height: Dimensions.get("window").width / 1.1,
+    backgroundColor: "rgba(252, 252, 250, 0.2)",
+  },
+  filterOverlay7: {
+    height: Dimensions.get("window").width / 1.1,
+    backgroundColor: "rgba(252, 252, 250, 0.3)",
   },
 });
