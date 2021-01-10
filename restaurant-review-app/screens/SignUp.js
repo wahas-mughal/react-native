@@ -11,8 +11,9 @@ import {
   CardItem,
   Text,
   Button,
+  Icon
 } from "native-base";
-import { View, Alert, ActivityIndicator } from "react-native";
+import { View, Alert, ActivityIndicator, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 import "@firebase/firestore";
 import {useDispatch} from 'react-redux';
@@ -105,6 +106,14 @@ const SignUp = (props) => {
         >
           <Text style={{ color: "#0065ff" }}> Sign Up</Text>
         </Button>
+        <View style = {{width: '100%', alignItems: 'center', marginTop: 10}}>
+        <TouchableOpacity onPress={() => props.navigation.navigate("home")}>
+        <Icon
+          name="md-home"
+          style={{ color: "#fff", fontSize: 40, marginLeft: 20 }}
+        />
+      </TouchableOpacity>
+        </View>
       </Content>
     </Container>
   );

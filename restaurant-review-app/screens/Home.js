@@ -6,6 +6,8 @@ import {
   FlatList,
   ActivityIndicator,
   View,
+  TouchableNativeFeedback,
+  Platform,
 } from "react-native";
 import {
   Container,
@@ -32,7 +34,6 @@ import * as detailActions from "../store/action/details";
 // navigator.geolocation = require('@react-native-community/geolocation');
 // navigator.geolocation = require('react-native-geolocation-service');
 
-
 const Home = (props) => {
   const [placeID, setPlaceID] = useState("");
   return (
@@ -50,14 +51,14 @@ const Home = (props) => {
               query={{
                 key: "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8",
                 language: "en",
-                components: "country:pk"
+                components: "country:pk",
               }}
               currentLocation={true}
-              currentLocationLabel='Choose current location'
+              currentLocationLabel="Choose current location"
             />
           </CardItem>
         </Card>
-        <SearchedItems place_id={placeID} navigation = {props.navigation} />
+        <SearchedItems place_id={placeID} navigation={props.navigation} />
       </Content>
     </Container>
   );
@@ -90,8 +91,6 @@ const SearchedItems = (props) => {
     return true;
   };
 
-
-
   // function to get the device current location
   const getLocationHandler = async () => {
     const hasPermission = await verifyPermissions();
@@ -105,10 +104,9 @@ const SearchedItems = (props) => {
       });
       console.log(location);
 
-        const lat = location.coords.latitude;
-        const lng = location.coords.longitude;
-        findNearByRestaurant(lat, lng)
-
+      const lat = location.coords.latitude;
+      const lng = location.coords.longitude;
+      findNearByRestaurant(lat, lng);
     } catch (err) {
       Alert.alert(
         "Could not fetch location!",
@@ -120,19 +118,17 @@ const SearchedItems = (props) => {
 
   const findNearByRestaurant = async (lat, lng) => {
     setIsLoading(true);
-    try{
+    try {
       const nearestPlaceAPI = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=${GoogleAPI}`;
       const nearestPlaceResult = await fetch(nearestPlaceAPI);
       const nearestPlaceResData = await nearestPlaceResult.json();
       console.log(nearestPlaceResData);
       dispatch(detailActions.setPlaceDetails(nearestPlaceResData));
-    }
-    catch(err){
+    } catch (err) {
       throw err;
     }
     setIsLoading(false);
-  }
-
+  };
 
   // request google maps nearby API to fetch the data for nearby restaurants
   const reqNearbyRestaurants = async (placeId) => {
@@ -142,8 +138,8 @@ const SearchedItems = (props) => {
       const placeResData = await placeResults.json();
       console.log(placeResData);
 
-      const lat =  placeResData.result.geometry.location.lat
-      const lng =  placeResData.result.geometry.location.lng
+      const lat = placeResData.result.geometry.location.lat;
+      const lng = placeResData.result.geometry.location.lng;
       findNearByRestaurant(lat, lng);
       // const nearestPlaceAPI = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=${GoogleAPI}`;
       // const nearestPlaceResult = await fetch(nearestPlaceAPI);
@@ -174,17 +170,25 @@ const SearchedItems = (props) => {
     );
   }
 
+  let TouchableNativeOpacity = TouchableOpacity;
+
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableNativeOpacity = TouchableNativeFeedback;
+  }
+
   return (
     <FlatList
       data={fetchedPlacesDetails}
       renderItem={(resData) => (
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate("reviewDetails", {
-            id: resData.item.place_id,
-            placeName: resData.item.name,
-            userRating: resData.item.rating,
-            totalRatings: resData.item.total_ratings
-          })}
+        <TouchableNativeOpacity
+          onPress={() =>
+            props.navigation.navigate("reviewDetails", {
+              id: resData.item.place_id,
+              placeName: resData.item.name,
+              userRating: resData.item.rating,
+              totalRatings: resData.item.total_ratings,
+            })
+          }
         >
           <Card>
             <CardItem>
@@ -206,7 +210,8 @@ const SearchedItems = (props) => {
             <CardItem cardBody>
               <Image
                 source={{
-                  uri: "https://cdn-food.tribune.com.pk/gallery/jHwYlOlhiCQSU6OBcx6RObu72a7JSvei5rHBjvJa.jpeg"
+                  uri:
+                    "https://cdn-food.tribune.com.pk/gallery/jHwYlOlhiCQSU6OBcx6RObu72a7JSvei5rHBjvJa.jpeg",
                 }}
                 style={{ height: 200, width: null, flex: 1 }}
                 resizeMode="contain"
@@ -222,11 +227,11 @@ const SearchedItems = (props) => {
                   <Text
                     style={{
                       color: "#0065ff",
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: "bold",
                     }}
                   >
-                  Total Ratings({resData.item.total_ratings})
+                    Total Ratings({resData.item.total_ratings})
                   </Text>
                 </Button>
               </Left>
@@ -239,7 +244,7 @@ const SearchedItems = (props) => {
                   <Text
                     style={{
                       color: "#0065ff",
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: "bold",
                     }}
                   >
@@ -249,7 +254,7 @@ const SearchedItems = (props) => {
               </Right>
             </CardItem>
           </Card>
-        </TouchableOpacity>
+        </TouchableNativeOpacity>
       )}
     />
   );

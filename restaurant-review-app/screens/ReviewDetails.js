@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   ActivityIndicator,
+  FlatList,
 } from "react-native";
 import {
   Container,
@@ -121,9 +122,12 @@ const ReviewDetails = (props) => {
 const InAppUserReviews = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const inAppReviewsDetail = useSelector((state) => state.reviews.inAppReviews.find((rest) => rest.restaurantName === props.name));
+  const inAppReviewsDetail = useSelector((state) =>
+    state.reviews.inAppReviews.filter(
+      (rest) => rest.restaurantName === props.name
+    )
+  );
   console.log("FILTERED IN APP REVIEW: ", inAppReviewsDetail);
-
 
   useEffect(() => {
     const getUserReviews = async () => {
@@ -134,16 +138,14 @@ const InAppUserReviews = (props) => {
     getUserReviews();
   }, []);
 
-  if (!inAppReviewsDetail) {
+  if (inAppReviewsDetail.length === 0) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Card style={{ padding: 15 }}>
-          <Text>
-            No reviews yet. Add a review if you have been here and experienced
-            their services.
-          </Text>
-        </Card>
-      </View>
+      <Card style={{alignItems: 'center', padding: 40}}>
+        <Text style={{ fontSize: 22, fontWeight: '700' }}>No reviews yet.</Text>
+        <Text style={{ fontSize: 14, textAlign: 'center'}}>
+          Help us know this place by adding a review if you have been here and experienced their services. Login to post a review!
+        </Text>
+      </Card>
     );
   }
 
@@ -156,56 +158,61 @@ const InAppUserReviews = (props) => {
   }
 
   return (
-    <Card>
-      <CardItem>
-        <Left>
-          <Body>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: 8,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  color: "#0065ff",
-                }}
-              >
-                {inAppReviewsDetail.username}
-              </Text>
-            </View>
-            <Text>{inAppReviewsDetail.review}</Text>
-          </Body>
-        </Left>
-        <Right>
-          <Body style={{ justifyContent: "flex-end" }}>
-            <View style={{ justifyContent: "flex-start" }}>
-              <Text
-                style={{
-                  color: "#0065ff",
-                  fontSize: 16,
-                  fontWeight: "bold",
-                }}
-              >
-                Rated {inAppReviewsDetail.rating}
-              </Text>
-              <Text
-                style={{
-                  color: "#0065ff",
-                  fontSize: 16,
-                  fontWeight: "bold",
-                }}
-              >
-                3 months ago
-              </Text>
-            </View>
-          </Body>
-        </Right>
-      </CardItem>
-    </Card>
+    <FlatList
+      data={inAppReviewsDetail}
+      renderItem={(resData) => (
+        <Card>
+          <CardItem>
+            <Left>
+              <Body>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 8,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      color: "#0065ff",
+                    }}
+                  >
+                    {resData.item.username}
+                  </Text>
+                </View>
+                <Text>{resData.item.review}</Text>
+              </Body>
+            </Left>
+            <Right>
+              <Body style={{ justifyContent: "flex-end" }}>
+                <View style={{ justifyContent: "flex-start" }}>
+                  <Text
+                    style={{
+                      color: "#0065ff",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Rated {resData.item.rating}
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#0065ff",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    3 months ago
+                  </Text>
+                </View>
+              </Body>
+            </Right>
+          </CardItem>
+        </Card>
+      )}
+    ></FlatList>
   );
 };
 
@@ -223,7 +230,7 @@ const styles = StyleSheet.create({
 });
 
 ReviewDetails.navigationOptions = (navData) => {
-  // const token = navData.navigation.getParam("authToken");
+  const token = navData.navigation.getParam("authToken");
   const resName = navData.navigation.getParam("restaurantName");
 
   return {
@@ -235,16 +242,20 @@ ReviewDetails.navigationOptions = (navData) => {
           })
         }
       >
-        <Text
-          style={{
-            color: "#0065ff",
-            marginRight: 15,
-            fontSize: 17,
-            fontWeight: "bold",
-          }}
-        >
-          Post Review
-        </Text>
+        {token ? (
+          <Text
+            style={{
+              color: "#0065ff",
+              marginRight: 15,
+              fontSize: 17,
+              fontWeight: "bold",
+            }}
+          >
+            Post Review
+          </Text>
+        ) : (
+          <View />
+        )}
       </TouchableOpacity>
     ),
   };

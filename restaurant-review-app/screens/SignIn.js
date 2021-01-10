@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   Container,
   Header,
@@ -13,43 +13,43 @@ import {
   Button,
   Icon,
 } from "native-base";
-import { View, Alert, ActivityIndicator} from "react-native";
-import * as firebase from 'firebase';
-import * as authActions from '../store/action/auth';
-import {useDispatch} from 'react-redux';
+import { View, Alert, ActivityIndicator, TouchableOpacity } from "react-native";
+import * as firebase from "firebase";
+import * as authActions from "../store/action/auth";
+import { useDispatch } from "react-redux";
 
 const SignIn = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const [isLoading, setIsLoading] = useState(false);
-const dispatch = useDispatch();
+  // user sign in with firebase
+  const userSignIn = async (email, password) => {
+    try {
+      setIsLoading(true);
+      const credentials = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      credentials.user.getIdToken().then(function (idToken) {
+        dispatch(authActions.auth(idToken, credentials.user.uid));
+        console.log("token at the time of login " + idToken);
+        console.log("user id at the time of login " + credentials.user.uid);
+        props.navigation.navigate("homeAfterAuth");
+      });
+    } catch (err) {
+      Alert.alert(err.message);
+    }
+    setIsLoading(false);
+  };
 
-// user sign in with firebase
-const userSignIn = async (email, password) => {
-  try{
-    setIsLoading(true);
-    const credentials = await firebase.auth().signInWithEmailAndPassword(email, password);
-    credentials.user.getIdToken().then(function (idToken) {
-      dispatch(authActions.auth(idToken, credentials.user.uid));
-      console.log("token at the time of login " + idToken);
-      console.log("user id at the time of login " + credentials.user.uid);
-      props.navigation.navigate('homeAfterAuth');
-    });
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size={30} color="#0065ff" />
+      </View>
+    );
   }
-  catch(err){
-    Alert.alert(err.message)
-  }
-  setIsLoading(false);
-};
-
-if(isLoading){
-  return(
-    <View style = {{flex:1, justifyContent: 'center', alignItems:'center'}}>
-      <ActivityIndicator size = {30} color = '#0065ff'/>
-    </View>
-  )
-}
 
   return (
     <Container style={{ backgroundColor: "#0065ff" }}>
@@ -67,13 +67,13 @@ if(isLoading){
           <CardItem cardBody style={{ height: 100 }}>
             <Item floatingLabel>
               <Label>Email</Label>
-              <Input onChangeText = {(text) => setEmail(text)} />
+              <Input onChangeText={(text) => setEmail(text)} />
             </Item>
           </CardItem>
           <CardItem cardBody style={{ height: 100 }}>
             <Item floatingLabel>
               <Label>Password</Label>
-              <Input onChangeText = {(text) => setPassword(text)} />
+              <Input onChangeText={(text) => setPassword(text)} />
             </Item>
           </CardItem>
         </Card>
@@ -99,6 +99,14 @@ if(isLoading){
           >
             <Text style={{ color: "#0065ff" }}> Sign In </Text>
           </Button>
+        </View>
+        <View style = {{width: '100%', alignItems: 'center', marginTop: 50}}>
+        <TouchableOpacity onPress={() => props.navigation.navigate("home")}>
+        <Icon
+          name="md-home"
+          style={{ color: "#fff", fontSize: 40, marginLeft: 20 }}
+        />
+      </TouchableOpacity>
         </View>
       </Content>
     </Container>

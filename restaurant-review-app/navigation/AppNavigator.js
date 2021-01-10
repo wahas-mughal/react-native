@@ -71,6 +71,7 @@ const afterAuthDrawerNav = createDrawerNavigator(
      const [user, setUser] = useState();
      const {uid} = firebase.auth().currentUser;
      const db = firebase.firestore();
+     const dispatch = useDispatch();
 
      const logOut = () => {
       firebase
@@ -78,6 +79,7 @@ const afterAuthDrawerNav = createDrawerNavigator(
         .signOut()
         .then(() => {
           props.navigation.navigate('signInNav');
+          dispatch(authActions.logOut());
         })
         .catch((err) => {
           throw err;
