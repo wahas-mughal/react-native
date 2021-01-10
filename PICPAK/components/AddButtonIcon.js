@@ -7,8 +7,6 @@ import {
   Modal,
   Image,
   Dimensions,
-  ScrollView,
-  PixelRatio,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -61,7 +59,7 @@ const AddButtonIcon = (props) => {
       }
       const image = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
-        aspect: [4, 3],
+        aspect: [8, 8],
         quality: 1,
       });
 

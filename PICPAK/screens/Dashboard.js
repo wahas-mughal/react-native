@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../store/actions";
 import Animated from 'react-native-reanimated';
 import { RFPercentage } from "react-native-responsive-fontsize";
+// @refresh reset
 
 const Dashboard = (props) => {
   // const [scrollBegins, setScrollBegins] = useState(false);
