@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Image, TouchableOpacity, StyleSheet, View } from "react-native";
+import {
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import {
   Container,
   Header,
@@ -14,12 +20,16 @@ import {
   Body,
   Right,
 } from "native-base";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import * as reviewActions from "../store/action/reviews";
 
 const ReviewDetails = (props) => {
   const getPlaceId = props.navigation.getParam("id");
   const [placeId, setPlaceId] = useState(getPlaceId);
   const token = useSelector((state) => state.auth.token);
+  // console.log("PAYLOAD ", inAppReviewsDetail[0].username);
+
+  console.log(token);
   const { navigation } = props;
 
   const getName = props.navigation.getParam("placeName");
@@ -27,8 +37,11 @@ const ReviewDetails = (props) => {
   const getTotalRatings = props.navigation.getParam("totalRatings");
 
   useEffect(() => {
-    navigation.setParams({ authToken: token });
-  }, [token]);
+    navigation.setParams({
+      authToken: token,
+      restaurantName: getName,
+    });
+  }, []);
 
   return (
     <Container>
@@ -99,61 +112,100 @@ const ReviewDetails = (props) => {
             </Body>
           </CardItem>
         </Card>
-
-        <Card>
-          <CardItem>
-            <Left>
-              <Body>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 8,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "bold",
-                      color: "#0065ff",
-                    }}
-                  >
-                    Bilal Khan
-                  </Text>
-                </View>
-                <Text>
-                  Habib Restaurant is fantastic and food is delicious too
-                </Text>
-              </Body>
-            </Left>
-            <Right>
-              <Body style={{ justifyContent: "flex-end" }}>
-                <View style={{ justifyContent: "flex-start" }}>
-                  <Text
-                    style={{
-                      color: "#0065ff",
-                      fontSize: 16,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    RATED 4
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#0065ff",
-                      fontSize: 16,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    3 months ago
-                  </Text>
-                </View>
-              </Body>
-            </Right>
-          </CardItem>
-        </Card>
+        <InAppUserReviews name={getName} />
       </Content>
     </Container>
+  );
+};
+
+const InAppUserReviews = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const inAppReviewsDetail = useSelector((state) => state.reviews.inAppReviews.find((rest) => rest.restaurantName === props.name));
+  console.log("FILTERED IN APP REVIEW: ", inAppReviewsDetail);
+
+
+  useEffect(() => {
+    const getUserReviews = async () => {
+      setIsLoading(true);
+      await dispatch(reviewActions.fetchInAppReviews(props.name));
+      setIsLoading(false);
+    };
+    getUserReviews();
+  }, []);
+
+  if (!inAppReviewsDetail) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Card style={{ padding: 15 }}>
+          <Text>
+            No reviews yet. Add a review if you have been here and experienced
+            their services.
+          </Text>
+        </Card>
+      </View>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size={28} color="#0065ff" />
+      </View>
+    );
+  }
+
+  return (
+    <Card>
+      <CardItem>
+        <Left>
+          <Body>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 8,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  color: "#0065ff",
+                }}
+              >
+                {inAppReviewsDetail.username}
+              </Text>
+            </View>
+            <Text>{inAppReviewsDetail.review}</Text>
+          </Body>
+        </Left>
+        <Right>
+          <Body style={{ justifyContent: "flex-end" }}>
+            <View style={{ justifyContent: "flex-start" }}>
+              <Text
+                style={{
+                  color: "#0065ff",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                Rated {inAppReviewsDetail.rating}
+              </Text>
+              <Text
+                style={{
+                  color: "#0065ff",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                3 months ago
+              </Text>
+            </View>
+          </Body>
+        </Right>
+      </CardItem>
+    </Card>
   );
 };
 
@@ -171,30 +223,30 @@ const styles = StyleSheet.create({
 });
 
 ReviewDetails.navigationOptions = (navData) => {
-  const token = navData.navigation.getParam("authToken");
+  // const token = navData.navigation.getParam("authToken");
+  const resName = navData.navigation.getParam("restaurantName");
+
   return {
-    headerRight: () => {
-      {
-        token ? (
-          <TouchableOpacity
-            onPress={() => navData.navigation.navigate("postReview")}
-          >
-            <Text
-              style={{
-                color: "#0065ff",
-                marginRight: 15,
-                fontSize: 17,
-                fontWeight: "bold",
-              }}
-            >
-              Post Review
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <View />
-        );
-      }
-    },
+    headerRight: () => (
+      <TouchableOpacity
+        onPress={() =>
+          navData.navigation.navigate("postReview", {
+            name: resName,
+          })
+        }
+      >
+        <Text
+          style={{
+            color: "#0065ff",
+            marginRight: 15,
+            fontSize: 17,
+            fontWeight: "bold",
+          }}
+        >
+          Post Review
+        </Text>
+      </TouchableOpacity>
+    ),
   };
 };
 

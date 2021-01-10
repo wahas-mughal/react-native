@@ -16,6 +16,7 @@ export default (state = initialState, action) => {
 
     case SET_USER_NAME:
       return {
+        ...state,
         UserName: action.user,
       };
     //return the initial state on logout

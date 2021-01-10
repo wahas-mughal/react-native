@@ -77,7 +77,7 @@ const afterAuthDrawerNav = createDrawerNavigator(
         .auth()
         .signOut()
         .then(() => {
-          props.navigation.navigate('sighnInNav');
+          props.navigation.navigate('signInNav');
         })
         .catch((err) => {
           throw err;

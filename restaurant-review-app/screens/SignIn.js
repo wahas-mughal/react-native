@@ -66,7 +66,7 @@ if(isLoading){
         <Card style={{ padding: 10 }}>
           <CardItem cardBody style={{ height: 100 }}>
             <Item floatingLabel>
-              <Label>Username</Label>
+              <Label>Email</Label>
               <Input onChangeText = {(text) => setEmail(text)} />
             </Item>
           </CardItem>

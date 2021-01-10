@@ -17,15 +17,21 @@ import {
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import * as InAppReviewActions from "../store/action/reviews";
+import * as authActions from '../store/action/auth';
 import * as firebase from "firebase";
 import '@firebase/firestore';
 
 const PostReview = (props) => {
   const user = useSelector(state => state.auth.UserName);
+  const token = useSelector(state => state.auth.token);
+  console.log(token);
+  const dispatch = useDispatch();
+  console.log(user);
   const [review, setReview] = useState(null);
   const [rating, setRating] = useState(null);
   const name = props.navigation.getParam('name');
-  const dispatch = useDispatch();
+  const[resName, setResName] = useState(name);
+  // console.log("Restaurant name: "+name);
   const {uid} = firebase.auth().currentUser;
   const db = firebase.firestore();
 
@@ -50,7 +56,7 @@ const PostReview = (props) => {
 
   useEffect(() => {
     getUserData();
-  },[])
+  },[uid])
 
   return (
     <Content padder>
@@ -145,8 +151,8 @@ const PostReview = (props) => {
         </View>
         <Button
           block
-          onPress={() => saveUserReview(user, name, review, rating)}
-          style={{ marginTop: 15 }}
+          onPress={() => saveUserReview(user, resName, review, rating)}
+          style={{ marginTop: 10, backgroundColor: '#0065ff' }}
         >
           <Text> POST </Text>
         </Button>
