@@ -103,7 +103,7 @@ const Profile = (props) => {
           renderItem={(itemData) => (
          
               <View style={styles.profilePosts}>
-                <TouchableNativeOpacity onPress={() => {}}>
+                <TouchableNativeOpacity onPress={() => props.navigation.navigate('likedPost')}>
                   <Image
                     source={{ uri: itemData.item.postImage }}
                     style={styles.postImages}

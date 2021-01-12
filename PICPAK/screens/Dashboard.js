@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useMemoOne} from 'use-memo-one';
 import {
   View,
   Text,
@@ -10,33 +11,41 @@ import {
   TouchableOpacity,
   TouchableNativeFeedback,
   Platform,
-  StatusBar
+  StatusBar,
 } from "react-native";
 import Card from "../components/Card";
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../store/actions";
-import Animated from 'react-native-reanimated';
+import Animated from "react-native-reanimated";
 import { RFPercentage } from "react-native-responsive-fontsize";
 // @refresh reset
 
 const Dashboard = (props) => {
   // const [scrollBegins, setScrollBegins] = useState(false);
   // const [isLiked, setIsLiked] = useState(false);
-  const HEADER_HEIGHT = Platform.OS === 'ios' ? 115 : 70+StatusBar.currentHeight;
-  
+  const HEADER_HEIGHT =
+    Platform.OS === "ios" ? 115 : 70 + StatusBar.currentHeight;
+
   //set the animated value Y position to 0
-  const scrollY = new Animated.Value(0);
+  // const scrollY = new Animated.Value(0);
+
+  const { scrollY } = useMemoOne(
+    () => ({
+      scrollY: new Animated.Value(0),
+    }),
+    []
+  );
 
   //to show the header on scroll up get the scroll Y value and set min and max value
   const diffClampScrollY = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
-  
+
   //set the input and output range on diffClamp values
   const headerY = Animated.interpolate(diffClampScrollY, {
     // 0 to header height
     inputRange: [0, HEADER_HEIGHT],
     // header height to 0
-    outputRange: [0, -HEADER_HEIGHT]
+    outputRange: [0, -HEADER_HEIGHT],
   });
 
   const feedData = useSelector((state) => state.feed.feed);
@@ -61,24 +70,37 @@ const Dashboard = (props) => {
       />
 
       {/* //transform the headerY to create an effect */}
-      <Animated.View style = {[styles.header, {height: HEADER_HEIGHT, transform: [{translateY: headerY}]}]} >
-        <Text style = {{color: '#fff', fontWeight: 'bold', fontSize: RFPercentage(3.5)}}> EXPLORE </Text>
+      <Animated.View
+        style={[
+          styles.header,
+          { height: HEADER_HEIGHT, transform: [{ translateY: headerY }] },
+        ]}
+      >
+        <Text
+          style={{
+            color: "#fff",
+            fontWeight: "bold",
+            fontSize: RFPercentage(3.5),
+          }}
+        >
+          {" "}
+          EXPLORE{" "}
+        </Text>
       </Animated.View>
 
       <Animated.ScrollView
-      bounces = {false}
-       // set the throttle value to 16
-        scrollEventThrottle = {16}
-
+        bounces={false}
+        // set the throttle value to 16
+        scrollEventThrottle={16}
         // create an animated event and set the nativeEvent contentOffset(y: scrollY)
-        onScroll = {Animated.event([
+        onScroll={Animated.event([
           {
             nativeEvent: {
               contentOffset: {
-                y: scrollY
-              }
-            }
-          }
+                y: scrollY,
+              },
+            },
+          },
         ])}
         showsVerticalScrollIndicator={false}
         style={styles.scrollview}
@@ -86,7 +108,7 @@ const Dashboard = (props) => {
           alignItems: "center",
           justifyContent: "center",
           paddingBottom: 40,
-          paddingTop: 80
+          paddingTop: 80,
         }}
       >
         {feedData.map((elements) => (
@@ -135,12 +157,14 @@ const Dashboard = (props) => {
                           marginTop: 3,
                         }}
                       >
-                        <Text style={styles.profileName}>
-                          {elements.user}
-                        </Text>
-                        <TouchableNativeOpacity onPress = {() => props.navigation.navigate('likedPost', {
-                          id: elements.feedId
-                        })}>
+                        <Text style={styles.profileName}>{elements.user}</Text>
+                        <TouchableNativeOpacity
+                          onPress={() =>
+                            props.navigation.navigate("likedPost", {
+                              id: elements.feedId,
+                            })
+                          }
+                        >
                           <View
                             style={{
                               backgroundColor: "orange",
@@ -171,7 +195,7 @@ const styles = StyleSheet.create({
   fixedPositioning: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
@@ -226,18 +250,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 3,
   },
-  header:{
-    position: 'absolute',
+  header: {
+    position: "absolute",
     left: 0,
     right: 0,
     top: 0,
-    backgroundColor: 'orange',
+    backgroundColor: "orange",
     zIndex: 1000,
     elevation: 1000,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 10
-  }
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 10,
+  },
 });
 
 export default Dashboard;

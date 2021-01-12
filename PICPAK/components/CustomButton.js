@@ -1,13 +1,26 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  Platform,
+} from "react-native";
 
 const CustomButton = (props) => {
+  let TouchableNativeOpacity = TouchableOpacity;
+
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableNativeOpacity = TouchableNativeFeedback;
+  }
+
   return (
-    <TouchableOpacity style={{ ...styles.btn, ...props.style }} onPress={props.onPress}>
-      <View>
-        <Text style={styles.title}> {props.title} </Text>
-      </View>
-    </TouchableOpacity>
+      <TouchableNativeOpacity onPress={props.onPress}>
+        <View  style={{ ...styles.btn, ...props.style }}>
+          <Text style={styles.title}> {props.title} </Text>
+        </View>
+      </TouchableNativeOpacity>
   );
 };
 
@@ -17,6 +30,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
+    borderColor: "#cf4242",
+    height: "100%",
   },
   title: {
     color: "#fff",

@@ -25,10 +25,10 @@ const Introduction = (props) => (
         width: "95%",
         height: "80%",
         justifyContent: "flex-start",
-        backgroundColor: 'rgba(255,255,255, 0.2)',
+        backgroundColor: "rgba(255,255,255, 0.2)",
         paddingHorizontal: 15,
         paddingVertical: 25,
-        borderRadius: 10
+        borderRadius: 10,
       }}
     >
       <Text
@@ -55,18 +55,6 @@ const Introduction = (props) => (
         {props.text}
       </Text>
     </View>
-    <CustomButton
-      title="SKIP"
-      onPress={() => props.navigation.navigate("dashboardBottomNav")}
-      style={{
-        width:Dimensions.get('window').width/2,
-        height:Dimensions.get('window').width/10,
-        borderRadius: 10,
-        position: "absolute",
-        bottom: 62,
-        backgroundColor: "#cf0a0a",
-      }}
-    />
   </View>
 );
 
@@ -98,7 +86,11 @@ export default class App extends Component {
 
   render() {
     return (
-      <ImageBackground style={styles.container} source={require("../assets/Images/intro-screen.jpg")} resizeMode = 'stretch'>
+      <ImageBackground
+        style={styles.container}
+        source={require("../assets/Images/intro-screen.jpg")}
+        resizeMode="stretch"
+      >
         <Carousel
           ref={(ref) => (this.carouselRef = ref)}
           data={this.SCREENS}
@@ -123,6 +115,19 @@ export default class App extends Component {
             }}
           />
         </View>
+        <CustomButton
+          title="SKIP"
+          onPress={() => props.navigation.navigate("dashboardBottomNav")}
+          style={{
+            width: Dimensions.get("window").width / 2,
+            height: Dimensions.get("window").width / 10,
+            borderRadius: 10,
+            position: "absolute",
+            bottom: 65,
+            left: 100,
+            backgroundColor: "#cf0a0a",
+          }}
+        />
       </ImageBackground>
     );
   }
@@ -143,7 +148,7 @@ const styles = StyleSheet.create({
   tabBar: {
     position: "absolute",
     right: 0,
-    bottom: Dimensions.get('window').width/3.3,
+    bottom: Dimensions.get("window").width / 3.3,
     left: 0,
     borderColor: "#ddd",
   },

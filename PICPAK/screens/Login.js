@@ -19,6 +19,8 @@ import {
 } from "expo-firebase-recaptcha";
 import {Picker} from "@react-native-community/picker";
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import { TouchableOpacity } from "react-native-gesture-handler";
+// import {Button, Text} from 'native-base';
 
 const Login = (props) => {
   // const screenWidth = Dimensions.get('window').width;
@@ -91,7 +93,7 @@ const Login = (props) => {
               onChangeText={(text) => setPhoneNumber(selectedValue +text)}
             />
           </View>
-
+          
           <CustomButton
             title="SIGN IN"
             onPress={sendVerificationCode}
