@@ -31,8 +31,7 @@ import * as Permissions from "expo-permissions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { useDispatch, useSelector } from "react-redux";
 import * as detailActions from "../store/action/details";
-// navigator.geolocation = require('@react-native-community/geolocation');
-// navigator.geolocation = require('react-native-geolocation-service');
+import { Bounce } from 'react-native-animated-spinkit';
 
 const Home = (props) => {
   const [placeID, setPlaceID] = useState("");
@@ -44,7 +43,6 @@ const Home = (props) => {
             <GooglePlacesAutocomplete
               placeholder="Search Nearby Restaurants"
               onPress={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
                 console.log(data, details);
                 setPlaceID(details.place_id);
               }}
@@ -141,11 +139,6 @@ const SearchedItems = (props) => {
       const lat = placeResData.result.geometry.location.lat;
       const lng = placeResData.result.geometry.location.lng;
       findNearByRestaurant(lat, lng);
-      // const nearestPlaceAPI = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&key=${GoogleAPI}`;
-      // const nearestPlaceResult = await fetch(nearestPlaceAPI);
-      // const nearestPlaceResData = await nearestPlaceResult.json();
-      // console.log(nearestPlaceResData);
-      // dispatch(detailActions.setPlaceDetails(nearestPlaceResData));
     } catch (err) {
       throw err;
     }
@@ -165,7 +158,7 @@ const SearchedItems = (props) => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size={28} color="#0065ff" />
+        <Bounce size={48} color="#0065ff"></Bounce>
       </View>
     );
   }
@@ -210,11 +203,10 @@ const SearchedItems = (props) => {
             <CardItem cardBody>
               <Image
                 source={{
-                  uri:
-                    "https://cdn-food.tribune.com.pk/gallery/jHwYlOlhiCQSU6OBcx6RObu72a7JSvei5rHBjvJa.jpeg",
+                  uri: resData.item.photo_reference,
                 }}
                 style={{ height: 200, width: null, flex: 1 }}
-                resizeMode="contain"
+                resizeMode="cover"
               />
             </CardItem>
             <CardItem>

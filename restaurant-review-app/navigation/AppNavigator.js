@@ -9,6 +9,7 @@ import ReviewDetails from "../screens/ReviewDetails";
 import PostReview from "../screens/PostReview";
 import GoogleReviews from "../screens/GoogleReviews";
 import ForgetPassword from "../screens/ForgetPassword";
+import Help from "../screens/Help";
 import { Button, View, Text } from "react-native";
 import React, {useState, useEffect} from "react";
 import * as firebase from "firebase";
@@ -195,6 +196,13 @@ const beforeAuthDrawerNav = createDrawerNavigator(
       navigationOptions: {
         headerShown: false,
         title: "Sign Up",
+      },
+    },
+    help: {
+      screen: Help,
+      navigationOptions: {
+        title: "Help",
+        headerTitleAlign: "center",
       },
     },
   },

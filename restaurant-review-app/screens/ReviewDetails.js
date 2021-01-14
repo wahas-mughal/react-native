@@ -23,6 +23,7 @@ import {
 } from "native-base";
 import { useSelector, useDispatch } from "react-redux";
 import * as reviewActions from "../store/action/reviews";
+import { Bounce } from 'react-native-animated-spinkit';
 
 const ReviewDetails = (props) => {
   const getPlaceId = props.navigation.getParam("id");
@@ -30,7 +31,7 @@ const ReviewDetails = (props) => {
   const token = useSelector((state) => state.auth.token);
   // console.log("PAYLOAD ", inAppReviewsDetail[0].username);
 
-  console.log(token);
+  // console.log(token);
   const { navigation } = props;
 
   const getName = props.navigation.getParam("placeName");
@@ -127,7 +128,7 @@ const InAppUserReviews = (props) => {
       (rest) => rest.restaurantName === props.name
     )
   );
-  console.log("FILTERED IN APP REVIEW: ", inAppReviewsDetail);
+  // console.log("FILTERED IN APP REVIEW: ", inAppReviewsDetail);
 
   useEffect(() => {
     const getUserReviews = async () => {
@@ -140,10 +141,11 @@ const InAppUserReviews = (props) => {
 
   if (inAppReviewsDetail.length === 0) {
     return (
-      <Card style={{alignItems: 'center', padding: 40}}>
-        <Text style={{ fontSize: 22, fontWeight: '700' }}>No reviews yet.</Text>
-        <Text style={{ fontSize: 14, textAlign: 'center'}}>
-          Help us know this place by adding a review if you have been here and experienced their services. Login to post a review!
+      <Card style={{ alignItems: "center", padding: 40 }}>
+        <Text style={{ fontSize: 22, fontWeight: "700" }}>No reviews yet.</Text>
+        <Text style={{ fontSize: 14, textAlign: "center" }}>
+          Help us know this place by adding a review if you have been here and
+          experienced their services. Login to post a review!
         </Text>
       </Card>
     );
@@ -152,7 +154,7 @@ const InAppUserReviews = (props) => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size={28} color="#0065ff" />
+        <Bounce size={48} color="#0065ff"></Bounce>
       </View>
     );
   }

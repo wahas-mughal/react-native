@@ -20,18 +20,17 @@ import * as InAppReviewActions from "../store/action/reviews";
 import * as authActions from "../store/action/auth";
 import * as firebase from "firebase";
 import "@firebase/firestore";
+import {Bounce} from 'react-native-animated-spinkit'
 
 const PostReview = (props) => {
   const user = useSelector((state) => state.auth.UserName);
-  const token = useSelector((state) => state.auth.token);
-  console.log(token);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  console.log(user);
+  // console.log(user);
   const [review, setReview] = useState(null);
   const [rating, setRating] = useState(null);
   const name = props.navigation.getParam("name");
   const [resName, setResName] = useState(name);
-  // console.log("Restaurant name: "+name);
   const { uid } = firebase.auth().currentUser;
   const db = firebase.firestore();
 
@@ -53,13 +52,24 @@ const PostReview = (props) => {
     }
   };
 
-  const saveUserReview = (User, Name, Review, Rating) => {
-    dispatch(InAppReviewActions.addReview(User, Name, Review, Rating));
+  const saveUserReview = async (User, Name, Review, Rating) => {
+    setIsLoading(true);
+    await dispatch(InAppReviewActions.addReview(User, Name, Review, Rating));
+    props.navigation.goBack();
+    setIsLoading(false);
   };
 
   useEffect(() => {
     getUserData();
   }, [uid]);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Bounce size={48} color="#0065ff"></Bounce>
+      </View>
+    );
+  }
 
   return (
     <Content padder>

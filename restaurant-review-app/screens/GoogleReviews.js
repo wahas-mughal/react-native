@@ -16,6 +16,7 @@ import {
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import * as reviewActions from "../store/action/reviews";
+import {Bounce} from 'react-native-animated-spinkit'
 
 const GoogleReviews = (props) => {
   const GoogleAPI = "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
@@ -50,7 +51,7 @@ const GoogleReviews = (props) => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size={28} color="#0065ff" />
+        <Bounce size={48} color="#0065ff"></Bounce>
       </View>
     );
   }

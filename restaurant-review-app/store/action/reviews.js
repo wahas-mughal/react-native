@@ -126,7 +126,7 @@ export const addReview = (user, name, review, rating) => {
       const resData = await response.json();
       console.log(resData);
 
-      // add the product in the redux store
+      // add review in the redux store
       dispatch({
         type: ADD_INAPPREVIEWS,
         reviewData: {
