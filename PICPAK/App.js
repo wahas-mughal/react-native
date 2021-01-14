@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import AppNavigator from "./navigation/AppNavigator";
 import { Provider, useSelector } from "react-redux";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import ReduxThunk from "redux-thunk";
 import feedReducer from "./store/reducers";
 import galleryReducer from "./store/reducers";
 import likesNotificationReducer from "./store/reducers";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
-import * as firebase from 'firebase';
-
+import * as firebase from "firebase";
 
 const firebaseConfig = {
   apiKey: "AIzaSyClWz_hZ3Xu6xgQr8fzJpsWg1Dqfz0ZGMw",
@@ -17,11 +17,10 @@ const firebaseConfig = {
   projectId: "pic-pak",
   storageBucket: "pic-pak.appspot.com",
   messagingSenderId: "729768859921",
-  appId: "1:729768859921:web:e2a257a8b1e8fb3d2b14b0"
+  appId: "1:729768859921:web:e2a257a8b1e8fb3d2b14b0",
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
 
 //load native base default fonts
 const loadFonts = () => {
@@ -38,10 +37,10 @@ export default function App() {
   const rootReducers = combineReducers({
     feed: feedReducer,
     gallery: galleryReducer,
-    likesNot: likesNotificationReducer 
+    likesNot: likesNotificationReducer,
   });
 
-  const store = createStore(rootReducers);
+  const store = createStore(rootReducers, applyMiddleware(ReduxThunk));
 
   if (!fontLoaded) {
     return (

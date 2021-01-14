@@ -25,7 +25,7 @@ const Search = (props) => {
       </View>
       <View style = {{width: width/2}}>
       <Button block onPress = {() => props.navigation.navigate('searchScreen')} style = {{backgroundColor: 'orange' }}>
-        <Text style = {{fontSize: RFPercentage(2.7), fontWeight: '700'}}> FIND </Text>
+        <Text style = {{fontSize: RFPercentage(2.7), fontWeight: '700', color: '#fff'}}> FIND </Text>
       </Button>
       </View>
     </ImageBackground>

@@ -23,6 +23,7 @@ import SavedLoginInfo from "../screens/Setting/SecuritySection/SavedLoginInfo";
 import About from "../screens/Setting/AboutSection/About";
 import Theme from "../screens/Setting/Theme";
 import Account from "../screens/Setting/AccountSection/Account";
+import Demo from "../screens/Demo";
 import PersonalInformation from "../screens/Setting/AccountSection/PersonalInformation";
 import Activity from "../screens/Setting/AccountSection/Activity";
 import { createAppContainer, createSwitchNavigator} from "react-navigation";
@@ -296,6 +297,12 @@ const profileNavigator = createStackNavigator({
       headerShown: false,
     },
   },
+  likedPost: {
+    screen: LikedPost,
+    navigationOptions:{
+      headerTitle: 'Liked Post'
+    }
+  },
 });
 
 const likesNavigator = createStackNavigator({
@@ -460,11 +467,12 @@ searchNavigator.navigationOptions = ({ navigation }) => {
 };
 
 const AppNavigator = createSwitchNavigator({
-  dashboardBottomNav: bottomTabNavigator,
+  demo: Demo,
   login: Login,
   verification: Verification,
   register: Register,
   intro: Intro,
+  dashboardBottomNav: bottomTabNavigator,
 },{
   defaultNavigationOptions: {
     headerShown: false,

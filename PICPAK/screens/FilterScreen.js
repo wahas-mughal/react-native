@@ -37,6 +37,13 @@ export default function FilterScreen({ source }) {
   const [selectedFilter, setSelectedFilter] = useState(
     styles.defaultFilterOverlay
   );
+  const [filterBtn1, setFilterBtn1] = useState(false);
+  const [filterBtn2, setFilterBtn2] = useState(false);
+  const [filterBtn3, setFilterBtn3] = useState(false);
+  const [filterBtn4, setFilterBtn4] = useState(false);
+  const [filterBtn5, setFilterBtn5] = useState(false);
+  const [filterBtn6, setFilterBtn6] = useState(false);
+  const [filterBtn7, setFilterBtn7] = useState(false);
 
   return (
     <View>
@@ -82,50 +89,113 @@ export default function FilterScreen({ source }) {
             }}
           >
             <TouchableOpacity
-              style={styles.filterTags}
-              onPress={() => setSelectedFilter(styles.filterOverlay1)}
+              style={filterBtn1 ? styles.filterTagsEffect : styles.filterTags}
+              onPress={() => {
+                setSelectedFilter(styles.filterOverlay1)
+                setFilterBtn1(true)
+                setFilterBtn2(false)
+                setFilterBtn3(false)
+                setFilterBtn4(false)
+                setFilterBtn5(false)
+                setFilterBtn6(false)
+                setFilterBtn7(false)
+              }}
             >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>Bright</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.filterTags}
-              onPress={() => setSelectedFilter(styles.filterOverlay6)}
+              style={filterBtn2 ? styles.filterTagsEffect : styles.filterTags}
+              onPress={() => {
+                setSelectedFilter(styles.filterOverlay6)
+                setFilterBtn1(false)
+                setFilterBtn2(true)
+                setFilterBtn3(false)
+                setFilterBtn4(false)
+                setFilterBtn5(false)
+                setFilterBtn6(false)
+                setFilterBtn7(false)
+              }}
             >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>
                 Bright 2
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.filterTags}
-              onPress={() => setSelectedFilter(styles.filterOverlay7)}
+              style={filterBtn3 ? styles.filterTagsEffect : styles.filterTags}
+              onPress={() => {
+                setSelectedFilter(styles.filterOverlay7)
+                setFilterBtn1(false)
+                setFilterBtn2(false)
+                setFilterBtn3(true)
+                setFilterBtn4(false)
+                setFilterBtn5(false)
+                setFilterBtn6(false)
+                setFilterBtn7(false)
+              }}
             >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>
                 Bright 3
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.filterTags}
-              onPress={() => setSelectedFilter(styles.filterOverlay2)}
+              style={filterBtn4 ? styles.filterTagsEffect : styles.filterTags}
+              onPress={() => {
+                setSelectedFilter(styles.filterOverlay2)
+                setFilterBtn1(false)
+                setFilterBtn2(false)
+                setFilterBtn3(false)
+                setFilterBtn4(true)
+                setFilterBtn5(false)
+                setFilterBtn6(false)
+                setFilterBtn7(false)
+              }}
             >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>Blueish</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.filterTags}
-              onPress={() => setSelectedFilter(styles.filterOverlay3)}
+              style={filterBtn5 ? styles.filterTagsEffect : styles.filterTags}
+              onPress={() => {
+                setSelectedFilter(styles.filterOverlay3)
+                setFilterBtn1(false)
+                setFilterBtn2(false)
+                setFilterBtn3(false)
+                setFilterBtn4(false)
+                setFilterBtn5(true)
+                setFilterBtn6(false)
+                setFilterBtn7(false)
+              }}
             >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>Reddish</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.filterTags}
-              onPress={() => setSelectedFilter(styles.filterOverlay4)}
+              style={filterBtn6 ? styles.filterTagsEffect : styles.filterTags}
+              onPress={() => {
+                setSelectedFilter(styles.filterOverlay4)
+                setFilterBtn1(false)
+                setFilterBtn2(false)
+                setFilterBtn3(false)
+                setFilterBtn4(false)
+                setFilterBtn5(false)
+                setFilterBtn6(true)
+                setFilterBtn7(false)
+              }}
             >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>
                 Dark Tense
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.filterTags}
-              onPress={() => setSelectedFilter(styles.filterOverlay5)}
+              style={filterBtn7 ? styles.filterTagsEffect : styles.filterTags}
+              onPress={() => {
+                setSelectedFilter(styles.filterOverlay5)
+                setFilterBtn1(false)
+                setFilterBtn2(false)
+                setFilterBtn3(false)
+                setFilterBtn4(false)
+                setFilterBtn5(false)
+                setFilterBtn6(false)
+                setFilterBtn7(true)
+              }}
             >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>
                 Greenish
@@ -169,6 +239,17 @@ const styles = StyleSheet.create({
     padding: 7,
     marginBottom: 10,
     backgroundColor: "orange",
+    borderRadius: 30,
+  },
+  filterTagsEffect: {
+    borderColor: "#888",
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+    padding: 7,
+    marginBottom: 10,
+    backgroundColor: "#888",
     borderRadius: 30,
   },
   filterImage: {
