@@ -17,6 +17,7 @@ import { View, Alert, ActivityIndicator, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 import * as authActions from "../store/action/auth";
 import { useDispatch } from "react-redux";
+import {Bounce} from 'react-native-animated-spinkit';
 
 const SignIn = (props) => {
   const [email, setEmail] = useState("");
@@ -43,10 +44,11 @@ const SignIn = (props) => {
     setIsLoading(false);
   };
 
+
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size={30} color="#0065ff" />
+        <Bounce size={48} color="#0065ff"></Bounce>
       </View>
     );
   }

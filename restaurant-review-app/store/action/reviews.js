@@ -50,10 +50,8 @@ export const fetchReview = (payload) => {
 };
 
 //fetching In App Reviews from firebase
-
-export const fetchInAppReviews = (restName) => {
+export const fetchInAppReviews = () => {
   return async (dispatch) => {
-
     try {
       const response = await fetch(
         "https://restaurant-review-app-edad8-default-rtdb.firebaseio.com/InAppReviews.json"
@@ -72,19 +70,19 @@ export const fetchInAppReviews = (restName) => {
         fetchUserReviews.push(
           new InAppReviews(
             resData[key].userID,
+            resData[key].place_id,
             resData[key].User,
             resData[key].Restaurant_Name,
             resData[key].User_Review,
             resData[key].User_Rating,
+            resData[key].Google_Ratings,
+            resData[key].Google_Total_Ratings,
+            resData[key].Google_Photo
           )
         );
       }
 
-    //   const getAllReviewsByName = fetchUserReviews.filter(
-    //     (rest) => rest.restaurantName === restName
-    //   );
-
-    //   console.log(getAllReviewsByName);
+      console.log("FETCH USER REVIEW ", fetchUserReviews);
 
       dispatch({
         type: SET_INAPPREVIEWS,
@@ -98,7 +96,7 @@ export const fetchInAppReviews = (restName) => {
 
 //Add In App Reviews
 //adding data to firebase
-export const addReview = (user, name, review, rating) => {
+export const addReview = (user, placeId ,name, review, rating, googleResRatings, googleResTotRatings, googlePhotoUrl, currentTimestamp) => {
   return async (dispatch, getState) => {
     try {
       const authToken = getState().auth.token;
@@ -115,10 +113,15 @@ export const addReview = (user, name, review, rating) => {
           },
           body: JSON.stringify({
             userID: userId,
+            place_id: placeId,
             User: user,
             Restaurant_Name: name,
             User_Review: review,
             User_Rating: rating,
+            Google_Ratings: googleResRatings,
+            Google_Total_Ratings: googleResTotRatings,
+            Google_Photo: googlePhotoUrl,
+            Current_Timestamp: currentTimestamp
           }),
         }
       );
@@ -131,10 +134,15 @@ export const addReview = (user, name, review, rating) => {
         type: ADD_INAPPREVIEWS,
         reviewData: {
           userID: userId,
+          placeId,
           user,
           name,
           review,
           rating,
+          googleResRatings,
+          googleResTotRatings,
+          googlePhotoUrl,
+          currentTimestamp
         },
       });
     } catch (err) {

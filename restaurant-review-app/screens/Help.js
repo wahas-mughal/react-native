@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import {
   Card,
   Content,
@@ -15,6 +15,10 @@ import {
 import * as MailComposer from "expo-mail-composer";
 
 const Help = (props) => {
+
+  const {width} = Dimensions.get('window');
+
+
   const sendEmailHandler = async () => {
       const response = await MailComposer.composeAsync({
           recipients: ['support@gmail.com'],
@@ -34,8 +38,8 @@ const Help = (props) => {
           />
         </Left>
         <Body>
-          <View style={{ width: 200, alignItems: "center" }}>
-            <Text style={{ color: "#fff", fontSize: 18, marginLeft: 15 }}>
+          <View style={{ width: width/1.6, alignItems: "center" }}>
+            <Text style={{ color: "#fff", fontSize: 18, fontWeight: 'bold'}}>
               Help
             </Text>
           </View>

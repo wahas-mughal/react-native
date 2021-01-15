@@ -31,7 +31,7 @@ import * as Permissions from "expo-permissions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { useDispatch, useSelector } from "react-redux";
 import * as detailActions from "../store/action/details";
-import { Bounce } from 'react-native-animated-spinkit';
+import { Bounce } from "react-native-animated-spinkit";
 
 const Home = (props) => {
   const [placeID, setPlaceID] = useState("");
@@ -51,8 +51,6 @@ const Home = (props) => {
                 language: "en",
                 components: "country:pk",
               }}
-              currentLocation={true}
-              currentLocationLabel="Choose current location"
             />
           </CardItem>
         </Card>
@@ -70,6 +68,7 @@ const SearchedItems = (props) => {
     (state) => state.details.placeDetails
   );
   console.log(fetchedPlacesDetails);
+  const nullReferenceImage = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
 
   const [pickedLocation, setPickedLocation] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -180,6 +179,7 @@ const SearchedItems = (props) => {
               placeName: resData.item.name,
               userRating: resData.item.rating,
               totalRatings: resData.item.total_ratings,
+              photo: resData.item.photo_reference
             })
           }
         >
@@ -201,13 +201,22 @@ const SearchedItems = (props) => {
               </Left>
             </CardItem>
             <CardItem cardBody>
-              <Image
-                source={{
-                  uri: resData.item.photo_reference,
-                }}
-                style={{ height: 200, width: null, flex: 1 }}
-                resizeMode="cover"
-              />
+              {resData.item.photo_reference === nullReferenceImage ? (
+                <Image
+                  source={require("../assets/images/no-preview-image.png")}
+                  style={{ height: 200, width: 200
+                    , flex: 1 }}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Image
+                  source={{
+                    uri: resData.item.photo_reference,
+                  }}
+                  style={{ height: 200, width: null, flex: 1 }}
+                  resizeMode="cover"
+                />
+              )}
             </CardItem>
             <CardItem>
               <Left>

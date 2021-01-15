@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Image,
   TouchableOpacity,
@@ -24,11 +24,13 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import * as reviewActions from "../store/action/reviews";
 import { Bounce } from 'react-native-animated-spinkit';
+import moment from 'moment';
 
 const ReviewDetails = (props) => {
   const getPlaceId = props.navigation.getParam("id");
   const [placeId, setPlaceId] = useState(getPlaceId);
   const token = useSelector((state) => state.auth.token);
+  const nullReferenceImage = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
   // console.log("PAYLOAD ", inAppReviewsDetail[0].username);
 
   // console.log(token);
@@ -37,11 +39,16 @@ const ReviewDetails = (props) => {
   const getName = props.navigation.getParam("placeName");
   const getRating = props.navigation.getParam("userRating");
   const getTotalRatings = props.navigation.getParam("totalRatings");
+  const getPhoto = props.navigation.getParam("photo");
 
   useEffect(() => {
     navigation.setParams({
       authToken: token,
       restaurantName: getName,
+      place_id: placeId,
+      rating: getRating,
+      total_ratings: getTotalRatings,
+      photo: getPhoto
     });
   }, []);
 
@@ -66,13 +73,22 @@ const ReviewDetails = (props) => {
             </Left>
           </CardItem>
           <CardItem cardBody>
-            <Image
-              source={{
-                uri:
-                  "https://media-cdn.tripadvisor.com/media/photo-s/11/9e/75/70/sala-a-restaurant.jpg",
-              }}
-              style={{ height: 200, width: null, flex: 1 }}
-            />
+          {getPhoto === nullReferenceImage ? (
+                <Image
+                  source={require("../assets/images/no-preview-image.png")}
+                  style={{ height: 200, width: null
+                    , flex: 1 }}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Image
+                  source={{
+                    uri: getPhoto,
+                  }}
+                  style={{ height: 200, width: null, flex: 1 }}
+                  resizeMode="cover"
+                />
+              )}
           </CardItem>
           <CardItem>
             <Left>
@@ -114,7 +130,7 @@ const ReviewDetails = (props) => {
             </Body>
           </CardItem>
         </Card>
-        <InAppUserReviews name={getName} />
+        <InAppUserReviews name={getName} navigation = {props.navigation} />
       </Content>
     </Container>
   );
@@ -130,14 +146,22 @@ const InAppUserReviews = (props) => {
   );
   // console.log("FILTERED IN APP REVIEW: ", inAppReviewsDetail);
 
+  const getUserReviews = useCallback(async () => {
+    setIsLoading(true);
+    await dispatch(reviewActions.fetchInAppReviews());
+    setIsLoading(false);
+  },[dispatch, setIsLoading]);
+
   useEffect(() => {
-    const getUserReviews = async () => {
-      setIsLoading(true);
-      await dispatch(reviewActions.fetchInAppReviews(props.name));
-      setIsLoading(false);
+    const willFocus = props.navigation.addListener("willFocus", getUserReviews);
+    return () => {
+      willFocus.remove();
     };
+  }, [getUserReviews]);
+
+  useEffect(() => {
     getUserReviews();
-  }, []);
+  }, [getUserReviews]);
 
   if (inAppReviewsDetail.length === 0) {
     return (
@@ -206,7 +230,7 @@ const InAppUserReviews = (props) => {
                       fontWeight: "bold",
                     }}
                   >
-                    3 months ago
+                   {moment.utc(resData.item.Current_Timestamp).local.startOf('seconds').fromNow()}
                   </Text>
                 </View>
               </Body>
@@ -234,6 +258,10 @@ const styles = StyleSheet.create({
 ReviewDetails.navigationOptions = (navData) => {
   const token = navData.navigation.getParam("authToken");
   const resName = navData.navigation.getParam("restaurantName");
+  const placeID = navData.navigation.getParam("place_id");
+  const resRating = navData.navigation.getParam("rating");
+  const totalRatings = navData.navigation.getParam("total_ratings");
+  const resPhoto = navData.navigation.getParam("photo");
 
   return {
     headerRight: () => (
@@ -241,6 +269,10 @@ ReviewDetails.navigationOptions = (navData) => {
         onPress={() =>
           navData.navigation.navigate("postReview", {
             name: resName,
+            placeId: placeID,
+            rating: resRating,
+            total_ratings: totalRatings,
+            photo: resPhoto
           })
         }
       >

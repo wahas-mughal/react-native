@@ -16,21 +16,21 @@ export const setPlaceDetails = (payload) => {
     console.log(result);
 
     let convertObjIntoArray = Object.values(result);
-    console.log("CONVERTED ARRAY " + convertObjIntoArray);
+    console.log("CONVERTED ARRAY ",  convertObjIntoArray);
 
     let detailsArray = [];
 
-    convertObjIntoArray.map((details) => {
-      detailsArray.push(
-        new Details(
-          details.placeID,
-          details.Name,
-          details.PhotoRef,
-          details.Rating,
-          details.TotalRatings
-        )
-      );
-    });
+    // convertObjIntoArray.map((details) => {
+    //   detailsArray.push(
+    //     new Details(
+    //       details.placeID,
+    //       details.Name,
+    //       details.PhotoRef,
+    //       details.Rating,
+    //       details.TotalRatings
+    //     )
+    //   );
+    // });
 
     const GoogleAPI = "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
 

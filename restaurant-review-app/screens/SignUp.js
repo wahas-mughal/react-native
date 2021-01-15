@@ -18,6 +18,7 @@ import * as firebase from "firebase";
 import "@firebase/firestore";
 import {useDispatch} from 'react-redux';
 import * as authActions from '../store/action/auth';
+import {Bounce} from 'react-native-animated-spinkit';
 
 const SignUp = (props) => {
   const db = firebase.firestore();
@@ -52,7 +53,7 @@ const SignUp = (props) => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size={28} color="#0065ff" />
+        <Bounce size={48} color="#0065ff"></Bounce>
       </View>
     );
   }

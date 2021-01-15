@@ -26,10 +26,15 @@ const PostReview = (props) => {
   const user = useSelector((state) => state.auth.UserName);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const current_timestamp = new Date();
   // console.log(user);
   const [review, setReview] = useState(null);
   const [rating, setRating] = useState(null);
   const name = props.navigation.getParam("name");
+  const place_id = props.navigation.getParam("placeId");
+  const resRating = props.navigation.getParam("rating");
+  const resTotalRatings = props.navigation.getParam("total_ratings");
+  const resPhoto = props.navigation.getParam("photo");
   const [resName, setResName] = useState(name);
   const { uid } = firebase.auth().currentUser;
   const db = firebase.firestore();
@@ -52,9 +57,9 @@ const PostReview = (props) => {
     }
   };
 
-  const saveUserReview = async (User, Name, Review, Rating) => {
+  const saveUserReview = async (User, PlaceId, Name, Review, Rating, GoogleRatings, GoogleTotalRatings, GooglePhoto, CurrentTimestamp) => {
     setIsLoading(true);
-    await dispatch(InAppReviewActions.addReview(User, Name, Review, Rating));
+    await dispatch(InAppReviewActions.addReview(User, PlaceId ,Name, Review, Rating, GoogleRatings, GoogleTotalRatings, GooglePhoto, CurrentTimestamp));
     props.navigation.goBack();
     setIsLoading(false);
   };
@@ -180,7 +185,7 @@ const PostReview = (props) => {
         </View>
         <Button
           block
-          onPress={() => saveUserReview(user, resName, review, rating)}
+          onPress={() => saveUserReview(user, place_id ,resName, review, rating, resRating, resTotalRatings, resPhoto, current_timestamp)}
           style={{ marginTop: 10, backgroundColor: "#0065ff" }}
         >
           <Text> POST </Text>
