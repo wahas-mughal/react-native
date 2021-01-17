@@ -176,7 +176,7 @@ const ReviewHistory = (props) => {
                       <Text> {resData.item.rating} </Text>
                     </Badge>
                   </TouchableOpacity>
-                  <Text style={{ marginLeft: 5 }}> Points</Text>
+                  <Text style={{ marginLeft: 5 }}> Rating </Text>
                 </View>
               </Card>
             </TouchableNativeOpacity>

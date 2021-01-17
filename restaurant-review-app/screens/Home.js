@@ -170,6 +170,7 @@ const SearchedItems = (props) => {
 
   return (
     <FlatList
+      keyExtractor = {(item) => item.place_id}
       data={fetchedPlacesDetails}
       renderItem={(resData) => (
         <TouchableNativeOpacity

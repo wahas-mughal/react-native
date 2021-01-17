@@ -90,7 +90,7 @@ const GoogleReviews = (props) => {
               <Text>{resData.item.review}</Text>
             </Body>
           </CardItem>
-          <CardItem>
+          <CardItem style = {{borderTopColor: '#ccc', borderTopWidth: 0.7}}>
             <Left>
               <Text
                 style={{
@@ -102,7 +102,6 @@ const GoogleReviews = (props) => {
                 {resData.item.reviewedAgo}
               </Text>
             </Left>
-            <Body />
             <Right>
               <Text
                 style={{

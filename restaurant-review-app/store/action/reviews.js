@@ -72,12 +72,14 @@ export const fetchInAppReviews = () => {
             resData[key].userID,
             resData[key].place_id,
             resData[key].User,
+            resData[key].Profile_Photo,
             resData[key].Restaurant_Name,
             resData[key].User_Review,
             resData[key].User_Rating,
             resData[key].Google_Ratings,
             resData[key].Google_Total_Ratings,
-            resData[key].Google_Photo
+            resData[key].Google_Photo,
+            resData[key].Current_Timestamp
           )
         );
       }
@@ -96,7 +98,7 @@ export const fetchInAppReviews = () => {
 
 //Add In App Reviews
 //adding data to firebase
-export const addReview = (user, placeId ,name, review, rating, googleResRatings, googleResTotRatings, googlePhotoUrl, currentTimestamp) => {
+export const addReview = (user, placeId ,profilePhoto , name, review, rating, googleResRatings, googleResTotRatings, googlePhotoUrl, currentTimestamp) => {
   return async (dispatch, getState) => {
     try {
       const authToken = getState().auth.token;
@@ -115,13 +117,14 @@ export const addReview = (user, placeId ,name, review, rating, googleResRatings,
             userID: userId,
             place_id: placeId,
             User: user,
+            Profile_Photo: profilePhoto,
             Restaurant_Name: name,
             User_Review: review,
             User_Rating: rating,
             Google_Ratings: googleResRatings,
             Google_Total_Ratings: googleResTotRatings,
             Google_Photo: googlePhotoUrl,
-            Current_Timestamp: currentTimestamp
+            Current_Timestamp: currentTimestamp,
           }),
         }
       );
@@ -135,6 +138,7 @@ export const addReview = (user, placeId ,name, review, rating, googleResRatings,
         reviewData: {
           userID: userId,
           placeId,
+          profilePhoto,
           user,
           name,
           review,

@@ -22,12 +22,12 @@ import * as firebase from "firebase";
 import "@firebase/firestore";
 import {Bounce} from 'react-native-animated-spinkit'
 
+
 const PostReview = (props) => {
   const user = useSelector((state) => state.auth.UserName);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const current_timestamp = new Date();
-  // console.log(user);
   const [review, setReview] = useState(null);
   const [rating, setRating] = useState(null);
   const name = props.navigation.getParam("name");
@@ -36,6 +36,8 @@ const PostReview = (props) => {
   const resTotalRatings = props.navigation.getParam("total_ratings");
   const resPhoto = props.navigation.getParam("photo");
   const [resName, setResName] = useState(name);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
+  console.log(profileImageUrl);
   const { uid } = firebase.auth().currentUser;
   const db = firebase.firestore();
 
@@ -51,15 +53,18 @@ const PostReview = (props) => {
       const userData = docSnapShot.data();
       const userName = userData?.firstname + " " + userData?.lastname;
       dispatch(authActions.setUserName(userName));
+      firebase.storage().ref("users/" + uid + "/profile-image.jpg").getDownloadURL().then((imgUrl) => {
+        setProfileImageUrl(imgUrl);
+      });
       console.log(userData);
     } catch (err) {
       throw err;
     }
   };
 
-  const saveUserReview = async (User, PlaceId, Name, Review, Rating, GoogleRatings, GoogleTotalRatings, GooglePhoto, CurrentTimestamp) => {
+  const saveUserReview = async (User, PlaceId, ProfilePhoto ,Name, Review, Rating, GoogleRatings, GoogleTotalRatings, GooglePhoto, CurrentTimestamp) => {
     setIsLoading(true);
-    await dispatch(InAppReviewActions.addReview(User, PlaceId ,Name, Review, Rating, GoogleRatings, GoogleTotalRatings, GooglePhoto, CurrentTimestamp));
+    await dispatch(InAppReviewActions.addReview(User, PlaceId, ProfilePhoto, Name, Review, Rating, GoogleRatings, GoogleTotalRatings, GooglePhoto, CurrentTimestamp));
     props.navigation.goBack();
     setIsLoading(false);
   };
@@ -185,7 +190,7 @@ const PostReview = (props) => {
         </View>
         <Button
           block
-          onPress={() => saveUserReview(user, place_id ,resName, review, rating, resRating, resTotalRatings, resPhoto, current_timestamp)}
+          onPress={() => saveUserReview(user, place_id ,profileImageUrl ,resName, review, rating, resRating, resTotalRatings, resPhoto, current_timestamp)}
           style={{ marginTop: 10, backgroundColor: "#0065ff" }}
         >
           <Text> POST </Text>

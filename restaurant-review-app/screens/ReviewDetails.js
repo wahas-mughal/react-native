@@ -24,7 +24,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import * as reviewActions from "../store/action/reviews";
 import { Bounce } from 'react-native-animated-spinkit';
-import moment from 'moment';
+import TimeAgo from 'react-native-timeago';
 
 const ReviewDetails = (props) => {
   const getPlaceId = props.navigation.getParam("id");
@@ -139,12 +139,16 @@ const ReviewDetails = (props) => {
 const InAppUserReviews = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  // const time = new Date().toISOString();
+  // const timeFormat = moment().format(time);
+
   const inAppReviewsDetail = useSelector((state) =>
     state.reviews.inAppReviews.filter(
       (rest) => rest.restaurantName === props.name
     )
   );
-  // console.log("FILTERED IN APP REVIEW: ", inAppReviewsDetail);
+
+  console.log("FILTERED IN APP REVIEW: ", inAppReviewsDetail);
 
   const getUserReviews = useCallback(async () => {
     setIsLoading(true);
@@ -189,56 +193,116 @@ const InAppUserReviews = (props) => {
       renderItem={(resData) => (
         <Card>
           <CardItem>
-            <Left>
-              <Body>
-                <View
+            <Body>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 8,
+                }}
+              >
+                <Image
+                  source={{
+                    uri: resData.item.profile_photo
+                  }}
+                  style={styles.image}
+                />
+                <Text
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 8,
+                    fontSize: 18,
+                    fontWeight: "bold",
+                    color: "#0065ff",
+                    marginLeft: 7,
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "bold",
-                      color: "#0065ff",
-                    }}
-                  >
-                    {resData.item.username}
-                  </Text>
-                </View>
-                <Text>{resData.item.review}</Text>
-              </Body>
+                  {resData.item.username}
+                </Text>
+              </View>
+              <Text>{resData.item.review}</Text>
+            </Body>
+          </CardItem>
+          <CardItem style = {{borderTopColor: '#ccc', borderTopWidth: 0.7}}>
+            <Left style = {{width:200}}>
+              <Text
+                style={{
+                  color: "#0065ff",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+               <TimeAgo time= {resData.item.timestamp} interval={20000} />
+              </Text>
             </Left>
             <Right>
-              <Body style={{ justifyContent: "flex-end" }}>
-                <View style={{ justifyContent: "flex-start" }}>
-                  <Text
-                    style={{
-                      color: "#0065ff",
-                      fontSize: 16,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Rated {resData.item.rating}
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#0065ff",
-                      fontSize: 16,
-                      fontWeight: "bold",
-                    }}
-                  >
-                   {moment.utc(resData.item.Current_Timestamp).local.startOf('seconds').fromNow()}
-                  </Text>
-                </View>
-              </Body>
+              <Text
+                style={{
+                  color: "#0065ff",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                Rated {resData.item.rating}
+              </Text>
             </Right>
           </CardItem>
         </Card>
       )}
-    ></FlatList>
+    />
+    // <FlatList
+    //   data={inAppReviewsDetail}
+    //   renderItem={(resData) => (
+    //     <Card>
+    //       <CardItem>
+    //         <Left>
+    //           <Body>
+    //             <View
+    //               style={{
+    //                 flexDirection: "row",
+    //                 alignItems: "center",
+    //                 marginBottom: 8,
+    //               }}
+    //             >
+    //               <Text
+    //                 style={{
+    //                   fontSize: 18,
+    //                   fontWeight: "bold",
+    //                   color: "#0065ff",
+    //                 }}
+    //               >
+    //                 {resData.item.username}
+    //               </Text>
+    //             </View>
+    //             <Text>{resData.item.review}</Text>
+    //           </Body>
+    //         </Left>
+    //         <Right>
+    //           <Body style={{ justifyContent: "flex-end" }}>
+    //             <View style={{ justifyContent: "flex-start" }}>
+    //               <Text
+    //                 style={{
+    //                   color: "#0065ff",
+    //                   fontSize: 16,
+    //                   fontWeight: "bold",
+    //                 }}
+    //               >
+    //                 Rated {resData.item.rating}
+    //               </Text>
+    //               <Text
+    //                 style={{
+    //                   color: "#0065ff",
+    //                   fontSize: 16,
+    //                   fontWeight: "bold",
+    //                 }}
+    //               >
+    //                {moment.utc(resData.item.Current_Timestamp).local().startOf('seconds').fromNow()}
+    //               </Text>
+    //             </View>
+    //           </Body>
+    //         </Right>
+    //       </CardItem>
+    //     </Card>
+    //   )}
+    // />
   );
 };
 
