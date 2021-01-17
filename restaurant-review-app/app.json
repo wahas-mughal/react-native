@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "restaurant-review-app",
-    "slug": "restaurant-review-app",
+    "name": "Reviews Inn",
+    "slug": "review-inn",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,13 +17,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.madebywahasalimughal.reviewsinn",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.madebywahasalimughal.reviewsinn"
     },
     "web": {
       "favicon": "./assets/favicon.png"

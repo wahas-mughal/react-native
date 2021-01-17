@@ -1,5 +1,4 @@
 export const FETCH_REVIEWS = "FETCH_REVIEWS";
-export const ADD_INAPPREVIEWS = "ADD_INAPPREVIEWS";
 export const SET_INAPPREVIEWS = "SET_INAPPREVIEWS";
 import Reviews from "../../modal/reviews";
 import InAppReviews from "../../modal/inappreviews";
@@ -140,23 +139,6 @@ export const addReview = (
       const resData = await response.json();
       console.log(resData);
 
-      // add review in the redux store
-      dispatch({
-        type: ADD_INAPPREVIEWS,
-        reviewData: {
-          userID: userId,
-          placeId,
-          profilePhoto,
-          user,
-          name,
-          review,
-          rating,
-          googleResRatings,
-          googleResTotRatings,
-          googlePhotoUrl,
-          currentTimestamp,
-        },
-      });
     } catch (err) {
       throw err;
     }
