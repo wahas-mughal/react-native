@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import {
   Container,
-  Header,
   Content,
-  Form,
   Item,
   Input,
   Label,
@@ -35,6 +33,16 @@ const SignUp = (props) => {
   const userSignUp = async (userEmail, pass) => {
     try {
       setIsLoading(true);
+      if (ImageUrl === null) {
+        Alert.alert(
+          "Profile photo is required!",
+          "Please also upload a profile photo to continue.",
+          [{ text: "Okay" }]
+        );
+        setIsLoading(false);
+        return;
+      }
+
       const credentials = await firebase
         .auth()
         .createUserWithEmailAndPassword(userEmail, pass);
@@ -43,7 +51,7 @@ const SignUp = (props) => {
         console.log("token at the time of login " + idToken);
         console.log("user id at the time of login " + credentials.user.uid);
         uploadPhoto(ImageUrl, credentials.user.uid);
-        props.navigation.navigate("afterAuthHome");
+        props.navigation.navigate("homeAfterSignUpAuth");
       });
       return db.collection("users").doc(credentials.user.uid).set({
         firstname: firstName,

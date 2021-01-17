@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
-  ActivityIndicator,
   FlatList,
 } from "react-native";
 import {
@@ -13,7 +12,6 @@ import {
   Content,
   Card,
   CardItem,
-  Thumbnail,
   Text,
   Button,
   Icon,
@@ -23,17 +21,16 @@ import {
 } from "native-base";
 import { useSelector, useDispatch } from "react-redux";
 import * as reviewActions from "../store/action/reviews";
-import { Bounce } from 'react-native-animated-spinkit';
-import TimeAgo from 'react-native-timeago';
+import { Bounce } from "react-native-animated-spinkit";
+import TimeAgo from "react-native-timeago";
 
 const ReviewDetails = (props) => {
   const getPlaceId = props.navigation.getParam("id");
   const [placeId, setPlaceId] = useState(getPlaceId);
   const token = useSelector((state) => state.auth.token);
-  const nullReferenceImage = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
-  // console.log("PAYLOAD ", inAppReviewsDetail[0].username);
+  const nullReferenceImage =
+    "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
 
-  // console.log(token);
   const { navigation } = props;
 
   const getName = props.navigation.getParam("placeName");
@@ -48,7 +45,7 @@ const ReviewDetails = (props) => {
       place_id: placeId,
       rating: getRating,
       total_ratings: getTotalRatings,
-      photo: getPhoto
+      photo: getPhoto,
     });
   }, []);
 
@@ -73,22 +70,21 @@ const ReviewDetails = (props) => {
             </Left>
           </CardItem>
           <CardItem cardBody>
-          {getPhoto === nullReferenceImage ? (
-                <Image
-                  source={require("../assets/images/no-preview-image.png")}
-                  style={{ height: 200, width: null
-                    , flex: 1 }}
-                  resizeMode="cover"
-                />
-              ) : (
-                <Image
-                  source={{
-                    uri: getPhoto,
-                  }}
-                  style={{ height: 200, width: null, flex: 1 }}
-                  resizeMode="cover"
-                />
-              )}
+            {getPhoto === nullReferenceImage ? (
+              <Image
+                source={require("../assets/images/no-preview-image.png")}
+                style={{ height: 200, width: null, flex: 1 }}
+                resizeMode="cover"
+              />
+            ) : (
+              <Image
+                source={{
+                  uri: getPhoto,
+                }}
+                style={{ height: 200, width: null, flex: 1 }}
+                resizeMode="cover"
+              />
+            )}
           </CardItem>
           <CardItem>
             <Left>
@@ -130,7 +126,7 @@ const ReviewDetails = (props) => {
             </Body>
           </CardItem>
         </Card>
-        <InAppUserReviews name={getName} navigation = {props.navigation} />
+        <InAppUserReviews name={getName} navigation={props.navigation} />
       </Content>
     </Container>
   );
@@ -154,7 +150,7 @@ const InAppUserReviews = (props) => {
     setIsLoading(true);
     await dispatch(reviewActions.fetchInAppReviews());
     setIsLoading(false);
-  },[dispatch, setIsLoading]);
+  }, [dispatch, setIsLoading]);
 
   useEffect(() => {
     const willFocus = props.navigation.addListener("willFocus", getUserReviews);
@@ -189,6 +185,7 @@ const InAppUserReviews = (props) => {
 
   return (
     <FlatList
+      keyExtractor={(item) => item.uid}
       data={inAppReviewsDetail}
       renderItem={(resData) => (
         <Card>
@@ -203,7 +200,7 @@ const InAppUserReviews = (props) => {
               >
                 <Image
                   source={{
-                    uri: resData.item.profile_photo
+                    uri: resData.item.profile_photo,
                   }}
                   style={styles.image}
                 />
@@ -221,8 +218,8 @@ const InAppUserReviews = (props) => {
               <Text>{resData.item.review}</Text>
             </Body>
           </CardItem>
-          <CardItem style = {{borderTopColor: '#ccc', borderTopWidth: 0.7}}>
-            <Left style = {{width:200}}>
+          <CardItem style={{ borderTopColor: "#ccc", borderTopWidth: 0.7 }}>
+            <Left style={{ width: 200 }}>
               <Text
                 style={{
                   color: "#0065ff",
@@ -230,7 +227,7 @@ const InAppUserReviews = (props) => {
                   fontWeight: "bold",
                 }}
               >
-               <TimeAgo time= {resData.item.timestamp} interval={20000} />
+                <TimeAgo time={resData.item.timestamp} interval={20000} />
               </Text>
             </Left>
             <Right>
@@ -248,61 +245,6 @@ const InAppUserReviews = (props) => {
         </Card>
       )}
     />
-    // <FlatList
-    //   data={inAppReviewsDetail}
-    //   renderItem={(resData) => (
-    //     <Card>
-    //       <CardItem>
-    //         <Left>
-    //           <Body>
-    //             <View
-    //               style={{
-    //                 flexDirection: "row",
-    //                 alignItems: "center",
-    //                 marginBottom: 8,
-    //               }}
-    //             >
-    //               <Text
-    //                 style={{
-    //                   fontSize: 18,
-    //                   fontWeight: "bold",
-    //                   color: "#0065ff",
-    //                 }}
-    //               >
-    //                 {resData.item.username}
-    //               </Text>
-    //             </View>
-    //             <Text>{resData.item.review}</Text>
-    //           </Body>
-    //         </Left>
-    //         <Right>
-    //           <Body style={{ justifyContent: "flex-end" }}>
-    //             <View style={{ justifyContent: "flex-start" }}>
-    //               <Text
-    //                 style={{
-    //                   color: "#0065ff",
-    //                   fontSize: 16,
-    //                   fontWeight: "bold",
-    //                 }}
-    //               >
-    //                 Rated {resData.item.rating}
-    //               </Text>
-    //               <Text
-    //                 style={{
-    //                   color: "#0065ff",
-    //                   fontSize: 16,
-    //                   fontWeight: "bold",
-    //                 }}
-    //               >
-    //                {moment.utc(resData.item.Current_Timestamp).local().startOf('seconds').fromNow()}
-    //               </Text>
-    //             </View>
-    //           </Body>
-    //         </Right>
-    //       </CardItem>
-    //     </Card>
-    //   )}
-    // />
   );
 };
 
@@ -336,7 +278,7 @@ ReviewDetails.navigationOptions = (navData) => {
             placeId: placeID,
             rating: resRating,
             total_ratings: totalRatings,
-            photo: resPhoto
+            photo: resPhoto,
           })
         }
       >

@@ -81,7 +81,7 @@ const ReviewHistory = (props) => {
           }}
         >
           <Text style={{ fontSize: 22, fontWeight: "700" }}>
-             No review history yet.
+            No review history yet.
           </Text>
           <Text style={{ fontSize: 14, textAlign: "center" }}>
             Help us know about the places by adding a review about your
@@ -119,6 +119,7 @@ const ReviewHistory = (props) => {
       </Header>
       <Content padder>
         <FlatList
+          keyExtractor={(item) => item.uid}
           data={reviews}
           renderItem={(resData) => (
             <TouchableNativeOpacity
@@ -176,7 +177,7 @@ const ReviewHistory = (props) => {
                       <Text> {resData.item.rating} </Text>
                     </Badge>
                   </TouchableOpacity>
-                  <Text style={{ marginLeft: 5 }}> Rating </Text>
+                  <Text style={{ marginLeft: 5 }}> Ratings </Text>
                 </View>
               </Card>
             </TouchableNativeOpacity>

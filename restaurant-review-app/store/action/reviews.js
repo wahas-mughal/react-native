@@ -4,7 +4,7 @@ export const SET_INAPPREVIEWS = "SET_INAPPREVIEWS";
 import Reviews from "../../modal/reviews";
 import InAppReviews from "../../modal/inappreviews";
 
-// Google Reviews
+// fetching google reviews
 export const fetchReview = (payload) => {
   return async (dispatch) => {
     const result = payload.result.reviews.map(
@@ -24,9 +24,6 @@ export const fetchReview = (payload) => {
     );
 
     console.log("RESULT OF REVIEWS ", result);
-
-    // let convertObjectIntoArray = Object.values(result);
-    // console.log("CONVERTED ARRAY " +convertObjectIntoArray);
 
     let reviewsArray = [];
 
@@ -71,8 +68,8 @@ export const fetchInAppReviews = () => {
           new InAppReviews(
             resData[key].userID,
             resData[key].place_id,
-            resData[key].User,
             resData[key].Profile_Photo,
+            resData[key].User,
             resData[key].Restaurant_Name,
             resData[key].User_Review,
             resData[key].User_Rating,
@@ -98,14 +95,25 @@ export const fetchInAppReviews = () => {
 
 //Add In App Reviews
 //adding data to firebase
-export const addReview = (user, placeId ,profilePhoto , name, review, rating, googleResRatings, googleResTotRatings, googlePhotoUrl, currentTimestamp) => {
+export const addReview = (
+  user,
+  placeId,
+  profilePhoto,
+  name,
+  review,
+  rating,
+  googleResRatings,
+  googleResTotRatings,
+  googlePhotoUrl,
+  currentTimestamp
+) => {
   return async (dispatch, getState) => {
     try {
       const authToken = getState().auth.token;
       const userId = getState().auth.uId;
       console.log(authToken);
       console.log(userId);
-      // map the products to the logged in token: logged in user and insert in firebase along the pushtoken
+      // map the reviews to the logged in token: logged in user and insert in firebase along the pushtoken
       const response = await fetch(
         `https://restaurant-review-app-edad8-default-rtdb.firebaseio.com/InAppReviews.json?auth=${authToken}`,
         {
@@ -146,7 +154,7 @@ export const addReview = (user, placeId ,profilePhoto , name, review, rating, go
           googleResRatings,
           googleResTotRatings,
           googlePhotoUrl,
-          currentTimestamp
+          currentTimestamp,
         },
       });
     } catch (err) {

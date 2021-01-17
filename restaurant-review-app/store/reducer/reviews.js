@@ -7,7 +7,7 @@ import InAppReviews from "../../modal/inappreviews";
 
 const initialState = {
   placeReviews: [],
-  inAppReviews: []
+  inAppReviews: [],
 };
 
 export default (state = initialState, action) => {
@@ -15,7 +15,7 @@ export default (state = initialState, action) => {
     case SET_INAPPREVIEWS:
       return {
         ...state,
-        inAppReviews: action.userReviews
+        inAppReviews: action.userReviews,
       };
 
     case FETCH_REVIEWS:
@@ -35,7 +35,7 @@ export default (state = initialState, action) => {
       return {
         //concatinate the newReview with inAppReviews
         ...state,
-        inAppReviews: state.inAppReviews.concat(newReview),
+        inAppReviews: [newReview].concat(state.inAppReviews),
       };
   }
 

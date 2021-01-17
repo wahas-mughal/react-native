@@ -1,22 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Image, FlatList, ActivityIndicator } from "react-native";
-import {
-  Container,
-  Header,
-  Content,
-  Card,
-  CardItem,
-  Thumbnail,
-  Text,
-  Button,
-  Icon,
-  Left,
-  Body,
-  Right,
-} from "native-base";
+import { StyleSheet, View, Image, FlatList } from "react-native";
+import { Card, CardItem, Text, Left, Body, Right } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import * as reviewActions from "../store/action/reviews";
-import {Bounce} from 'react-native-animated-spinkit'
+import { Bounce } from "react-native-animated-spinkit";
 
 const GoogleReviews = (props) => {
   const GoogleAPI = "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
@@ -28,7 +15,7 @@ const GoogleReviews = (props) => {
   const dispatch = useDispatch();
 
   const getReviewById = async (placeID) => {
-      setIsLoading(true);
+    setIsLoading(true);
     try {
       const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=reviews&key=${GoogleAPI}`;
       const results = await fetch(url);
@@ -38,7 +25,7 @@ const GoogleReviews = (props) => {
     } catch (err) {
       throw err;
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -47,7 +34,6 @@ const GoogleReviews = (props) => {
     }
   }, [placeId]);
 
-  
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -90,7 +76,7 @@ const GoogleReviews = (props) => {
               <Text>{resData.item.review}</Text>
             </Body>
           </CardItem>
-          <CardItem style = {{borderTopColor: '#ccc', borderTopWidth: 0.7}}>
+          <CardItem style={{ borderTopColor: "#ccc", borderTopWidth: 0.7 }}>
             <Left>
               <Text
                 style={{

@@ -14,15 +14,15 @@ class InAppReviews {
   ) {
     (this.uid = uid),
       (this.placeid = placeid),
-      (this.username = username),
       (this.profile_photo = profile_photo),
+      (this.username = username),
       (this.restaurantName = restaurantName),
       (this.review = review),
       (this.rating = rating),
       (this.googleRatings = googleRatings),
       (this.googleTotalRatings = googleTotalRatings),
       (this.googlePhotoUrl = googlePhotoUrl),
-      (this.timestamp = timestamp)
+      (this.timestamp = timestamp);
   }
 }
 

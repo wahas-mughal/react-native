@@ -11,21 +11,18 @@ import {
   Header,
   Button,
 } from "native-base";
-
 import * as MailComposer from "expo-mail-composer";
 
 const Help = (props) => {
-
-  const {width} = Dimensions.get('window');
-
+  const { width } = Dimensions.get("window");
 
   const sendEmailHandler = async () => {
-      const response = await MailComposer.composeAsync({
-          recipients: ['support@gmail.com'],
-          subject: 'Query'
-      });
-      console.log(response);
-  }
+    const response = await MailComposer.composeAsync({
+      recipients: ["support@gmail.com"],
+      subject: "Query",
+    });
+    console.log(response);
+  };
 
   return (
     <Container>
@@ -38,8 +35,8 @@ const Help = (props) => {
           />
         </Left>
         <Body>
-          <View style={{ width: width/1.6, alignItems: "center" }}>
-            <Text style={{ color: "#fff", fontSize: 18, fontWeight: 'bold'}}>
+          <View style={{ width: width / 1.6, alignItems: "center" }}>
+            <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
               Help
             </Text>
           </View>
@@ -88,7 +85,7 @@ const Help = (props) => {
           <Button
             block
             style={{ marginVertical: 20, backgroundColor: "#0065ff" }}
-            onPress = {sendEmailHandler}
+            onPress={sendEmailHandler}
           >
             <Text style={{ color: "#fff", fontWeight: "700", fontSize: 17 }}>
               Contact Us
@@ -101,5 +98,3 @@ const Help = (props) => {
 };
 
 export default Help;
-
-const styles = StyleSheet.create({});

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import AppNavigator from "./navigation/AppNavigator";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,19 +8,21 @@ import { Provider } from "react-redux";
 import authReducer from "./store/reducer/auth";
 import detailsReducer from "./store/reducer/details";
 import reviewsReducer from "./store/reducer/reviews";
-import ReduxThunk from 'redux-thunk';
-import * as firebase from 'firebase';
+import ReduxThunk from "redux-thunk";
+import * as firebase from "firebase";
+import { LogBox } from "react-native";
 
-
+//firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCiMNLAYa_o9X644efR7rTko9J38KxnRTg",
   authDomain: "restaurant-review-app-edad8.firebaseapp.com",
-  databaseURL: "https://restaurant-review-app-edad8-default-rtdb.firebaseio.com",
+  databaseURL:
+    "https://restaurant-review-app-edad8-default-rtdb.firebaseio.com",
   projectId: "restaurant-review-app-edad8",
   storageBucket: "restaurant-review-app-edad8.appspot.com",
   messagingSenderId: "236628363912",
-  appId: "1:236628363912:web:2d0dbb887fb3f14f2bed3d"
-}
+  appId: "1:236628363912:web:2d0dbb887fb3f14f2bed3d",
+};
 
 firebase.initializeApp(firebaseConfig);
 
@@ -35,11 +36,13 @@ const loadFonts = () => {
 };
 
 export default function App() {
+  //ignore all log warnings
+  LogBox.ignoreAllLogs();
 
   const rootReducer = combineReducers({
     auth: authReducer,
     details: detailsReducer,
-    reviews: reviewsReducer
+    reviews: reviewsReducer,
   });
 
   const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
@@ -62,10 +65,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});

@@ -10,12 +10,12 @@ import PostReview from "../screens/PostReview";
 import GoogleReviews from "../screens/GoogleReviews";
 import ForgetPassword from "../screens/ForgetPassword";
 import Help from "../screens/Help";
-import { Button, View, Text } from "react-native";
-import React, {useState, useEffect} from "react";
+import { Button, View, Text, Image } from "react-native";
+import React, { useState, useEffect } from "react";
 import * as firebase from "firebase";
-import '@firebase/firestore';
+import "@firebase/firestore";
 import { useDispatch } from "react-redux";
-import * as authActions from '../store/action/auth';
+import * as authActions from "../store/action/auth";
 
 const HomeNavigator = createStackNavigator({
   Home: {
@@ -48,7 +48,6 @@ const HomeNavigator = createStackNavigator({
   },
 });
 
-
 const afterAuthDrawerNav = createDrawerNavigator(
   {
     afterAuthHome: {
@@ -68,40 +67,46 @@ const afterAuthDrawerNav = createDrawerNavigator(
   },
   {
     contentComponent: (props) => {
+      const [user, setUser] = useState();
+      const [profilePhotoUrl, setProfilePhotoUrl] = useState(null);
+      const { uid } = firebase.auth().currentUser;
+      const db = firebase.firestore();
+      const dispatch = useDispatch();
 
-     const [user, setUser] = useState();
-     const {uid} = firebase.auth().currentUser;
-     const db = firebase.firestore();
-     const dispatch = useDispatch();
+      const logOut = () => {
+        firebase
+          .auth()
+          .signOut()
+          .then(() => {
+            props.navigation.navigate("signInNav");
+            dispatch(authActions.logOut());
+          })
+          .catch((err) => {
+            throw err;
+          });
+      };
 
-     const logOut = () => {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          props.navigation.navigate('signInNav');
-          dispatch(authActions.logOut());
-        })
-        .catch((err) => {
+      const getUserData = async () => {
+        try {
+          const docSnapShot = await db.collection("users").doc(uid).get();
+          const userData = docSnapShot.data();
+          setUser(userData);
+          firebase
+            .storage()
+            .ref(`users/${uid}/profileImage`)
+            .getDownloadURL()
+            .then((imgUrl) => {
+              setProfilePhotoUrl(imgUrl);
+            });
+          console.log(userData);
+        } catch (err) {
           throw err;
-        });
-    };
+        }
+      };
 
-     const getUserData = async () => {
-       try{
-         const docSnapShot = await db.collection("users").doc(uid).get();
-         const userData = docSnapShot.data();
-         setUser(userData);
-         console.log(userData);
-       }
-       catch(err){
-         throw err;
-       }
-     }
-
-    useEffect(() => {
-      getUserData();
-    },[])
+      useEffect(() => {
+        getUserData();
+      }, []);
 
       return (
         <View style={{ flex: 1 }}>
@@ -114,14 +119,32 @@ const afterAuthDrawerNav = createDrawerNavigator(
               alignItems: "flex-end",
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 20, margin: 20 }}>
+            <Image
+              source={{ uri: profilePhotoUrl }}
+              style={{
+                width: 90,
+                height: 90,
+                borderColor: "#fff",
+                borderWidth: 0.7,
+                borderRadius: 50,
+                marginHorizontal: 20,
+              }}
+            />
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 20,
+                marginHorizontal: 20,
+                marginVertical: 5,
+              }}
+            >
               {user && user?.firstname + " " + user?.lastname}
             </Text>
           </View>
           <DrawerItems {...props} />
           <View style={{ alignItems: "center" }}>
             <View style={{ width: "95%", height: "100%" }}>
-              <Button title="Logout" color="#0065ff" onPress = {logOut} />
+              <Button title="Logout" color="#0065ff" onPress={logOut} />
             </View>
           </View>
         </View>
@@ -130,7 +153,7 @@ const afterAuthDrawerNav = createDrawerNavigator(
   }
 );
 
-const forgetSignInNavigator = createStackNavigator({
+const SignInNavigator = createStackNavigator({
   signin: {
     screen: SignIn,
     navigationOptions: {
@@ -145,31 +168,14 @@ const forgetSignInNavigator = createStackNavigator({
   },
 });
 
-const SignInNavigator = createStackNavigator({
-  signin: {
-    screen: forgetSignInNavigator,
-    navigationOptions: {
-      headerShown: false,
-    },
-  },
-  forgetPassword: {
-    screen: ForgetPassword,
-  },
-  // homeAfterAuth: {
-  //   screen: afterAuthDrawerNav,
-  // },
-});
-
-const SignUpNavigator = createSwitchNavigator({
-  signup: {
+const authSignUpDrawer = createSwitchNavigator({
+  signUp: {
     screen: SignUp,
     navigationOptions: {
       headerShown: false,
     },
   },
-  homeAfterAuth: {
-    screen: afterAuthDrawerNav,
-  },
+  homeAfterSignUpAuth: afterAuthDrawerNav,
 });
 
 const authWithDrawer = createSwitchNavigator({
@@ -192,7 +198,7 @@ const beforeAuthDrawerNav = createDrawerNavigator(
       },
     },
     signup: {
-      screen: SignUpNavigator,
+      screen: authSignUpDrawer,
       navigationOptions: {
         headerShown: false,
         title: "Sign Up",
@@ -208,11 +214,4 @@ const beforeAuthDrawerNav = createDrawerNavigator(
   },
   {}
 );
-
-
-// const MainStackNavigator = createStackNavigator({
-//     authFalse: beforeAuthDrawerNav,
-//     authTrue:  AfterAuthDrawerNav
-// });
-
 export default createAppContainer(beforeAuthDrawerNav);

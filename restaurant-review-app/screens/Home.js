@@ -4,7 +4,6 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
   View,
   TouchableNativeFeedback,
   Platform,
@@ -15,14 +14,12 @@ import {
   Content,
   Card,
   CardItem,
-  Thumbnail,
   Text,
   Button,
   Icon,
   Left,
   Body,
   Right,
-  Input,
 } from "native-base";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../components/HeaderButton";
@@ -68,7 +65,8 @@ const SearchedItems = (props) => {
     (state) => state.details.placeDetails
   );
   console.log(fetchedPlacesDetails);
-  const nullReferenceImage = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
+  const nullReferenceImage =
+    "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8";
 
   const [pickedLocation, setPickedLocation] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -170,7 +168,7 @@ const SearchedItems = (props) => {
 
   return (
     <FlatList
-      keyExtractor = {(item) => item.place_id}
+      keyExtractor={(item) => item.place_id}
       data={fetchedPlacesDetails}
       renderItem={(resData) => (
         <TouchableNativeOpacity
@@ -180,7 +178,7 @@ const SearchedItems = (props) => {
               placeName: resData.item.name,
               userRating: resData.item.rating,
               totalRatings: resData.item.total_ratings,
-              photo: resData.item.photo_reference
+              photo: resData.item.photo_reference,
             })
           }
         >
@@ -205,8 +203,7 @@ const SearchedItems = (props) => {
               {resData.item.photo_reference === nullReferenceImage ? (
                 <Image
                   source={require("../assets/images/no-preview-image.png")}
-                  style={{ height: 200, width: 200
-                    , flex: 1 }}
+                  style={{ height: 200, width: 200, flex: 1 }}
                   resizeMode="cover"
                 />
               ) : (

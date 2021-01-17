@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import {
   Container,
-  Header,
   Content,
-  Form,
   Item,
   Input,
   Label,
@@ -17,7 +15,7 @@ import { View, Alert, ActivityIndicator, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 import * as authActions from "../store/action/auth";
 import { useDispatch } from "react-redux";
-import {Bounce} from 'react-native-animated-spinkit';
+import { Bounce } from "react-native-animated-spinkit";
 
 const SignIn = (props) => {
   const [email, setEmail] = useState("");
@@ -43,7 +41,6 @@ const SignIn = (props) => {
     }
     setIsLoading(false);
   };
-
 
   if (isLoading) {
     return (
@@ -102,13 +99,13 @@ const SignIn = (props) => {
             <Text style={{ color: "#0065ff" }}> Sign In </Text>
           </Button>
         </View>
-        <View style = {{width: '100%', alignItems: 'center', marginTop: 50}}>
-        <TouchableOpacity onPress={() => props.navigation.navigate("home")}>
-        <Icon
-          name="md-home"
-          style={{ color: "#fff", fontSize: 40, marginLeft: 20 }}
-        />
-      </TouchableOpacity>
+        <View style={{ width: "100%", alignItems: "center", marginTop: 50 }}>
+          <TouchableOpacity onPress={() => props.navigation.navigate("home")}>
+            <Icon
+              name="md-home"
+              style={{ color: "#fff", fontSize: 40, marginLeft: 20 }}
+            />
+          </TouchableOpacity>
         </View>
       </Content>
     </Container>
@@ -116,11 +113,3 @@ const SignIn = (props) => {
 };
 
 export default SignIn;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-// });

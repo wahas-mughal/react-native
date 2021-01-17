@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import {
-  Container,
-  Header,
   Content,
   Textarea,
   Form,
   Text,
   Card,
   CardItem,
-  Body,
   Badge,
-  Icon,
   Button,
 } from "native-base";
 import { View } from "react-native";
@@ -20,8 +16,7 @@ import * as InAppReviewActions from "../store/action/reviews";
 import * as authActions from "../store/action/auth";
 import * as firebase from "firebase";
 import "@firebase/firestore";
-import {Bounce} from 'react-native-animated-spinkit'
-
+import { Bounce } from "react-native-animated-spinkit";
 
 const PostReview = (props) => {
   const user = useSelector((state) => state.auth.UserName);
@@ -37,7 +32,7 @@ const PostReview = (props) => {
   const resPhoto = props.navigation.getParam("photo");
   const [resName, setResName] = useState(name);
   const [profileImageUrl, setProfileImageUrl] = useState(null);
-  console.log(profileImageUrl);
+  console.log("PROFILE IMAGE URL " + profileImageUrl);
   const { uid } = firebase.auth().currentUser;
   const db = firebase.firestore();
 
@@ -53,18 +48,46 @@ const PostReview = (props) => {
       const userData = docSnapShot.data();
       const userName = userData?.firstname + " " + userData?.lastname;
       dispatch(authActions.setUserName(userName));
-      firebase.storage().ref("users/" + uid + "/profile-image.jpg").getDownloadURL().then((imgUrl) => {
-        setProfileImageUrl(imgUrl);
-      });
+      firebase
+        .storage()
+        .ref(`users/${uid}/profileImage`)
+        .getDownloadURL()
+        .then((imgUrl) => {
+          setProfileImageUrl(imgUrl);
+        });
       console.log(userData);
     } catch (err) {
       throw err;
     }
   };
 
-  const saveUserReview = async (User, PlaceId, ProfilePhoto ,Name, Review, Rating, GoogleRatings, GoogleTotalRatings, GooglePhoto, CurrentTimestamp) => {
+  const saveUserReview = async (
+    User,
+    PlaceId,
+    ProfilePhoto,
+    Name,
+    Review,
+    Rating,
+    GoogleRatings,
+    GoogleTotalRatings,
+    GooglePhoto,
+    CurrentTimestamp
+  ) => {
     setIsLoading(true);
-    await dispatch(InAppReviewActions.addReview(User, PlaceId, ProfilePhoto, Name, Review, Rating, GoogleRatings, GoogleTotalRatings, GooglePhoto, CurrentTimestamp));
+    await dispatch(
+      InAppReviewActions.addReview(
+        User,
+        PlaceId,
+        ProfilePhoto,
+        Name,
+        Review,
+        Rating,
+        GoogleRatings,
+        GoogleTotalRatings,
+        GooglePhoto,
+        CurrentTimestamp
+      )
+    );
     props.navigation.goBack();
     setIsLoading(false);
   };
@@ -115,7 +138,10 @@ const PostReview = (props) => {
               setPoint1(true);
             }}
           >
-            <Badge primary style={point1 ? styles.selectedReviewPoint : styles.reviewPoints}>
+            <Badge
+              primary
+              style={point1 ? styles.selectedReviewPoint : styles.reviewPoints}
+            >
               <Text> 1 </Text>
             </Badge>
           </TouchableOpacity>
@@ -190,7 +216,20 @@ const PostReview = (props) => {
         </View>
         <Button
           block
-          onPress={() => saveUserReview(user, place_id ,profileImageUrl ,resName, review, rating, resRating, resTotalRatings, resPhoto, current_timestamp)}
+          onPress={() =>
+            saveUserReview(
+              user,
+              place_id,
+              profileImageUrl,
+              resName,
+              review,
+              rating,
+              resRating,
+              resTotalRatings,
+              resPhoto,
+              current_timestamp
+            )
+          }
           style={{ marginTop: 10, backgroundColor: "#0065ff" }}
         >
           <Text> POST </Text>
@@ -209,10 +248,10 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     backgroundColor: "#0065ff",
   },
-  selectedReviewPoint:{
+  selectedReviewPoint: {
     width: 40,
     height: 40,
     borderRadius: 40,
     backgroundColor: "#888",
-  }
+  },
 });
