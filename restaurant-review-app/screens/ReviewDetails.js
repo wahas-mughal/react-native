@@ -5,6 +5,8 @@ import {
   StyleSheet,
   View,
   FlatList,
+  TouchableNativeFeedback,
+  Platform,
 } from "react-native";
 import {
   Container,
@@ -269,9 +271,15 @@ ReviewDetails.navigationOptions = (navData) => {
   const totalRatings = navData.navigation.getParam("total_ratings");
   const resPhoto = navData.navigation.getParam("photo");
 
+  let TouchableNativeOpacity = TouchableOpacity;
+
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableNativeOpacity = TouchableNativeFeedback;
+  }
+
   return {
     headerRight: () => (
-      <TouchableOpacity
+      <TouchableNativeOpacity
         onPress={() =>
           navData.navigation.navigate("postReview", {
             name: resName,
@@ -283,20 +291,29 @@ ReviewDetails.navigationOptions = (navData) => {
         }
       >
         {token ? (
-          <Text
+          <View
             style={{
-              color: "#0065ff",
               marginRight: 15,
-              fontSize: 17,
-              fontWeight: "bold",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 8,
+              backgroundColor: "#0065ff",
             }}
           >
-            Post Review
-          </Text>
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 16,
+                fontWeight: "bold",
+              }}
+            >
+              Post Review
+            </Text>
+          </View>
         ) : (
           <View />
         )}
-      </TouchableOpacity>
+      </TouchableNativeOpacity>
     ),
   };
 };

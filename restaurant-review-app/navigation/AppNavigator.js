@@ -17,6 +17,7 @@ import "@firebase/firestore";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/action/auth";
 
+
 const HomeNavigator = createStackNavigator({
   Home: {
     screen: Home,

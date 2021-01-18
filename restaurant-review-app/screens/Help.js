@@ -18,7 +18,7 @@ const Help = (props) => {
 
   const sendEmailHandler = async () => {
     const response = await MailComposer.composeAsync({
-      recipients: ["support@gmail.com"],
+      recipients: ["reviewsinn5@gmail.com"],
       subject: "Query",
     });
     console.log(response);

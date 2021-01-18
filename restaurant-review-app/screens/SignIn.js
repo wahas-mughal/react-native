@@ -72,7 +72,10 @@ const SignIn = (props) => {
           <CardItem cardBody style={{ height: 100 }}>
             <Item floatingLabel>
               <Label>Password</Label>
-              <Input onChangeText={(text) => setPassword(text)} />
+              <Input
+                onChangeText={(text) => setPassword(text)}
+                secureTextEntry={true}
+              />
             </Item>
           </CardItem>
         </Card>

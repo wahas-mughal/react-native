@@ -11,7 +11,14 @@ import {
   Button,
   Icon,
 } from "native-base";
-import { View, Alert, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Alert,
+  TouchableOpacity,
+  Image,
+  TouchableNativeFeedback,
+  Platform,
+} from "react-native";
 import * as firebase from "firebase";
 import "@firebase/firestore";
 import { useDispatch } from "react-redux";
@@ -79,6 +86,12 @@ const SignUp = (props) => {
     firebase.storage().ref().child(`users/${userId}/profileImage`).put(blob);
   };
 
+  let TouchableNativeOpacity = TouchableOpacity;
+
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableNativeOpacity = TouchableNativeFeedback;
+  }
+
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -96,7 +109,7 @@ const SignUp = (props) => {
           margin: 20,
         }}
       >
-        <TouchableOpacity onPress={launchLibrary}>
+        <TouchableNativeOpacity onPress={launchLibrary}>
           <View
             style={{
               alignSelf: "center",
@@ -138,7 +151,7 @@ const SignUp = (props) => {
               </View>
             )}
           </View>
-        </TouchableOpacity>
+        </TouchableNativeOpacity>
         <Card style={{ padding: 10 }}>
           <CardItem cardBody style={{ height: 80 }}>
             <Item floatingLabel>
@@ -161,7 +174,10 @@ const SignUp = (props) => {
           <CardItem cardBody style={{ height: 80 }}>
             <Item floatingLabel>
               <Label>Password</Label>
-              <Input onChangeText={(password) => setPassword(password)} />
+              <Input
+                onChangeText={(password) => setPassword(password)}
+                secureTextEntry={true}
+              />
             </Item>
           </CardItem>
         </Card>

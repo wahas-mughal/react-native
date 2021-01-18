@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Reviews Inn",
-    "slug": "review-inn",
+    "slug": "reviews-inn",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,20 +13,24 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.madebywahasalimughal.reviewsinn",
       "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "com.madebywahasalimughal.reviewsinn",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.madebywahasalimughal.reviewsinn"
+      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION", "WRITE_EXTERNAL_STORAGE"],
+      "config": {
+         "googleMaps": {
+          "apiKey": "AIzaSyBOMyWUiUrclTaK3tybe7gYEOsa8d-KVU8"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
