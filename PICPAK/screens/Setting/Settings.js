@@ -17,9 +17,17 @@ import {
   FontAwesome,
   Entypo,
 } from "@expo/vector-icons";
-import {RFPercentage} from 'react-native-responsive-fontsize'
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import * as firebase from 'firebase';
 
 const Settings = (props) => {
+
+const logout = () => {
+  firebase.auth().signOut();
+  props.navigation.navigate('login');
+  console.log("pressed");
+}
+
   return (
     <View style={{ flex: 1, backgroundColor: "black" }}>
       <ScrollView
@@ -89,7 +97,7 @@ const Settings = (props) => {
             <Text style={styles.text}> Theme </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress = {logout}>
           <View style={styles.rows}>
             <Entypo name="log-out" size={28} color="#03b1fc" />
             <Text style={[styles.text, { color: "#03b1fc"}]}>Log Out </Text>

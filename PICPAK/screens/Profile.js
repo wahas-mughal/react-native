@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,18 +9,42 @@ import {
   Image,
   TouchableOpacity,
   TouchableNativeFeedback,
-  Platform
+  Platform,
 } from "react-native";
 import Card from "../components/Card";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
 import { useSelector } from "react-redux";
 import { FlatList } from "react-native-gesture-handler";
+// import {useDispatch} from 'react-redux';
+// import * as actions from '../store/actions';
 
 const Profile = (props) => {
   const galleryData = useSelector((state) => state.gallery.gallery);
+  const uid = useSelector((state) => state.auth.userId);
+  // const [profileImageBase64, setProfileImageBase64] = useState();
+  // console.log("BASE 64 " +profileImageBase64)
+  const [userData, setUserData] = useState();
   console.log(galleryData);
-  
+
+  const getUserData = async () => {
+    try {
+      const response = await fetch(
+        `https://gudbazar.com/picpak/signupUserGet.php?id=${uid}`
+      );
+      const resData = await response.json();
+      console.log("PROFILE DETAILS", resData);
+      setUserData(resData[0]);
+      // console.log("BASE 64 " , resData[0].pic_img);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
   let TouchableNativeOpacity = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) {
     TouchableNativeOpacity = TouchableNativeFeedback;
@@ -41,24 +65,34 @@ const Profile = (props) => {
           justifyContent: "center",
         }}
       >
-        <View style={{ marginTop: 50, width: "100%"}}>
+        <View style={{ marginTop: 50, width: "100%" }}>
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
             <View></View>
-            <Text>
-              @Jessica_George
-            </Text>
-            <MaterialIcons name="settings" size={30} color="black" onPress = {() => props.navigation.navigate('settingsNav')} />
+            <Text>@Jessica_George</Text>
+            <MaterialIcons
+              name="settings"
+              size={30}
+              color="black"
+              onPress={() => props.navigation.navigate("settingsNav")}
+            />
           </View>
         </View>
 
         <View style={{ marginTop: 20 }}>
           <View style={styles.profileHead}>
-            <Image
-              source={require("../assets/Images/dummy-img1.jpg")}
-              style={styles.profileImage}
-            />
+            {userData ? (
+              <Image
+                source={{ uri:`data:image/jpeg;base64,${userData.pic_img}`}}
+                style={styles.profileImage}
+              />
+            ) : (
+              <Image
+                source={{ uri: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png" }}
+                style={styles.profileImage}
+              />
+            )}
             <View style={styles.profileText}>
               <Text style={styles.profileName}> Jessica George </Text>
               <Text> Fashion Model & Photographer </Text>
@@ -81,7 +115,6 @@ const Profile = (props) => {
                   <Text style={styles.count}> 250 </Text>
                   <Text style={styles.title}> Followers </Text>
                 </View>
-
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {}}>
                 <View style={styles.countView}>
@@ -94,26 +127,31 @@ const Profile = (props) => {
         </View>
 
         <CustomButton style={styles.btn} title="Follow" />
-        <View style = {{width: Dimensions.get("window").width / 1.1, paddingBottom:40}}>
-        <FlatList
-          data={galleryData}
-          numColumns = {3}
-          keyExtractor={(item, index) => item.postId}
-          contentContainerStyle = {{alignSelf: 'flex-start'}}
-          renderItem={(itemData) => (
-         
+        <View
+          style={{
+            width: Dimensions.get("window").width / 1.1,
+            paddingBottom: 40,
+          }}
+        >
+          <FlatList
+            data={galleryData}
+            numColumns={3}
+            keyExtractor={(item, index) => item.postId}
+            contentContainerStyle={{ alignSelf: "flex-start" }}
+            renderItem={(itemData) => (
               <View style={styles.profilePosts}>
-                <TouchableNativeOpacity onPress={() => props.navigation.navigate('likedPost')}>
+                <TouchableNativeOpacity
+                  onPress={() => props.navigation.navigate("likedPost")}
+                >
                   <Image
                     source={{ uri: itemData.item.postImage }}
                     style={styles.postImages}
                   />
                 </TouchableNativeOpacity>
               </View>
-          )}
-        />
+            )}
+          />
         </View>
-       
       </ScrollView>
     </View>
   );
@@ -154,8 +192,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileImage: {
-    width: Dimensions.get('window').width/4,
-    height: Dimensions.get('window').width/4,
+    width: Dimensions.get("window").width / 4,
+    height: Dimensions.get("window").width / 4,
     borderRadius: 50,
   },
   profileHead: {
@@ -181,7 +219,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: Dimensions.get("window").width / 1.1,
-    height:Dimensions.get("window").width/9,
+    height: Dimensions.get("window").width / 9,
     backgroundColor: "#ff6600",
     alignItems: "center",
     justifyContent: "center",
@@ -190,11 +228,11 @@ const styles = StyleSheet.create({
   },
   profilePosts: {
     marginTop: 10,
-    marginHorizontal:5
+    marginHorizontal: 5,
   },
   postImages: {
-    width: Dimensions.get("window").width /3.6,
-    height: Dimensions.get("window").height/7 ,
+    width: Dimensions.get("window").width / 3.6,
+    height: Dimensions.get("window").height / 7,
     borderRadius: 15,
   },
 });

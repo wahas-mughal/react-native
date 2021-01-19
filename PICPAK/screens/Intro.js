@@ -117,7 +117,7 @@ export default class App extends Component {
         </View>
         <CustomButton
           title="SKIP"
-          onPress={() => props.navigation.navigate("dashboardBottomNav")}
+          onPress={() => this.props.navigation.navigate("dashboardBottomNav")}
           style={{
             width: Dimensions.get("window").width / 2,
             height: Dimensions.get("window").width / 10,

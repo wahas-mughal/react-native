@@ -23,7 +23,6 @@ import SavedLoginInfo from "../screens/Setting/SecuritySection/SavedLoginInfo";
 import About from "../screens/Setting/AboutSection/About";
 import Theme from "../screens/Setting/Theme";
 import Account from "../screens/Setting/AccountSection/Account";
-import Demo from "../screens/Demo";
 import PersonalInformation from "../screens/Setting/AccountSection/PersonalInformation";
 import Activity from "../screens/Setting/AccountSection/Activity";
 import { createAppContainer, createSwitchNavigator} from "react-navigation";
@@ -33,7 +32,6 @@ import Search from "../screens/Search";
 import SearchScreen from "../screens/SearchScreen";
 import Likes from "../screens/Likes";
 import AllLikes from "../screens/AllLikes";
-import FollowRequests from "../screens/FollowRequests";
 import Profile from "../screens/Profile";
 import AddImage from "../screens/AddImage";
 import { SimpleLineIcons } from "@expo/vector-icons";
@@ -297,6 +295,12 @@ const profileNavigator = createStackNavigator({
       headerShown: false,
     },
   },
+  login: {
+    screen: Login,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
   likedPost: {
     screen: LikedPost,
     navigationOptions:{
@@ -467,7 +471,6 @@ searchNavigator.navigationOptions = ({ navigation }) => {
 };
 
 const AppNavigator = createSwitchNavigator({
-  demo: Demo,
   login: Login,
   verification: Verification,
   register: Register,

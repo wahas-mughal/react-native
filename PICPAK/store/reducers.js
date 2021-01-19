@@ -1,12 +1,13 @@
 import { FEED } from "../data/dummy-data";
 import { GALLERY } from "../data/dummy-data";
 import { LIKE } from "../data/dummy-data";
-import { ISLIKED, SIGNUP } from "./actions";
+import { ISLIKED, AUTH } from "./actions";
 
 const initialState = {
   feed: FEED,
   gallery: GALLERY,
-  likes: LIKE
+  likes: LIKE,
+  userId: null,
 };
 
 export default (state = initialState, action) => {
@@ -18,15 +19,19 @@ export default (state = initialState, action) => {
             ...item,
             isLiked: !item.isLiked,
           };
-
         } else {
           return item;
         }
       });
       return {
         ...state,
-        feed: updatedState
-      }
+        feed: updatedState,
+      };
+    case AUTH:
+      return {
+        ...state,
+        userId: action.payload,
+      };
   }
   return state;
 };

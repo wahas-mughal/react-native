@@ -6,6 +6,7 @@ import ReduxThunk from "redux-thunk";
 import feedReducer from "./store/reducers";
 import galleryReducer from "./store/reducers";
 import likesNotificationReducer from "./store/reducers";
+import authReducer from "./store/reducers";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -38,6 +39,7 @@ export default function App() {
     feed: feedReducer,
     gallery: galleryReducer,
     likesNot: likesNotificationReducer,
+    auth: authReducer
   });
 
   const store = createStore(rootReducers, applyMiddleware(ReduxThunk));

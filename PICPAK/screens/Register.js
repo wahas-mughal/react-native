@@ -8,20 +8,69 @@ import {
   Image,
   Dimensions,
   ActivityIndicator,
+  Alert,
+  TouchableOpacity,
 } from "react-native";
 import CustomButton from "../components/CustomButton";
 import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../store/actions";
+import { Swing } from "react-native-animated-spinkit";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
+import * as firebase from 'firebase';
+
 
 const Register = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setlastName] = useState("");
   const [email, setEmail] = useState("");
+  const [imagePicked, setImagePicked] = useState(null);
+  const dispatch = useDispatch();
+
+  const [imageBase64, setImageBase64] = useState("");
   const getNumber = props.navigation.getParam("number");
   const getUid = props.navigation.getParam("uid");
-  const dispatch = useDispatch();
+
+  //verify permisssions specifically for iOS
+  const verifyPermissions = async () => {
+    const result = await Permissions.askAsync(
+      Permissions.CAMERA,
+      Permissions.CAMERA_ROLL
+    );
+    if (result.status !== "granted") {
+      Alert.alert(
+        "Permission Denied",
+        "Permissions to access the camera is denied",
+        [
+          {
+            text: "Okay",
+          },
+        ]
+      );
+      return false;
+    }
+    return true;
+  };
+
+  const imagePickHandler = async () => {
+    const hasPermission = verifyPermissions();
+    if (!hasPermission) {
+      return;
+    }
+    const image = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 1,
+      base64: true
+    });
+    
+    const imageURL = image.uri;
+    const base64String = image.base64;
+    setImagePicked(imageURL);
+    setImageBase64(base64String)
+  };
 
   const submitUserData = async () => {
     try {
@@ -31,12 +80,14 @@ const Register = (props) => {
           getUid,
           firstName,
           lastName,
+          imageBase64,
           email,
           getNumber,
           "12/12/20",
           "10:00"
         )
       );
+      await dispatch(actions.auth(getUid));
       props.navigation.navigate("intro");
     } catch (err) {
       throw err;
@@ -47,7 +98,7 @@ const Register = (props) => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size={28} color="orange" />
+        <Swing size={45} color="orange"></Swing>
       </View>
     );
   }
@@ -58,12 +109,13 @@ const Register = (props) => {
       style={styles.bgImage}
     >
       <Card style={styles.inputContainer}>
-        <View style={styles.trademarkView}>
-          <Image
-            style={styles.cameraImg}
-            source={require("../assets/Images/camera-img.png")}
-          />
-        </View>
+        <TouchableOpacity onPress = {imagePickHandler} style={styles.trademarkView}>
+            <Image
+              style={styles.cameraImg}
+              source = {{uri: imagePicked ? imagePicked : "https://www.cmu.edu/chemistry/people/staff/images/no-image.png" }}
+              resizeMode = 'contain'
+            />
+        </TouchableOpacity>
         <TextInput
           placeholder="First Name"
           style={styles.input}
@@ -79,7 +131,11 @@ const Register = (props) => {
           style={styles.input}
           onChangeText={(text) => setEmail(text)}
         />
-        <CustomButton title="SIGN UP" onPress={submitUserData} style={styles.btn} />
+        <CustomButton
+          title="SIGN UP"
+          onPress={submitUserData}
+          style={styles.btn}
+        />
       </Card>
       <View style={styles.fbTextContainer}>
         <Text style={styles.mainText}> Try Signing With: </Text>
@@ -145,6 +201,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "absolute",
     top: -50,
+    overflow: 'hidden'
   },
   trademarkText: {
     fontSize: 18,
@@ -166,8 +223,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   cameraImg: {
-    width: 55,
-    height: 55,
+    width: '100%',
+    height: '100%',
   },
 });
 

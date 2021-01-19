@@ -32,6 +32,8 @@ import FilterScreen from "../screens/FilterScreen";
 const AddButtonIcon = (props) => {
   const [imagePicker, setImagePicker] = useState(null);
   const [isModalTrue, setIsModalTrue] = useState(false);
+  // const blob = imagePicker ? imagePicker.blob() : null;
+  // console.log("BLOB " +blob);
 
   // camera permission for iOS
   const verifyPermissionsIOS = async () => {
@@ -64,6 +66,12 @@ const AddButtonIcon = (props) => {
       });
 
       const imageURI = image.uri;
+
+      //convert image uri to blob
+      const response = await fetch(imageURI);
+      const blob = await response.blob();
+      console.log("BLOB " +blob);
+
       console.log("Image path: " + imageURI);
       const imagePath = imageURI.split("/").pop();
       const newImagePath = FileSystem.documentDirectory + imagePath;
@@ -72,9 +80,7 @@ const AddButtonIcon = (props) => {
         from: imageURI,
         to: newImagePath,
       });
-
-      console.log("New Image Path " + newImagePath);
-
+    
       setImagePicker(newImagePath);
       setIsModalTrue(true);
     } catch (err) {

@@ -19,12 +19,17 @@ import {
   FirebaseRecaptchaVerifierModal,
   FirebaseRecaptchaBanner,
 } from "expo-firebase-recaptcha";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../store/actions";
+import {Swing} from 'react-native-animated-spinkit';
 
 const Verification = (props) => {
   const [isLoading, setIsloading] = useState(false);
   const verificationID = props.navigation.getParam("verificationId");
   const phoneNumber = props.navigation.getParam("phoneNumber");
-  console.log(phoneNumber);
+
+  const dispatch = useDispatch();
+  // console.log(phoneNumber);
   const [validVerificationID, setValidVerificationID] = useState(
     verificationID
   );
@@ -38,6 +43,31 @@ const Verification = (props) => {
 
   const attemptInvisibleVerification = false;
 
+  //get uid from database
+  const getConfirmAuth = async (uid) => {
+    try {
+      setIsloading(true);
+      const res = await fetch(
+        `https://gudbazar.com/picpak/signupUserGet.php?id=${uid}`
+      );
+      const resData = await res.json();
+      console.log("PICPAK AUTH ", resData);
+      const matchForUid = resData === -1 ? "" : resData[0].uid;
+      console.log(matchForUid);
+      if (matchForUid === uid) {
+        dispatch(actions.auth(uid));
+        props.navigation.navigate("dashboardBottomNav");
+      } else {
+        props.navigation.navigate("register", {
+          number: phoneNumber,
+          uid: uid,
+        });
+      }
+    } catch (err) {
+      throw err;
+    }
+    setIsloading(false);
+  };
   //send verification code
   const resendVerificationCode = async () => {
     try {
@@ -95,7 +125,7 @@ const Verification = (props) => {
         setValidVerificationID(null);
         Alert.alert("Please verify the valid OTP!");
       } else {
-        setIsloading(true);
+     
         const credential = firebase.auth.PhoneAuthProvider.credential(
           validVerificationID,
           verificationCode
@@ -103,22 +133,30 @@ const Verification = (props) => {
         // console.log(credential);
         const res = await firebase.auth().signInWithCredential(credential);
         console.log(res);
-        const uID = res.user.uid
-        props.navigation.navigate("register", { 
-          number: phoneNumber,
-          uid: uID
-        });
+        const uID = res.user.uid;
+        getConfirmAuth(uID);
+        // await dispatch(actions.SignIn(uID));
+        // console.log("USERAUTH " +authID);
+        // if(authID === uID){
+        //   console.log(authID);
+        //   props.navigation.navigate("dashboardBottomNav");
+        // }
+        // else{
+        //   props.navigation.navigate("register", {
+        //     number: phoneNumber,
+        //     uid: uID
+        //   });
+        // }
       }
     } catch (err) {
       Alert.alert("Please enter a valid OTP!");
     }
-    setIsloading(false);
   };
 
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator color="orange" size={28} />
+        <Swing color="orange" size={45}> </Swing>
       </View>
     );
   }
@@ -132,7 +170,7 @@ const Verification = (props) => {
         <Card style={styles.inputContainer}>
           <TextInput
             placeholder="Verification Code"
-            placeholderTextColor = '#888'
+            placeholderTextColor="#888"
             style={styles.input}
             onChangeText={(text) => setVerificationCode(text)}
           />
