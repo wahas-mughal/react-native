@@ -5,11 +5,11 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {Dimensions} from 'react-native'
 import homeDealerStack from "./homeDealerstack";
 import bookingStack from "./Bookingstack";
 import accountStack from "./Accountstack";
-import Referstack from "./Referstack";
 import favouriteStack from "./Favouritestack";
 import Helpstack from "./Helpstack";
 import { createStackNavigator } from "react-navigation-stack";
@@ -19,30 +19,49 @@ import forgotPassword from "../screens/LoginStackScreens/Forgetpassword";
 import IdentityScreen1 from "../screens/LoginStackScreens/Identityscreena";
 import IdentityScreen2 from "../screens/LoginStackScreens/Identityscreenb";
 import IdentityScreen3 from "../screens/LoginStackScreens/Identityscreenc";
-import Spinner from "../components/Spinner";
+import "@firebase/firestore";
+import * as firebase from "firebase";
 
-customSideBar = (props) => (
-  <View>
-    <View style={styles.profileView}>
-      <Image
-        style={styles.profileImage}
-        source={require("../assets/images/blank-profile-picture.png")}
-      />
-      <Text
-        style={{
-          paddingTop: 10,
-          color: "#fff",
-          fontWeight: "bold",
-          fontSize: 16,
-        }}
-      >
-        {" "}
-        wahas mughal{" "}
-      </Text>
+customSideBar = (props) => {
+
+  const [user, setUser] = useState(null);
+  const { uid } = firebase.auth().currentUser;
+  const db = firebase.firestore();
+
+  const getUserData = async () => {
+    try {
+      const docSnapShot = await db.collection("users").doc(uid).get();
+      const userData = docSnapShot.data();
+      setUser(userData);
+      console.log(userData);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  return (
+    <View>
+      <View style={styles.profileView}>
+        <Text
+          style={{
+            paddingTop: 10,
+            color: "#fff",
+            fontWeight: "bold",
+            fontSize: 17,
+            textTransform: 'uppercase'
+          }}
+        >
+          {user && user?.firstname + " " + user?.lastname}
+        </Text>
+      </View>
+      <DrawerItems {...props} />
     </View>
-    <DrawerItems {...props} />
-  </View>
-);
+  );
+};
 
 const drawNavigation = createDrawerNavigator(
   {
@@ -92,13 +111,6 @@ const drawNavigation = createDrawerNavigator(
       },
     },
 
-    "Refer And Earn": {
-      screen: Referstack,
-      navigationOptions: {
-        drawerIcon: <Ionicons name="ios-copy" size={26} color="#03c4ff" />,
-      },
-    },
-
     Help: {
       screen: Helpstack,
       navigationOptions: {
@@ -131,6 +143,27 @@ const drawNavigation = createDrawerNavigator(
   }
 );
 
+const identificationStack = createStackNavigator(
+  {
+    "Identification (3/1)": {
+      screen: IdentityScreen1,
+    },
+
+    "Identification (3/2)": {
+      screen: IdentityScreen2,
+    },
+
+    "Identification (3/3)": {
+      screen: IdentityScreen3,
+    },
+  },
+  {
+    defaultNavigationOptions: {
+      headerTitleAlign: "center",
+    },
+  }
+);
+
 const LoginStack = createStackNavigator({
   Login: {
     screen: Login,
@@ -146,36 +179,22 @@ const LoginStack = createStackNavigator({
     },
   },
 
-  Spinner: {
-    screen: Spinner,
-    navigationOptions: {
-      headerShown: false,
-    },
-  },
-
   Forgetpassword: {
     screen: forgotPassword,
     navigationOptions: {
       headerShown: false,
     },
   },
+});
 
-  "Identification (3/1)": {
-    screen: IdentityScreen1,
-  },
-
-  "Identification (3/2)": {
-    screen: IdentityScreen2,
-  },
-
-  "Identification (3/3)": {
-    screen: IdentityScreen3,
-  },
+const loginIdentityStack = createSwitchNavigator({
+  loginStack: LoginStack,
+  identityStack: identificationStack,
 });
 
 const AppNavigator = createSwitchNavigator({
   Loginstack: {
-    screen: LoginStack,
+    screen: loginIdentityStack,
     navigationOptions: {
       headerShown: false,
     },
@@ -196,12 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: 30,
     paddingBottom: 20,
+    height: Dimensions.get('window').width/2,
     backgroundColor: "#03c4ff",
-  },
-
-  profileImage: {
-    width: 110,
-    height: 110,
-    borderRadius: 75,
   },
 });

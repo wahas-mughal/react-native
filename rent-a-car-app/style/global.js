@@ -6,7 +6,8 @@ export const globalstyles = StyleSheet.create({
     container: {
         flex: 1,
         alignContent: 'center',
-        backgroundColor: 'whitesmoke',
+        justifyContent:'center',
+        backgroundColor: '#03c4ff',
 
     },
     header:{
@@ -16,7 +17,6 @@ export const globalstyles = StyleSheet.create({
        flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: -150,
     },
     orText: {
         fontSize: 20,
@@ -26,23 +26,22 @@ export const globalstyles = StyleSheet.create({
 
     },
     SignUpCont: {
-        //flexGrow: 1,
         alignItems: 'flex-end',
         justifyContent: 'center',
-        marginTop: 50,
-        marginBottom: 30,
+        marginTop: 100,
         flexDirection: 'row',
         backgroundColor: 'rgb(256,256,256)',
         opacity: 2,
         borderRadius: 10,
-        padding: 5,
+        padding: 7,
     },
     SignUpText: {
-        fontSize: 17,
+        fontSize: 15,
+        fontWeight:'bold'
     },
     SignUpButton: {
         fontSize: 17,
-        fontWeight: '500',
+        fontWeight: 'bold',
         color: '#03c4ff',
     },
     forgotContainer: {
@@ -50,9 +49,12 @@ export const globalstyles = StyleSheet.create({
         opacity: 2,
         borderRadius: 10,
         margin: 15,
-        padding: 5,
-        width: 170,
-        marginLeft: 40
+        alignItems:'center',
+        justifyContent:'center',
+        width: 200,
+        paddingHorizontal: 0,
+        paddingVertical: 8,
+        marginLeft: 25
     },
     ForgotContent:{
         alignItems: "center",
@@ -80,7 +82,8 @@ export const globalstyles = StyleSheet.create({
     },
 
     InputContainer:{
-        paddingBottom: 14,
+        // paddingBottom: 14,
+        marginVertical: 20,
         width: 255,
     },
 
@@ -105,11 +108,6 @@ export const globalstyles = StyleSheet.create({
         paddingHorizontal: 10,
         marginBottom: 10,
         width: 200,
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
     },
     smallbutton: {
         flexDirection: 'row',

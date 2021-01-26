@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
-import { Picker } from "@react-native-community/picker";
 import Card from "../shared/Card";
 import {
   EvilIcons,
-  Fontisto,
   SimpleLineIcons,
   AntDesign,
   FontAwesome5,
@@ -15,8 +13,6 @@ import { ScrollView } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 
 export default function MyAccount({ navigation }) {
-  const [user, setUser] = useState("");
-  const [selectedValue, setSelectedValue] = useState("java");
 
   // sign out the current session of the user
   const userSignOut = () => {
@@ -54,7 +50,7 @@ export default function MyAccount({ navigation }) {
             </View>
           </TouchableOpacity>
         </View>
-        <Card style = {styles.cardExtended}>
+        <Card style={styles.cardExtended}>
           <View style={styles.boxSetting}>
             <EvilIcons
               name="user"
@@ -62,13 +58,13 @@ export default function MyAccount({ navigation }) {
               color="black"
               style={{ marginTop: 10 }}
             />
-            <View style={{ paddingLeft: 25}}>
+            <View style={{ paddingLeft: 25 }}>
               <Text style={{ fontSize: 17 }}>Name </Text>
               <Text style={{ fontSize: 17, color: "gray" }}>Fardin Khan </Text>
             </View>
           </View>
         </Card>
-        <Card style = {styles.cardExtended}>
+        <Card style={styles.cardExtended}>
           <View style={styles.boxSetting}>
             <FontAwesome5
               name="mobile-alt"
@@ -82,15 +78,15 @@ export default function MyAccount({ navigation }) {
             </View>
           </View>
         </Card>
-        <Card style = {styles.cardExtended}>
+        <Card style={styles.cardExtended}>
           <View style={styles.boxSetting}>
             <MaterialCommunityIcons
               name="gmail"
               size={24}
               color="black"
-              style={{paddingTop: 10, paddingLeft: 4 }}
+              style={{ paddingTop: 10, paddingLeft: 4 }}
             />
-            <View style={{ paddingLeft: 26}}>
+            <View style={{ paddingLeft: 26 }}>
               <Text style={{ fontSize: 17 }}>Email</Text>
               <Text style={{ fontSize: 17, color: "gray" }}>
                 m.fkkhan09@gmail.com
@@ -98,40 +94,28 @@ export default function MyAccount({ navigation }) {
             </View>
           </View>
         </Card>
-        <Card style = {styles.cardExtended}>
+        <Card style={styles.cardExtended}>
           <TouchableOpacity
             onPress={() => navigation.navigate({ routeName: "ChangePassword" })}
           >
             <View style={styles.boxSetting}>
-              <EvilIcons
-                name="lock"
-                size={34}
-                color="black"
-              />
+              <EvilIcons name="lock" size={34} color="black" />
 
-              <View
-                style={{ paddingLeft: 20, fontWeight: "bold" }}
-              >
+              <View style={{ paddingLeft: 20, fontWeight: "bold" }}>
                 <Text style={{ fontSize: 17 }}>Change Password</Text>
               </View>
             </View>
           </TouchableOpacity>
         </Card>
 
-        <Card style = {styles.cardExtended}>
+        <Card style={styles.cardExtended}>
           <TouchableOpacity
             onPress={() => navigation.navigate({ routeName: "BankDetails" })}
           >
             <View style={styles.boxSetting}>
-              <EvilIcons
-                name="lock"
-                size={34}
-                color="black"
-              />
+              <EvilIcons name="lock" size={34} color="black" />
 
-              <View
-                style={{paddingLeft: 20, fontWeight: "bold" }}
-              >
+              <View style={{ paddingLeft: 20, fontWeight: "bold" }}>
                 <Text style={{ fontSize: 17 }}>Add/Remove Debit Card</Text>
               </View>
             </View>
@@ -148,47 +132,8 @@ export default function MyAccount({ navigation }) {
             General
           </Text>
         </View>
-        <Card style = {styles.cardExtended}>
-          <View style={styles.boxSetting}>
-            <Fontisto
-              name="world-o"
-              size={24}
-              color="black"
-              style={{paddingTop: 12, paddingLeft: 6 }}
-            />
-            <View style={{ paddingLeft: 31}}>
-              <Picker
-                selectedValue={selectedValue}
-                style={{ height: 50, width: 150 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedValue(itemValue)
-                }
-              >
-                <Picker.Item label="Language" value="Language" />
-                <Picker.Item label="US English" value="us-english" />
-                <Picker.Item label="UK English" value="uk-english" />
-              </Picker>
-            </View>
-          </View>
-        </Card>
-        <Card style = {styles.cardExtended}>
-          <TouchableOpacity>
-            <View style={styles.boxSetting}>
-              <AntDesign
-                name="staro"
-                size={24}
-                color="black"
-                style={{ marginTop: 10, paddingLeft: 8 }}
-              />
-              <View
-                style={{paddingTop: 10, paddingLeft: 32, fontWeight: "bold" }}
-              >
-                <Text style={{ fontSize: 17 }}>Rate this App</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </Card>
-        <Card style = {styles.cardExtended}>
+
+        <Card style={styles.cardExtended}>
           <TouchableOpacity onPress={userSignOut}>
             <View style={styles.boxSetting}>
               <SimpleLineIcons
@@ -218,8 +163,8 @@ export default function MyAccount({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  screen:{
-    marginTop: 5
+  screen: {
+    marginTop: 5,
   },
   Header1: {
     width: "100%",
@@ -239,11 +184,11 @@ const styles = StyleSheet.create({
   editProfile: {
     fontSize: 16,
   },
-  cardExtended:{
+  cardExtended: {
     elevation: 1,
     marginHorizontal: 10,
     marginVertical: 5,
     padding: 25,
-    backgroundColor: "whitesmoke"
+    backgroundColor: "whitesmoke",
   },
 });

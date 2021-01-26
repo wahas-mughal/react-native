@@ -17,37 +17,12 @@ import Card from "../shared/Card";
 
 export default function AllDealers({ navigation }) {
   const allDealer = useSelector((state) => state.dealers.allDealers);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const dispatch = useDispatch();
-
-  // const fetchAllDealers = useCallback(async () => {
-  //   setIsLoading(true);
-  //   await dispatch(dealerActions.fetchDealers());
-  //   setIsLoading(false);
-  // }, [dispatch, setIsLoading]);
-
-  // useEffect(() => {
-  //   const willFocus = navigation.addListener("WillFocus", fetchAllDealers);
-  //   return () => {
-  //     willFocus.remove();
-  //   };
-  // }, [fetchAllDealers]);
-
-  // useEffect(() => {
-  //   fetchAllDealers();
-  // }, []);
 
   let TouchableNativeOpacity = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21) {
     TouchableNativeOpacity = TouchableNativeFeedback;
   }
-
-  // if (isLoading) {
-  //   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-  //     <ActivityIndicator size={28} color="#03c4ff" />
-  //   </View>;
-  // }
 
   return (
     <View style={styles.allFeaturedSection}>
@@ -88,14 +63,14 @@ export default function AllDealers({ navigation }) {
 
 const styles = StyleSheet.create({
   allFeaturedSection: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginVertical: 15,
     // width: "100%",
   },
 
   allFeaturedImage: {
     width: "100%",
-    height: 185,
+    height: 205,
   },
 
   ratingText: {
@@ -112,8 +87,8 @@ const styles = StyleSheet.create({
   allCard: {
     elevation: 6,
     backgroundColor: "white",
-    height: 250,
-    width: 300,
+    height: 270,
+    width: '100%',
     // marginBottom: 13,
     borderRadius: 10,
     overflow: "hidden",
@@ -122,7 +97,7 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans-bold",
     fontSize: 22,
     color: "black",
-    marginVertical: 10,
+    marginBottom: 10,
     marginLeft: 10,
   },
 });

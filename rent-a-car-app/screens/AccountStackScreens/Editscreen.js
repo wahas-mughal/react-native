@@ -1,13 +1,12 @@
 import React from "react";
 import {
-  Text,
   StyleSheet,
   View,
   LayoutAnimation,
   TextInput,
-  Button,
 } from "react-native";
 import Card from "../../shared/Card";
+import {Button, Text} from 'native-base';
 
 export default class Edit extends React.Component {
   render() {
@@ -26,8 +25,10 @@ export default class Edit extends React.Component {
               placeholder="Edit your mobile number"
             />
             <TextInput style={styles.input} placeholder="Edit your email" />
-            <View style={styles.buttonView}>
-              <Button title="Save Changes" color="#03c4ff" />
+            <View style={styles.buttonView}> 
+              <Button block style = {{backgroundColor: '#03c4ff' }}>
+                <Text style = {{fontSize: 17, fontWeight: 'bold'}}> Save Changes </Text>
+              </Button>
             </View>
           </View>
         </Card>
@@ -47,7 +48,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#03c4ff",
     borderBottomWidth: 1,
     marginVertical: 20,
-    padding: 10
+    padding: 10,
+    fontSize: 17
   },
   cardSection: {
     padding: 20

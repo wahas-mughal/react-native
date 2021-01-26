@@ -5,8 +5,8 @@ import { globalstyles } from '../style/global';
 export default function MyButton({ text, onPress }) {
     return (
         <TouchableOpacity onPress={onPress}>
-            <View style={globalstyles.button} backgroundColor = "#03c4ff">
-                <Text style={globalstyles.buttonText} color='black'>{text}</Text>
+            <View style={globalstyles.button} backgroundColor = "#fff">
+                <Text style={{color: '#03c4ff', fontWeight:'bold', textTransform: 'uppercase', fontSize: 17}}>{text}</Text>
             </View>
         </TouchableOpacity>
     )

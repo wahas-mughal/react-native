@@ -64,7 +64,7 @@ const bookedCarsStack = createStackNavigator(
 );
 
 const dealerHomeStack = createStackNavigator({
-  Home: {
+  home: {
     screen: Homescreen,
     navigationOptions: ({ navigation }) => {
       return {
@@ -119,23 +119,13 @@ dealerHomeStack.navigationOptions = ({ navigation }) => {
   let { routeName } = navigation.state.routes[navigation.state.index];
   let navigationOptions = {};
 
-  if (routeName === "Home") {
+  if (routeName === "home") {
     navigationOptions.tabBarVisible = false;
   }
 
   return navigationOptions;
 };
 
-//hide the bottom tab bar in Map screen
-dealerHomeStack.navigationOptions = ({ navigation }) => {
-  let { routeName } = navigation.state.routes[navigation.state.index];
-  let navigationOptions = {};
-
-  if (routeName === "MapScreen") {
-    navigationOptions.tabBarVisible = false;
-  }
-  return navigationOptions;
-};
 
 const bottomTabScreens = {
   "Dealer Profile": {

@@ -35,8 +35,8 @@ export default function Homescreen({ navigation }) {
           </Card>
         </View>
       </TouchableNativeOpacity>
-      <FeaturedDealers navigation={navigation} />
-      <Text
+      {/* <FeaturedDealers navigation={navigation} /> */}
+      {/* <Text
         style={{
           borderBottomColor: "#ccc",
           borderBottomWidth: 1,
@@ -45,7 +45,7 @@ export default function Homescreen({ navigation }) {
         }}
       >
         {" "}
-      </Text>
+      </Text> */}
       <AllDealers navigation={navigation} />
     </ScrollView>
   );
