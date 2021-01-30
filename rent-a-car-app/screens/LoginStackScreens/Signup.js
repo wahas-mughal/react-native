@@ -13,13 +13,14 @@ import "@firebase/firestore";
 import * as authActions from "../../store/actions/auth";
 import { useDispatch } from "react-redux";
 import { Flow } from "react-native-animated-spinkit";
+
 export default function SignUp({ navigation }) {
   const db = firebase.firestore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -38,12 +39,11 @@ export default function SignUp({ navigation }) {
           dispatch(authActions.auth(idToken, credentials.user.uid));
           console.log("token at the time of login " + idToken);
           console.log("user id at the time of login " + credentials.user.uid);
-          navigation.navigate("identification");
+          navigation.navigate("identityStack");
         })
         .catch((err) => {
           Alert.alert(err.message);
         });
-
       //send uid to real time database in order to match it after user login for the second time
       await fetch(
         "https://rent-a-car-app-211bf.firebaseio.com/users/userIds.json",
@@ -57,14 +57,14 @@ export default function SignUp({ navigation }) {
           }),
         }
       );
-      setIsLoading(false);
       return db.collection("users").doc(credentials.user.uid).set({
-        firstname: firstName,
-        lastname: lastName,
+        fullname: fullName,
+        mobile: mobileNumber,
       });
     } catch (err) {
       Alert.alert(err.message);
     }
+    setIsLoading(false);
   };
 
   if (isLoading) {
@@ -83,15 +83,15 @@ export default function SignUp({ navigation }) {
       <View style={globalstyles.SignUpcontent}>
         <TextInput
           style={globalstyles.inputBox}
-          placeholder="FIRST NAME"
+          placeholder="FULL NAME"
           placeholderTextColor="#fff"
-          onChangeText={(text) => setFirstName(text)}
+          onChangeText={(text) => setFullName(text)}
         />
         <TextInput
           style={globalstyles.inputBox}
-          placeholder="LAST NAME"
+          placeholder="MOBILE NUMBER"
           placeholderTextColor="#fff"
-          onChangeText={(text) => setLastName(text)}
+          onChangeText={(text) => setMobileNumber(text)}
         />
         <TextInput
           style={globalstyles.inputBox}
@@ -105,12 +105,6 @@ export default function SignUp({ navigation }) {
           placeholderTextColor="#fff"
           secureTextEntry={true}
           onChangeText={(text) => setPassword(text)}
-        />
-        <TextInput
-          style={globalstyles.inputBox}
-          placeholder="CONFIRM PASSWORD"
-          placeholderTextColor="#fff"
-          secureTextEntry={true}
         />
       </View>
       <View style={globalstyles.SignUpfooter}>

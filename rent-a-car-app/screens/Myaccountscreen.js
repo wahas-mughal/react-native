@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import Card from "../shared/Card";
 import {
@@ -11,8 +11,12 @@ import {
 } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import * as firebase from "firebase";
+import "@firebase/firestore";
+import { useSelector } from "react-redux";
 
 export default function MyAccount({ navigation }) {
+  const user = useSelector((state) => state.auth.userDetails);
+  console.log("USER ", user);
 
   // sign out the current session of the user
   const userSignOut = () => {
@@ -60,7 +64,9 @@ export default function MyAccount({ navigation }) {
             />
             <View style={{ paddingLeft: 25 }}>
               <Text style={{ fontSize: 17 }}>Name </Text>
-              <Text style={{ fontSize: 17, color: "gray" }}>Fardin Khan </Text>
+              <Text style={{ fontSize: 17, color: "gray" }}>
+                {user?.fullname}
+              </Text>
             </View>
           </View>
         </Card>
@@ -74,7 +80,9 @@ export default function MyAccount({ navigation }) {
             />
             <View style={{ paddingLeft: 31 }}>
               <Text style={{ fontSize: 17 }}>Mobile Number </Text>
-              <Text style={{ fontSize: 17, color: "gray" }}>+923310000000</Text>
+              <Text style={{ fontSize: 17, color: "gray" }}>
+                {user?.mobile}
+              </Text>
             </View>
           </View>
         </Card>
@@ -88,38 +96,9 @@ export default function MyAccount({ navigation }) {
             />
             <View style={{ paddingLeft: 26 }}>
               <Text style={{ fontSize: 17 }}>Email</Text>
-              <Text style={{ fontSize: 17, color: "gray" }}>
-                m.fkkhan09@gmail.com
-              </Text>
+              <Text style={{ fontSize: 17, color: "gray" }}>{user?.email}</Text>
             </View>
           </View>
-        </Card>
-        <Card style={styles.cardExtended}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate({ routeName: "ChangePassword" })}
-          >
-            <View style={styles.boxSetting}>
-              <EvilIcons name="lock" size={34} color="black" />
-
-              <View style={{ paddingLeft: 20, fontWeight: "bold" }}>
-                <Text style={{ fontSize: 17 }}>Change Password</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </Card>
-
-        <Card style={styles.cardExtended}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate({ routeName: "BankDetails" })}
-          >
-            <View style={styles.boxSetting}>
-              <EvilIcons name="lock" size={34} color="black" />
-
-              <View style={{ paddingLeft: 20, fontWeight: "bold" }}>
-                <Text style={{ fontSize: 17 }}>Add/Remove Debit Card</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
         </Card>
 
         <View style={{ paddingTop: 20 }}>

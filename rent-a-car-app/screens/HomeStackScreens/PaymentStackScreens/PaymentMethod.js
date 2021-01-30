@@ -27,16 +27,6 @@ export default function PaymentMethod({ navigation }) {
       </Text>
       <View style={{ width: "100%" }}>
         <TouchableAndroidOpacity
-          onPress={() => navigation.navigate("selectCreditCard", {bookingData: {title: title, rent: rent, duration: duration, paymentMethod: 'Credit Card'}})}
-        >
-          <View style={{ marginVertical: 15, marginHorizontal: 10 }}>
-            <Card style={styles.card}>
-              <Text style={styles.text}> Pay using credit card</Text>
-              <Ionicons name="ios-checkmark-circle" size={24} color="#03c4ff" />
-            </Card>
-          </View>
-        </TouchableAndroidOpacity>
-        <TouchableAndroidOpacity
           onPress={() =>
             navigation.navigate("confirmPayment",{bookingData: {title: title, rent: rent, duration: duration, paymentMethod: 'Cash on delivery'}})
           }

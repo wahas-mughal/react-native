@@ -1,8 +1,9 @@
-import { AUTH } from "../actions/auth";
+import { AUTH, USER_PROFILE } from "../actions/auth";
 
 const initialState = {
   token: null,
   userId: null,
+  userDetails: []
 };
 
 export default (state = initialState, action) => {
@@ -13,6 +14,11 @@ export default (state = initialState, action) => {
         token: action.idToken,
         userId: action.userID,
       };
+      case USER_PROFILE:
+        return{
+          ...state,
+          userDetails: action.payload
+        }
   }
   return state;
 };

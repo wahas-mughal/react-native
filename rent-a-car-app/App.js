@@ -10,6 +10,7 @@ import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import ReduxThunk from 'redux-thunk';
 import {firebaseConfig} from './config/firebase-config';
+import { Ionicons } from '@expo/vector-icons';
 
 //firebase setup
 import * as firebase from "firebase";
@@ -21,6 +22,9 @@ const fetchFonts = () => {
   return Font.loadAsync({
     "open-sans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+    Roboto: require('native-base/Fonts/Roboto.ttf'),
+    Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+    ...Ionicons.font,
   });
 };
 

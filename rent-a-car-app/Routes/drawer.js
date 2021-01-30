@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
-import {Dimensions} from 'react-native'
+import { Dimensions } from "react-native";
 import homeDealerStack from "./homeDealerstack";
 import bookingStack from "./Bookingstack";
 import accountStack from "./Accountstack";
@@ -21,18 +21,21 @@ import IdentityScreen2 from "../screens/LoginStackScreens/Identityscreenb";
 import IdentityScreen3 from "../screens/LoginStackScreens/Identityscreenc";
 import "@firebase/firestore";
 import * as firebase from "firebase";
+import * as actions from "../store/actions/auth";
+import { useDispatch } from "react-redux";
 
 customSideBar = (props) => {
-
-  const [user, setUser] = useState(null);
-  const { uid } = firebase.auth().currentUser;
+  const [fullName, setFullName] = useState(null);
+  const dispatch = useDispatch();
+  const { uid, email } = firebase.auth().currentUser;
   const db = firebase.firestore();
 
   const getUserData = async () => {
     try {
       const docSnapShot = await db.collection("users").doc(uid).get();
       const userData = docSnapShot.data();
-      setUser(userData);
+      setFullName(userData.fullname);
+      dispatch(actions.userProfile(userData.fullname, userData.mobile, email));
       console.log(userData);
     } catch (err) {
       throw err;
@@ -51,11 +54,11 @@ customSideBar = (props) => {
             paddingTop: 10,
             color: "#fff",
             fontWeight: "bold",
-            fontSize: 17,
-            textTransform: 'uppercase'
+            fontSize: 20,
+            textTransform: "uppercase",
           }}
         >
-          {user && user?.firstname + " " + user?.lastname}
+          {fullName ? fullName : ""}
         </Text>
       </View>
       <DrawerItems {...props} />
@@ -215,7 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: 30,
     paddingBottom: 20,
-    height: Dimensions.get('window').width/2,
+    height: Dimensions.get("window").width / 2,
     backgroundColor: "#03c4ff",
   },
 });

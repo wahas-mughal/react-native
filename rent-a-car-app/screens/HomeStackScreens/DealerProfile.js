@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -6,17 +6,46 @@ import {
   ImageBackground,
   FlatList,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../shared/CustomHeaderButton";
+import * as actions from "../../store/actions/dealers";
 
 const DealerProfile = (props) => {
   const dealerID = props.navigation.getParam("id");
-
+  let counter = 0;
+  const isFavMeal = useSelector((state) =>
+    state.dealers.favDealers.some((dealers) => dealers.dealerId === dealerID)
+  );
   const dealerData = useSelector((state) =>
     state.dealers.allDealers.filter((dealer) => dealer.dealerId === dealerID)
   );
+
+  const dispatch = useDispatch();
+
+  //delete the fav dealer
+  const deleteFav = async () => {
+    await dispatch(actions.delFav(dealerData.dealerId));
+  };
+
+  const toggleFavHandler = useCallback(async () => {
+    counter++;
+    if (counter === 1) {
+      dispatch(actions.toggleFavorites(dealerID));
+      await dispatch(actions.addFavoriteDealers(dealerData));
+    } else {
+      await dispatch(actions.delFav(dealerData.dealerId));
+    }
+  }, [dispatch, dealerID]);
+
+  useEffect(() => {
+    props.navigation.setParams({ toggleFav: toggleFavHandler });
+  }, [toggleFavHandler]);
+
+  useEffect(() => {
+    props.navigation.setParams({ isFavourite: isFavMeal });
+  }, [isFavMeal]);
 
   return (
     <FlatList
@@ -32,10 +61,6 @@ const DealerProfile = (props) => {
             >
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>{itemData.item.title}</Text>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Text style={styles.ratingText}>{itemData.item.rating} </Text>
-                  <Ionicons name="md-star" size={22} color="#FFD700" />
-                </View>
               </View>
             </ImageBackground>
           </View>
@@ -55,13 +80,14 @@ const DealerProfile = (props) => {
 };
 
 DealerProfile.navigationOptions = (navData) => {
-
-  const title = navData.navigation.getParam('title')
+  const title = navData.navigation.getParam("title");
+  const toggleFavourite = navData.navigation.getParam("toggleFav");
+  const isFav = navData.navigation.getParam("isFavourite");
   return {
     headerTitle: title,
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item iconName="star-o" />
+        <Item iconName={isFav ? "star" : "staro"} onPress={toggleFavourite} />
       </HeaderButtons>
     ),
   };

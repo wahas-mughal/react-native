@@ -27,6 +27,7 @@ export default function AllDealers({ navigation }) {
   return (
     <View style={styles.allFeaturedSection}>
       <Text style={styles.featureHeading}>All Dealers </Text>
+      <Text style = {{borderBottomColor: '#ccc', borderBottomWidth:0.7, marginBottom: 15, marginTop: -10}}/>
       <FlatList
         data={allDealer}
         keyExtractor={(item) => item.dealerId}
@@ -53,6 +54,7 @@ export default function AllDealers({ navigation }) {
                   </Text>
                 </View>
               </Card>
+              <Text style = {{borderBottomColor: '#ccc', borderBottomWidth:0.7}}/>
             </View>
           </TouchableNativeOpacity>
         )}
@@ -63,9 +65,8 @@ export default function AllDealers({ navigation }) {
 
 const styles = StyleSheet.create({
   allFeaturedSection: {
-    marginHorizontal: 10,
-    marginVertical: 15,
-    // width: "100%",
+    backgroundColor: '#fff',
+    padding: 5
   },
 
   allFeaturedImage: {
@@ -89,7 +90,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     height: 270,
     width: '100%',
-    // marginBottom: 13,
     borderRadius: 10,
     overflow: "hidden",
   },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans-bold",
     fontSize: 22,
     color: "black",
-    marginBottom: 10,
+    marginTop: 15,
     marginLeft: 10,
   },
 });

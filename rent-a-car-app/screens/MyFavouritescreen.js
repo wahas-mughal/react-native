@@ -11,31 +11,37 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import Card from "../shared/Card";
-
 export default function Myfavourites({ navigation }) {
   const favDealers = useSelector((state) => state.dealers.favDealers);
-  console.log(favDealers);
+  console.log("FAV DEALERS ",favDealers);
   let TouchableNativeOpacity = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21) {
     TouchableNativeOpacity = TouchableNativeFeedback;
   }
 
-  return (
-    <View style = {{backgroundColor: '#fff'}}>
-      <View style={styles.textView}>
-        <Text style={styles.featureHeading}> Yours Favourited </Text>
+  if(favDealers.length === 0) {
+    return(
+      <View style = {{flex:1, justifyContent: 'center', alignItems:'center', backgroundColor:"#fff"}}>
+        <Card style = {{paddingVertical: 100, paddingHorizontal: 10}}>
+        <Text style = {{fontSize: 19, fontWeight: 'bold'}}> No Favorites yet, please add some. </Text>
+        </Card>
       </View>
+    )
+  }
 
-      <View style={styles.allFeaturedSection}>
+  return (
+    <View style = {{backgroundColor: '#fff', flex:1, paddingHorizontal: 15}}>
         <FlatList
           data={favDealers}
+          style = {{paddingVertical:15}}
           keyExtractor={(item) => item.dealerId}
+          showsVerticalScrollIndicator = {false}
           renderItem={(itemData) => (
             <TouchableNativeOpacity
               onPress={() => navigation.navigate("Dealer Profile")}
             >
-              <View style={{ margin: 10 }}>
+              <View style = {{padding:5}}>
                 <Card style={styles.allCard}>
                   <Image
                     style={styles.allFeaturedImage}
@@ -51,22 +57,16 @@ export default function Myfavourites({ navigation }) {
                     </Text>
                   </View>
                 </Card>
+                <Text style = {{borderBottomColor: '#ccc', borderBottomWidth: 0.7, marginBottom:5}}/>
               </View>
             </TouchableNativeOpacity>
           )}
         />
-      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  allFeaturedSection: {
-    marginHorizontal: 20,
-    marginVertical: 10,
-    width: "100%",
-    // flex: 1
-  },
 
   allFeaturedImage: {
     width: "100%",
@@ -88,18 +88,16 @@ const styles = StyleSheet.create({
     elevation: 6,
     backgroundColor: "white",
     height: 250,
-    width: 300,
-    marginBottom: 13,
+    width: '100%',
     borderRadius: 10,
     overflow: "hidden",
   },
   featureHeading: {
     fontWeight: "bold",
     color: 'black',
-    fontSize: 20
+    fontSize: 22
   },
   textView: {
-    marginLeft: 25,
-    marginTop: 30
+    marginVertical: 15
   },
 });

@@ -2,10 +2,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 import React from 'react';
 import Header from '../shared/Header';
 import MyAccount from '../screens/Myaccountscreen';
-import BankDetails from '../screens/AccountStackScreens/Bankdetailsscreen';
-import ChangePassword from '../screens/AccountStackScreens/Changepasswordscreen';
 import Edit from '../screens/AccountStackScreens/Editscreen';
-import Spinner from '../components/Spinner';
+
 
 const screens = {
     Account: {
@@ -17,35 +15,15 @@ const screens = {
             }
     }, 
 
-    BankDetails:{
-        screen: BankDetails,
-        navigationOptions: {
-            title: 'Bank Details',
-        },  
-    },
-
-    ChangePassword:{
-        screen: ChangePassword,
-        navigationOptions: {
-            title: 'Change Password',
-        },  
-    },
-
     Edit:{
         screen: Edit,
         navigationOptions: {
             title: 'Edit',
+            headerTitleStyle:{
+                fontSize: 20,
+            }
         },
     },
-    Spinner: {
-        screen: Spinner,
-        navigationOptions:{
-            headerShown: false
-        }
-    },
-
-
-
 }
 
 const Accountstack = createStackNavigator(screens, {

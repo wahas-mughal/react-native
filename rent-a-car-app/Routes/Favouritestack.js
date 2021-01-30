@@ -9,7 +9,7 @@ const screens = {
         screen: MyFavourites,
         navigationOptions: ({navigation}) => {
             return{
-                headerTitle: () => <Header navigation = {navigation} title = 'My Favourites'/>
+                headerTitle: () => <Header navigation = {navigation} title = 'Favourites'/>
             }
         }
     }

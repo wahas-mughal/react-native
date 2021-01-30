@@ -7,7 +7,7 @@ export default function HelpScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator = {false}>
           <Text style = {styles.mainText}>The standard Lorem Ipsum passage, used since the 1500s </Text>
           <Text style = {{textAlign: 'justify'}}>
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

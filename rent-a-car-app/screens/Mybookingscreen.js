@@ -11,6 +11,7 @@ import {
 import Card from "../shared/Card";
 import { useSelector, useDispatch } from "react-redux";
 import * as bookingActions from "../store/actions/bookings";
+import { Flow } from "react-native-animated-spinkit";
 
 function BookingList({ navigation }) {
   const bookingData = useSelector((state) => state.bookings.userBookings);
@@ -37,10 +38,20 @@ function BookingList({ navigation }) {
     fetchBookings();
   }, []);
 
+  if(bookingData.length === 0){
+    return(
+     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor:'#fff'}}>
+       <Card style = {{paddingVertical: 60, paddingHorizontal: 10}}>
+        <Text style = {{fontSize: 19, fontWeight: 'bold'}}> No bookings yet, please do some. </Text>
+        </Card>
+    </View>
+    )
+  }
+
   if (isLoading) {
     return (
-      <View style={styles.indicator}>
-        <ActivityIndicator size={32} color="#03c4ff" />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Flow size={40} color="#03c4ff" />
       </View>
     );
   }
@@ -69,6 +80,7 @@ function BookingList({ navigation }) {
               </View>
             </TouchableOpacity>
           </Card>
+          <Text style = {{borderBottomColor: '#ccc', borderBottomWidth: 0.7}}/>
         </View>
       ))}
     </View>
@@ -80,6 +92,7 @@ export default function MyBookings({ navigation }) {
     <ScrollView style={styles.container}>
       <View style={{ margin: 10 }}>
         <Text style={styles.headingText}> Bookings Overview</Text>
+        <Text style = {{borderBottomColor: '#ccc', borderBottomWidth: 0.7, marginTop: -10, marginBottom: 10}}/>
         <BookingList navigation={navigation} />
       </View>
     </ScrollView>
@@ -91,10 +104,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   headingText: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     color: "black",
-    marginBottom: 10,
     marginLeft: 4,
     marginTop: 10,
   },
