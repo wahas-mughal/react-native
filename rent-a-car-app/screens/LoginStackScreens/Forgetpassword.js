@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   ImageBackground,
+  Alert
 } from "react-native";
 import { globalstyles } from "../../style/global";
 import * as firebase from 'firebase';

@@ -15,11 +15,11 @@ export default function BookingHistory({navigation}) {
       renderItem={(itemData) => (
         <View style={styles.historyContainer}>
           <View style={globalstyles.card}>
-            {/* <Image
-              source={require("../../assets/images/suzuki-liana.jpg")}
+            <Image
+              source={{uri: itemData.item.carImage}}
               style={styles.coverImage}
               resizeMode="cover"
-            /> */}
+            />
 
             <Text style={styles.headingText}> Booking Details </Text>
 
@@ -36,11 +36,11 @@ export default function BookingHistory({navigation}) {
                Rent Duration:{" "}
                 <Text style={styles.innerText}>
                   {" "}
-                  {itemData.item.rentDuration}
+                  {itemData.item.rentDuration} Day
                 </Text>
               </Text>
               <Text style={styles.text}>
-                Status: <Text style={styles.innerText}> On-Going </Text>{" "}
+                Status: <Text style={[styles.innerText, {color: '#03c4ff', fontWeight: 'bold'}]}> On-Going </Text>{" "}
               </Text>
             </View>
           </View>

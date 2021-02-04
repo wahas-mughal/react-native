@@ -85,7 +85,7 @@ export default function ConfirmPayment({ navigation }) {
         />
         <CustomButton
           onPress={() => {
-            dispatch(bookingActions.addBooking(bookingData.title, bookingData.rent, bookingData.duration, bookingData.paymentMethod ))
+            dispatch(bookingActions.addBooking(bookingData.title, bookingData.carImage, bookingData.rent ,bookingData.duration, bookingData.paymentMethod ))
             // console.log("Confirmed")
             navigation.navigate("confirmBooking");
           }}

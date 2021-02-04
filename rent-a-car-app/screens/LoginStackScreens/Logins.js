@@ -66,8 +66,8 @@ export default function Login({ navigation }) {
     <View style={globalstyles.container}>
       <View style={globalstyles.loginContent}>
         <Image
-          source={require("../../assets/images/logo-removebg-preview.png")}
-          style={{ width: 300, height: 120 }}
+          source={require("../../assets/adaptive-icon.png")}
+          style={{ width: 300, height: 140, marginTop: 40}}
         />
         <View style={globalstyles.InputContainer}>
           <Input

@@ -28,7 +28,7 @@ export const globalstyles = StyleSheet.create({
     SignUpCont: {
         alignItems: 'flex-end',
         justifyContent: 'center',
-        marginTop: 100,
+        marginTop: 50,
         flexDirection: 'row',
         backgroundColor: 'rgb(256,256,256)',
         opacity: 2,

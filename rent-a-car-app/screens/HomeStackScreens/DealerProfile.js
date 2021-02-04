@@ -24,11 +24,6 @@ const DealerProfile = (props) => {
 
   const dispatch = useDispatch();
 
-  //delete the fav dealer
-  const deleteFav = async () => {
-    await dispatch(actions.delFav(dealerData.dealerId));
-  };
-
   const toggleFavHandler = useCallback(async () => {
     counter++;
     if (counter === 1) {

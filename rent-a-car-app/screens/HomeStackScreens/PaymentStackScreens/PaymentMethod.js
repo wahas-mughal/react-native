@@ -13,7 +13,8 @@ import { Ionicons } from "@expo/vector-icons";
 export default function PaymentMethod({ navigation }) {
   const title = navigation.getParam("title");
   const rent = navigation.getParam("rent");
-  const duration = navigation.getParam("duration")
+  const duration = navigation.getParam("duration");
+  const image = navigation.getParam("carImage");
 
   let TouchableAndroidOpacity = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -28,7 +29,15 @@ export default function PaymentMethod({ navigation }) {
       <View style={{ width: "100%" }}>
         <TouchableAndroidOpacity
           onPress={() =>
-            navigation.navigate("confirmPayment",{bookingData: {title: title, rent: rent, duration: duration, paymentMethod: 'Cash on delivery'}})
+            navigation.navigate("confirmPayment", {
+              bookingData: {
+                title: title,
+                carImage: image,
+                rent: rent,
+                duration: duration,
+                paymentMethod: "Cash on delivery",
+              },
+            })
           }
         >
           <View style={{ marginVertical: 15, marginHorizontal: 10 }}>

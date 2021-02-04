@@ -14,6 +14,7 @@ export default (state = initialState, action) => {
         action.bookingId,
         action.userId,
         action.vehicle,
+        action.carImage,
         action.rent,
         action.rentDuration,
         action.paymentMethod

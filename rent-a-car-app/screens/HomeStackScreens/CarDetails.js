@@ -113,8 +113,9 @@ export default function CarDetails({ navigation }) {
                   onPress={() =>
                     navigation.navigate("paymentMethod", {
                       title: itemData.item.title,
+                      carImage: itemData.item.coverImage,
                       rent: itemData.item.rent,
-                      duration: selectedValue
+                      duration: selectedValue,
                     })
                   }
                 />

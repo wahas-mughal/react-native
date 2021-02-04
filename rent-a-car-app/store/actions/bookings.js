@@ -21,6 +21,7 @@ export const fetchBookings = () => {
             key,
             resData[key].userId,
             resData[key].vehicle,
+            resData[key].carImage,
             resData[key].rent,
             resData[key].duration,
             resData[key].paymentMethod
@@ -44,7 +45,7 @@ export const fetchBookings = () => {
 };
 
 // Add a booking into firebase
-export const addBooking = (vehicle, rent, rentDuration, paymentMethod) => {
+export const addBooking = (vehicle, image, rent ,rentDuration, paymentMethod) => {
   return async (dispatch, getState) => {
     try {
       const token = getState().auth.token
@@ -61,6 +62,7 @@ export const addBooking = (vehicle, rent, rentDuration, paymentMethod) => {
           body: JSON.stringify({
             userId: userId,
             vehicle: vehicle,
+            carImage: image,
             rent: rent,
             duration: rentDuration,
             paymentMethod: paymentMethod,
@@ -76,6 +78,7 @@ export const addBooking = (vehicle, rent, rentDuration, paymentMethod) => {
         bookingId: resData.name,
         userId: userId,
         vehicle: vehicle,
+        carImage: image,
         rent: rent,
         duration: rentDuration,
         payMethod: paymentMethod,

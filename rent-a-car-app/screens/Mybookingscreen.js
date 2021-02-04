@@ -59,7 +59,7 @@ function BookingList({ navigation }) {
   return (
     <View>
       {bookingData.map((items) => (
-        <View key={items.userId} style={{ margin: 10 }}>
+        <View key={items.bookingId} style={{ margin: 10 }}>
           <Card style={{ padding: 15 }}>
             <TouchableOpacity
               activeOpacity={0.5}

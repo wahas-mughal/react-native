@@ -39,7 +39,9 @@ export default function Myfavourites({ navigation }) {
           showsVerticalScrollIndicator = {false}
           renderItem={(itemData) => (
             <TouchableNativeOpacity
-              onPress={() => navigation.navigate("Dealer Profile")}
+              onPress={() => navigation.navigate("Dealer Profile", {
+                id: itemData.item.dealerId
+              })}
             >
               <View style = {{padding:5}}>
                 <Card style={styles.allCard}>

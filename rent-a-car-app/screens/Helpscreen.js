@@ -1,58 +1,70 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import Card from "../shared/Card";
+import { StyleSheet, Text, View } from "react-native";
+import { Card, Content, Container, Button } from "native-base";
+import * as MailComposer from "expo-mail-composer";
 
-export default function HelpScreen() {
+const HelpScreen = (props) => {
+  const sendEmailHandler = async () => {
+    const response = await MailComposer.composeAsync({
+      recipients: ["suppot@rentnow.com"],
+      subject: "Query",
+    });
+    console.log(response);
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        <ScrollView showsVerticalScrollIndicator = {false}>
-          <Text style = {styles.mainText}>The standard Lorem Ipsum passage, used since the 1500s </Text>
-          <Text style = {{textAlign: 'justify'}}>
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum."
+    <Container>
+      <Content style={{ margin: 10 }}>
+        <Card style={{ padding: 10 }}>
+          <View style={{ marginVertical: 10 }}>
+            <Text style={{ fontSize: 16, fontWeight: "700", marginBottom: 10 }}>
+              RENT NOW BOOKINGS
+            </Text>
+            <Text style={{ fontSize: 15 }}>
+              This app's core feature is users booking through the app, you can
+              book a car of your choice from the dealer's listing for upto 30
+              days at once. Before booking your profile information and
+              documents has to be verified.
+            </Text>
+          </View>
+          <View style={{ marginVertical: 10 }}>
+            <Text style={{ fontSize: 16, fontWeight: "700", marginBottom: 10 }}>
+              DOCUMENTS VERIFICATION
+            </Text>
+            <Text style={{ fontSize: 15 }}>
+              Documents verification <Text style = {{fontWeight: 'bold', color: '#03c4ff'}}> i.e. License, Identity Card and Selfie with
+              Identity Card </Text> has be to submitted at the time of sign up. It is
+              imporrtant because dealers will not trust on your booking until
+              you provide clear pictures of the documents.
+            </Text>
+          </View>
+          <View style={{ marginVertical: 10 }}>
+            <Text style={{ fontSize: 16, fontWeight: "700", marginBottom: 10 }}>
+              PAYMENT PROCEDURE
+            </Text>
+            <Text style={{ fontSize: 15 }}>
+              Right now, we are providing only cash on delivery model for the
+              MVC of this app. users will pay 50% amount of the total rent in
+              advance to the dealers at the time of taking the vehicle
+            </Text>
+          </View>
+          <Text style={{ fontSize: 15, marginTop: 10 }}>
+            Need more help? or have any questions tab on the button below to get
+            in touch with us.
           </Text>
-          <Text style = {styles.mainText}>Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC </Text>
-          <Text style = {{textAlign: 'justify'}}>
-            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-            quae ab illo inventore veritatis et quasi architecto beatae vitae
-            dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-            aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
-            eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est,
-            qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
-            sed quia non numquam eius modi tempora incidunt ut labore et dolore
-            magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis
-            nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut
-            aliquid ex ea commodi consequatur? Quis autem vel eum iure
-            reprehenderit qui in ea voluptate velit esse quam nihil molestiae
-            consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla
-            pariatur?"
-          </Text>
-        </ScrollView>
-      </View>
-    </View>
+          <Button
+            block
+            style={{ marginVertical: 20, backgroundColor: "#03c4ff" }}
+            onPress={sendEmailHandler}
+          >
+            <Text style={{ color: "#fff", fontWeight: "700", fontSize: 17 }}>
+              Contact Us
+            </Text>
+          </Button>
+        </Card>
+      </Content>
+    </Container>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  innerContainer: {
-    margin: 25,
-  },
-  mainText:{
-      fontFamily: 'open-sans-bold',
-      fontSize: 16,
-      marginVertical: 10,
-      textAlign: 'justify'
-  }
-});
+export default HelpScreen;

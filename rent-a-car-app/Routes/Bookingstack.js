@@ -32,7 +32,8 @@ const bookingStack = createStackNavigator(screens, {
         },
         headerTintColor: '#fff',
         headerTitleStyle:{
-            fontSize: 18
+            fontSize: 20,
+            fontWeight: 'bold'
         },
         headerTitleAlign: 'center'
     }
